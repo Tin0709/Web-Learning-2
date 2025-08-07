@@ -16,15 +16,52 @@ export default function Register() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Register</h2>
-      <input placeholder="Email" onChange={e => setForm({ ...form, email: e.target.value })} /><br />
-      <input type="password" placeholder="Password" onChange={e => setForm({ ...form, password: e.target.value })} /><br />
-      <select onChange={e => setForm({ ...form, role: e.target.value })}>
+      <h2 style={styles.heading}>Register</h2>
+      <input
+        placeholder="Email"
+        style={styles.input}
+        onChange={e => setForm({ ...form, email: e.target.value })}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        style={styles.input}
+        onChange={e => setForm({ ...form, password: e.target.value })}
+      />
+      <select
+        style={styles.input}
+        onChange={e => setForm({ ...form, role: e.target.value })}
+      >
         <option value="user">User</option>
         <option value="vendor">Vendor</option>
         <option value="shipper">Shipper</option>
-      </select><br />
-      <button type="submit">Register</button>
+      </select>
+      <button style={styles.button} type="submit">Register</button>
     </form>
   );
 }
+
+const styles = {
+  heading: {
+    marginBottom: '20px',
+    color: '#333',
+  },
+  input: {
+    width: '100%',
+    padding: '10px',
+    marginBottom: '15px',
+    borderRadius: '6px',
+    border: '1px solid #ccc',
+    fontSize: '16px',
+  },
+  button: {
+    width: '100%',
+    padding: '10px',
+    backgroundColor: '#4CAF50',
+    color: 'white',
+    border: 'none',
+    borderRadius: '6px',
+    fontSize: '16px',
+    cursor: 'pointer',
+  },
+};
