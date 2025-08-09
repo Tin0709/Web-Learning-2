@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Random Recipe Generator</title>
+    <meta name="color-scheme" content="dark light" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0b0f14;
+        --bg-2: #0f1620;
+        --card: rgba(255, 255, 255, 0.06);
+        --muted: #9fb3c8;
+        --text: #e6edf5;
+        --accent: #7ee787;
+        --accent-2: #78a6ff;
+        --danger: #ff7b7b;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        --radius: 18px;
+        --blur: 12px;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f6f8fb;
+          --bg-2: #eef2f7;
+          --card: rgba(255, 255, 255, 0.7);
+          --muted: #52667a;
+          --text: #0b1220;
+          --shadow: 0 10px 30px rgba(14, 26, 54, 0.12);
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: Manrope, system-ui, Segoe UI, Roboto, Helvetica, Arial,
+          sans-serif;
+        color: var(--text);
+        background: radial-gradient(
+            1200px 800px at 20% -10%,
+            #3b82f620 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            1000px 700px at 120% 20%,
+            #22c55e25 0%,
+            transparent 60%
+          ),
+          linear-gradient(180deg, var(--bg), var(--bg-2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+        overflow-x: hidden;
+      }
+
+      /* Floating orbs for subtle motion */
+      .orb {
+        position: fixed;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        filter: blur(70px);
+        opacity: 0.55;
+        z-index: -2;
+        pointer-events: none;
+        mix-blend-mode: screen;
+        animation: drift 18s ease-in-out infinite alternate;
+      }
+      .orb.a {
+        background: #60a5fa55;
+        top: -120px;
+        left: -120px;
+      }
+      .orb.b {
+        background: #34d39955;
+        bottom: -140px;
+        right: -140px;
+        animation-duration: 22s;
+      }
+      @keyframes drift {
+        from {
+          transform: translate(0, 0) scale(1);
+        }
+        to {
+          transform: translate(40px, 30px) scale(1.08);
+        }
+      }
+
+      .wrap {
+        width: min(1100px, 100%);
+      }
+
+      header {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: conic-gradient(
+          from 210deg,
+          #4ade80,
+          #60a5fa 45%,
+          #a78bfa 70%,
+          #4ade80
+        );
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+        animation: spin 14s linear infinite;
+      }
+      .logo::after {
+        /* glossy bar */
+        content: "";
+        position: absolute;
+        inset: -20%;
+        transform: skewX(-20deg);
+        background: linear-gradient(90deg, #fff6, transparent 30% 70%, #fff6);
+        animation: sweep 6s ease-in-out infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes sweep {
+        0%,
+        100% {
+          transform: translateX(-140%) skewX(-20deg);
+        }
+        50% {
+          transform: translateX(140%) skewX(-20deg);
+        }
+      }
+
+      h1 {
+        font-size: clamp(22px, 2.5vw, 30px);
+        margin: 0;
+        letter-spacing: 0.2px;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+      button,
+      .ghost {
+        border: 0;
+        background: linear-gradient(180deg, #2d5bff, #1e40af);
+        color: white;
+        padding: 12px 16px;
+        border-radius: 14px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        box-shadow: 0 10px 18px rgba(30, 64, 175, 0.35),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        transform: translateY(0);
+        transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      button:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.05);
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+      button .spark {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        background: radial-gradient(
+          120px 120px at var(--x, 50%) var(--y, 50%),
+          #fff8,
+          transparent 60%
+        );
+        transition: opacity 0.25s ease;
+      }
+      button:hover .spark {
+        opacity: 0.9;
+      }
+
+      .ghost {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid #8ea9ff66;
+        box-shadow: none;
+        font-weight: 600;
+      }
+
+      /* Layout */
+      .grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 16px;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Card base */
+      .card {
+        background: var(--card);
+        backdrop-filter: blur(var(--blur));
+        -webkit-backdrop-filter: blur(var(--blur));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: clip;
+      }
+
+      /* Recipe hero */
+      .hero {
+        position: relative;
+        min-height: 320px;
+      }
+      .hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: saturate(1.05) contrast(1.02);
+        transform: scale(1.02);
+        transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .hero:hover img {
+        transform: scale(1.06);
+      }
+      .chipbar {
+        position: absolute;
+        inset: auto 16px 16px 16px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .chip {
+        background: rgba(0, 0, 0, 0.45);
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        letter-spacing: 0.2px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .title {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 16px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .title h2 {
+        margin: 0;
+        font-size: clamp(22px, 3.2vw, 36px);
+        text-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+      .iconbtn {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.45);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        transition: transform 0.15s ease, filter 0.2s ease;
+      }
+      .iconbtn:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.1);
+      }
+      .iconbtn:active {
+        transform: translateY(1px);
+      }
+
+      /* Content panels */
+      .panel {
+        padding: 18px;
+      }
+      .section-title {
+        margin: 0 0 10px;
+        font-size: 14px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+      }
+
+      .ingredients {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      @media (max-width: 600px) {
+        .ingredients {
+          grid-template-columns: 1fr;
+        }
+      }
+      .ing {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 10px 12px;
+        border-radius: 12px;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #a5b4fc, #60a5fa);
+        box-shadow: 0 2px 6px rgba(99, 102, 241, 0.35);
+      }
+      .ing b {
+        font-weight: 800;
+      }
+
+      .instructions {
+        line-height: 1.65;
+        color: var(--text);
+      }
+      .instructions p {
+        margin: 0 0 10px;
+      }
+      .meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .meta a {
+        color: inherit;
+        text-decoration: underline dotted;
+      }
+
+      /* Favorites drawer */
+      .drawer {
+        position: relative;
+      }
+      .drawer h3 {
+        margin: 0 0 10px;
+      }
+      .favlist {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      @media (max-width: 600px) {
+        .favlist {
+          grid-template-columns: 1fr;
+        }
+      }
+      .fav {
+        display: grid;
+        grid-template-columns: 64px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 8px;
+      }
+      .fav img {
+        width: 64px;
+        height: 64px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+      .trash {
+        border: 0;
+        background: transparent;
+        color: var(--danger);
+        font-size: 20px;
+        cursor: pointer;
+        padding: 6px 8px;
+        border-radius: 10px;
+      }
+      .empty {
+        color: var(--muted);
+        font-style: italic;
+      }
+
+      /* Shimmer skeleton */
+      .skeleton {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(180deg, #ffffff0d, #ffffff05);
+      }
+      .skeleton::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent, #ffffff33, transparent);
+        animation: shimmer 1.2s linear infinite;
+      }
+      @keyframes shimmer {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(100%);
+        }
+      }
+
+      /* Toast */
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translate(-50%, 40px);
+        background: rgba(0, 0, 0, 0.75);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 12px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      /* Confetti canvas */
+      #fx {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10;
+      }
+      /* Accessibility helpers */
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="orb a"></div>
+    <div class="orb b"></div>
+    <canvas id="fx"></canvas>
+
+    <div class="wrap">
+      <header>
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1>Random Recipe Generator</h1>
+            <div class="sub">
+              Fresh dish ideas with one click. Save your faves.
+            </div>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="randomBtn" aria-label="Get a random recipe">
+            <span>Surprise Me</span>
+            <span class="spark"></span>
+          </button>
+          <button class="ghost" id="copyBtn" title="Copy ingredients">
+            Copy Ingredients
+          </button>
+          <button class="ghost" id="shareBtn" title="Share recipe">
+            Share
+          </button>
+        </div>
+      </header>
+
+      <div class="grid" id="grid">
+        <!-- Left: recipe -->
+        <div class="card" id="recipeCard" aria-live="polite" aria-busy="true">
+          <div class="hero skeleton" id="hero">
+            <img id="thumb" alt="" />
+            <div class="title">
+              <h2
+                id="name"
+                class="skeleton"
+                style="padding: 10px 14px; border-radius: 10px; min-width: 40%"
+              >
+                &nbsp;
+              </h2>
+              <div class="actions">
+                <button
+                  class="iconbtn"
+                  id="favBtn"
+                  title="Save to favorites"
+                  aria-label="Save to favorites"
+                >
+                  💚
+                </button>
+                <a
+                  class="iconbtn"
+                  id="ytBtn"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  title="Watch on YouTube"
+                  aria-label="YouTube tutorial"
+                  >▶️</a
+                >
+              </div>
+            </div>
+            <div class="chipbar">
+              <div class="chip" id="chipCat">Category</div>
+              <div class="chip" id="chipArea">Area</div>
+              <div class="chip" id="chipTags">Tags</div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="section-title">Ingredients</div>
+            <div class="ingredients" id="ings"></div>
+          </div>
+          <div class="panel">
+            <div class="section-title">Instructions</div>
+            <div class="instructions" id="inst"></div>
+            <div class="meta">
+              <span id="sourceWrap" style="display: none"
+                >Source:
+                <a id="source" href="#" target="_blank" rel="noopener"></a
+              ></span>
+              <span
+                >API:
+                <a
+                  href="https://www.themealdb.com/api.php"
+                  target="_blank"
+                  rel="noopener"
+                  >TheMealDB</a
+                ></span
+              >
+              <span>Tip: Press <b>Space</b> for a new recipe</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: favorites -->
+        <div class="card drawer">
+          <div class="panel">
+            <h3 style="margin: 0 0 4px">Favorites</h3>
+            <div class="sub" style="margin-bottom: 10px">
+              Saved on this device
+            </div>
+            <div class="favlist" id="favList"></div>
+            <div id="emptyFav" class="empty">
+              No favorites yet. Save a dish you love!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      const $ = (sel) => document.querySelector(sel);
+      const $all = (sel) => [...document.querySelectorAll(sel)];
+
+      const state = {
+        current: null,
+        favorites: JSON.parse(localStorage.getItem("rrg:favs") || "[]"),
+      };
+
+      /* ---------- UI Helpers ---------- */
+      function toast(msg, ms = 1800) {
+        const el = $("#toast");
+        el.textContent = msg;
+        el.classList.add("show");
+        setTimeout(() => el.classList.remove("show"), ms);
+      }
+      function setBusy(busy) {
+        const card = $("#recipeCard");
+        card.setAttribute("aria-busy", busy ? "true" : "false");
+        $("#hero").classList.toggle("skeleton", busy);
+        $("#name").classList.toggle("skeleton", busy);
+      }
+      function htmlEscape(s) {
+        return s.replace(
+          /[&<>"']/g,
+          (m) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[m])
+        );
+      }
+
+      /* ---------- Confetti ---------- */
+      const fx = document.getElementById("fx");
+      const ctx = fx.getContext("2d");
+      let pieces = [];
+      function resizeFx() {
+        fx.width = innerWidth;
+        fx.height = innerHeight;
+      }
+      addEventListener("resize", resizeFx);
+      resizeFx();
+
+      function confetti(x = innerWidth / 2, y = innerHeight / 2) {
+        const colors = [
+          "#60a5fa",
+          "#34d399",
+          "#fbbf24",
+          "#a78bfa",
+          "#f87171",
+          "#2dd4bf",
+        ];
+        for (let i = 0; i < 130; i++) {
+          pieces.push({
+            x,
+            y,
+            vx: (Math.random() * 2 - 1) * 6,
+            vy: -Math.random() * 8 - 3,
+            size: Math.random() * 6 + 2,
+            rot: Math.random() * Math.PI,
+            vr: (Math.random() * 2 - 1) * 0.2,
+            color: colors[(Math.random() * colors.length) | 0],
+            life: 60 + ((Math.random() * 40) | 0),
+          });
+        }
+        if (!animating) requestAnimationFrame(step);
+        animating = true;
+      }
+      let animating = false;
+      function step() {
+        ctx.clearRect(0, 0, fx.width, fx.height);
+        pieces.forEach((p) => {
+          p.vy += 0.18;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.life--;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.restore();
+        });
+        pieces = pieces.filter((p) => p.life > 0 && p.y < innerHeight + 50);
+        if (pieces.length) {
+          requestAnimationFrame(step);
+        } else {
+          animating = false;
+        }
+      }
+
+      /* ---------- Fetch & Render ---------- */
+      async function fetchRandom() {
+        setBusy(true);
+        try {
+          const res = await fetch(
+            "https://www.themealdb.com/api/json/v1/1/random.php"
+          );
+          if (!res.ok) throw new Error("Network error");
+          const data = await res.json();
+          const meal = data.meals?.[0];
+          if (!meal) throw new Error("No recipe found");
+          state.current = normalizeMeal(meal);
+          renderRecipe(state.current);
+          confetti(innerWidth - 120, 100);
+        } catch (err) {
+          console.error(err);
+          toast("Could not fetch a recipe. Try again.");
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      function normalizeMeal(m) {
+        // gather ingredients x measures
+        const ingredients = [];
+        for (let i = 1; i <= 20; i++) {
+          const ing = (m[`strIngredient${i}`] || "").trim();
+          const qty = (m[`strMeasure${i}`] || "").trim();
+          if (ing) ingredients.push({ ing, qty });
+        }
+        return {
+          id: m.idMeal,
+          name: m.strMeal,
+          img: m.strMealThumb,
+          area: m.strArea || "—",
+          category: m.strCategory || "—",
+          tags: (m.strTags || "")
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean),
+          ingredients,
+          instructions: m.strInstructions || "",
+          source: m.strSource || "",
+          youtube: m.strYoutube || "",
+        };
+      }
+
+      function renderRecipe(r) {
+        // Hero
+        const img = $("#thumb");
+        img.alt = r.name;
+        img.src = r.img;
+
+        $("#name").classList.remove("skeleton");
+        $("#name").textContent = r.name;
+
+        $("#chipCat").textContent = r.category;
+        $("#chipArea").textContent = r.area;
+        $("#chipTags").textContent = r.tags.length
+          ? r.tags.join(" · ")
+          : "No tags";
+
+        // Ingredients
+        const ings = $("#ings");
+        ings.innerHTML = "";
+        r.ingredients.forEach(({ ing, qty }) => {
+          const el = document.createElement("div");
+          el.className = "ing";
+          el.innerHTML = `<span class="dot" aria-hidden="true"></span><b>${htmlEscape(
+            ing
+          )}</b> <span style="margin-left:auto">${htmlEscape(
+            qty || ""
+          )}</span>`;
+          ings.appendChild(el);
+        });
+
+        // Instructions (split into paragraphs)
+        const inst = $("#inst");
+        inst.innerHTML = "";
+        r.instructions
+          .split(/\r?\n/)
+          .map((s) => s.trim())
+          .filter(Boolean)
+          .forEach((p) => {
+            const el = document.createElement("p");
+            el.textContent = p;
+            inst.appendChild(el);
+          });
+
+        // Source + YouTube
+        const yt = $("#ytBtn");
+        if (r.youtube) {
+          yt.href = r.youtube;
+          yt.style.pointerEvents = "auto";
+          yt.style.opacity = "1";
+        } else {
+          yt.href = "#";
+          yt.style.pointerEvents = "none";
+          yt.style.opacity = ".4";
+        }
+
+        if (r.source) {
+          $("#sourceWrap").style.display = "";
+          $("#source").href = r.source;
+          $("#source").textContent = new URL(r.source).hostname.replace(
+            "www.",
+            ""
+          );
+        } else {
+          $("#sourceWrap").style.display = "none";
+        }
+
+        // Favorite state
+        const isFav = state.favorites.some((f) => f.id === r.id);
+        $("#favBtn").textContent = isFav ? "💖" : "💚";
+        $("#favBtn").title = isFav ? "In favorites" : "Save to favorites";
+      }
+
+      /* ---------- Favorites ---------- */
+      function saveFav(r) {
+        if (state.favorites.some((f) => f.id === r.id)) {
+          toast("Already in favorites");
+          return;
+        }
+        state.favorites.unshift({
+          id: r.id,
+          name: r.name,
+          img: r.img,
+          area: r.area,
+          category: r.category,
+        });
+        persistFavs();
+        renderFavs();
+        $("#favBtn").textContent = "💖";
+        toast("Saved to favorites");
+      }
+      function removeFav(id) {
+        state.favorites = state.favorites.filter((f) => f.id !== id);
+        persistFavs();
+        renderFavs();
+        if (state.current?.id === id) {
+          $("#favBtn").textContent = "💚";
+        }
+      }
+      function persistFavs() {
+        localStorage.setItem(
+          "rrg:favs",
+          JSON.stringify(state.favorites).toString()
+        );
+      }
+
+      function renderFavs() {
+        const list = $("#favList");
+        const empty = $("#emptyFav");
+        list.innerHTML = "";
+        if (!state.favorites.length) {
+          empty.style.display = "";
+          return;
+        }
+        empty.style.display = "none";
+        state.favorites.forEach((f) => {
+          const row = document.createElement("div");
+          row.className = "fav";
+          row.innerHTML = `
+          <img src="${f.img}" alt="">
+          <div>
+            <div style="font-weight:800">${htmlEscape(f.name)}</div>
+            <div class="sub">${htmlEscape(f.category)} • ${htmlEscape(
+            f.area
+          )}</div>
+          </div>
+          <button class="trash" title="Remove" aria-label="Remove ${htmlEscape(
+            f.name
+          )}">🗑️</button>
+        `;
+          row
+            .querySelector(".trash")
+            .addEventListener("click", () => removeFav(f.id));
+          list.appendChild(row);
+        });
+      }
+
+      /* ---------- Actions ---------- */
+      $("#randomBtn").addEventListener("mousemove", (e) => {
+        e.currentTarget.style.setProperty("--x", e.offsetX + "px");
+        e.currentTarget.style.setProperty("--y", e.offsetY + "px");
+      });
+      $("#randomBtn").addEventListener("click", () => {
+        fetchRandom();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault();
+          fetchRandom();
+        }
+      });
+
+      $("#favBtn").addEventListener("click", () => {
+        if (!state.current) return;
+        const exists = state.favorites.some((f) => f.id === state.current.id);
+        if (exists) {
+          toast("Already saved");
+          return;
+        }
+        saveFav(state.current);
+      });
+
+      $("#copyBtn").addEventListener("click", async () => {
+        if (!state.current) {
+          toast("Nothing to copy yet");
+          return;
+        }
+        const lines = state.current.ingredients.map(
+          (i) => `• ${i.ing}${i.qty ? ` — ${i.qty}` : ""}`
+        );
+        const text = `${state.current.name}\n\nIngredients:\n${lines.join(
+          "\n"
+        )}`;
+        try {
+          await navigator.clipboard.writeText(text);
+          toast("Ingredients copied!");
+        } catch {
+          toast("Copy failed");
+        }
+      });
+
+      $("#shareBtn").addEventListener("click", async () => {
+        if (!state.current) {
+          toast("Fetch a recipe first");
+          return;
+        }
+        const shareData = {
+          title: state.current.name,
+          text: "Check out this recipe!",
+          url: state.current.youtube || state.current.source || location.href,
+        };
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+          } catch {}
+        } else {
+          try {
+            await navigator.clipboard.writeText(shareData.url);
+            toast("Link copied to clipboard");
+          } catch {
+            toast("Sharing not supported");
+          }
+        }
+      });
+
+      /* ---------- Init ---------- */
+      renderFavs();
+      fetchRandom();
+    </script>
+  </body>
+</html>
