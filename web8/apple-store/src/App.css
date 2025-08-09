@@ -73,8 +73,6 @@
   gap: 0.6rem;
   flex-wrap: wrap;
 }
-
-/* Ghost button */
 .btn-ghost {
   background: #fff;
   border: 1px solid #e6e8ea;
@@ -88,7 +86,7 @@
   transform: translateY(-1px);
 }
 
-/* ===== Add to Cart (Bootstrap-aware + premium hover) ===== */
+/* ===== Add to Cart (fixed height / min width, never circular) ===== */
 .btn-primary-pill.btn {
   --bs-btn-color: #fff;
   --bs-btn-hover-color: #fff;
@@ -98,12 +96,19 @@
   --bs-btn-hover-border-color: #000;
   --bs-btn-active-bg: #000;
   --bs-btn-active-border-color: #000;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px; /* fixed height prevents circle */
+  min-width: 148px; /* keeps pill wide enough */
+  padding: 0 18px; /* horizontal only */
   border-radius: 999px;
-  padding: 0.58rem 1.25rem;
   line-height: 1;
+  white-space: nowrap;
+  position: relative;
   transition: transform 0.14s, box-shadow 0.2s, background-color 0.15s,
     border-color 0.15s;
-  position: relative;
 }
 .btn-primary-pill,
 .btn-primary-pill:hover,
@@ -164,29 +169,28 @@
   --bs-btn-hover-border-color: #15803d;
 }
 
-/* ==== RESPONSIVE TWEAKS ==== */
-/* Phones: stack price + add button; make secondary actions full-width row */
+/* ==== RESPONSIVE ==== */
+/* Phones: full-width add button, taller touch target */
 @media (max-width: 575.98px) {
   .card.product .bottom {
     grid-template-columns: 1fr;
   }
   .btn-primary-pill {
     width: 100%;
-    text-align: center;
-  }
-  .actions-secondary {
-    gap: 0.5rem;
+    height: 48px;
+    min-width: 0;
   }
   .actions-secondary .btn {
     flex: 1 1 calc(50% - 0.5rem);
-    text-align: center;
   }
 }
-
-/* Very small phones: keep images tall enough to be recognizable */
-@media (max-width: 360px) {
-  .card.product .media {
-    aspect-ratio: 1/1;
+/* Ultra-wide (≥1400px): keep pill sizing explicit */
+@media (min-width: 1400px) {
+  .btn-primary-pill {
+    height: 44px;
+    min-width: 148px;
+    width: auto;
+    border-radius: 999px;
   }
 }
 
@@ -204,7 +208,7 @@
   object-fit: contain;
 }
 
-/* QuickView: improve modal padding on small screens */
+/* QuickView: better on phones */
 @media (max-width: 575.98px) {
   .modal .modal-content {
     border-radius: 0;
@@ -212,12 +216,24 @@
   }
 }
 
-/* Respect reduced motion */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .btn-primary-pill,
   .btn-primary-pill::after,
   .card.product,
   .card.product .media img {
     transition: none !important;
+  }
+}
+/* Ultra-wide: slightly taller media + larger title for nicer proportion */
+@media (min-width: 1400px) {
+  .card.product .media {
+    aspect-ratio: 16/9;
+  }
+  .card.product .title {
+    font-size: 1.1rem;
+  }
+  .card.product .card-body {
+    padding: 18px 20px;
   }
 }

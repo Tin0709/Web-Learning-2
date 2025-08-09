@@ -66,10 +66,10 @@ export default function Products() {
         </div>
       </div>
 
-      {/* Grid: 2-up phones, 3-up tablets, 4-up laptops, 6-up ultrawide */}
+      {/* Grid: 2-up phones, 3-up tablets, 4-up laptops, **4-up XXL** (bigger cards) */}
       <div className="row g-4">
         {filtered.map((p) => (
-          <div className="col-6 col-md-4 col-lg-3 col-xxl-2" key={p.id}>
+          <div className="col-6 col-md-4 col-lg-3 col-xxl-3" key={p.id}>
             <ProductCard p={p} />
           </div>
         ))}

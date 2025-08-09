@@ -6,15 +6,13 @@ import { useUI } from "../context/UIContext.jsx";
 export default function ProductCard({ p }) {
   const { add } = useCart();
   const { showToast, openQuickView } = useUI();
-  const [adding, setAdding] = useState(false); // controls the temporary "Added" state
+  const [adding, setAdding] = useState(false);
 
-  const handleAdd = async () => {
+  const handleAdd = () => {
     if (adding) return;
     setAdding(true);
     add(p, 1);
     showToast("Added to cart", `${p.name} has been added to your cart.`);
-
-    // brief “Added” feedback then return to normal
     setTimeout(() => setAdding(false), 900);
   };
 
@@ -32,7 +30,6 @@ export default function ProductCard({ p }) {
 
         <div className="bottom">
           <span className="price">${p.price.toFixed(2)}</span>
-
           <button
             className={`btn btn-primary-pill ${adding ? "btn-added" : ""}`}
             onClick={handleAdd}

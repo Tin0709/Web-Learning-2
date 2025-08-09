@@ -18,6 +18,14 @@ a {
   text-decoration: none;
 }
 
+/* Default container width */
 .container {
   max-width: var(--container-max);
+}
+
+/* XXL screens (≥1400px): widen container so content uses space */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1440px;
+  } /* try 1536px if you want even wider */
 }
