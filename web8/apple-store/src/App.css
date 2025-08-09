@@ -19,7 +19,6 @@
   aspect-ratio: 16/10;
   display: grid;
   place-items: center;
-  position: relative;
 }
 .card.product .media img {
   max-width: 100%;
@@ -37,7 +36,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  padding: 14px 16px 14px 16px;
+  padding: 14px 16px;
 }
 .card.product .category {
   font-size: 0.75rem;
@@ -72,14 +71,16 @@
 .actions-secondary {
   display: flex;
   gap: 0.6rem;
+  flex-wrap: wrap;
 }
+
+/* Ghost button */
 .btn-ghost {
   background: #fff;
   border: 1px solid #e6e8ea;
   border-radius: 12px;
   padding: 0.5rem 0.9rem;
-  transition: background 0.15s ease, border-color 0.15s ease,
-    transform 0.15s ease;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
 }
 .btn-ghost:hover {
   background: #f3f5f7;
@@ -87,123 +88,42 @@
   transform: translateY(-1px);
 }
 
-/* ===== Add to Cart (hover/press states) ===== */
-.btn-primary-pill {
-  --btn-bg: #111;
-  --btn-bg-hover: #000;
-  --btn-ring: rgba(17, 17, 17, 0.15);
-
-  background: var(--btn-bg);
-  color: #fff;
-  border: 1px solid var(--btn-bg);
-  border-radius: 999px;
-  padding: 0.55rem 1.2rem;
-  line-height: 1;
-  transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.15s ease,
-    border-color 0.15s ease, opacity 0.2s ease;
-  position: relative;
-  will-change: transform, box-shadow;
-}
-.btn-primary-pill:hover {
-  background: var(--btn-bg-hover);
-  border-color: var(--btn-bg-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px var(--btn-ring);
-}
-.btn-primary-pill:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px var(--btn-ring);
-}
-
-/* Subtle pulse when item added */
-@keyframes btn-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(17, 17, 17, 0.18);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(17, 17, 17, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(17, 17, 17, 0);
-  }
-}
-.btn-added {
-  background: #16a34a; /* green */
-  border-color: #16a34a;
-}
-.btn-added:hover {
-  background: #15803d;
-  border-color: #15803d;
-}
-.btn-added,
-.btn-added:hover {
-  animation: btn-pulse 0.7s ease-out 1;
-}
-
-/* Disabled look while animating */
-.btn-primary-pill[disabled] {
-  opacity: 0.8;
-  cursor: not-allowed;
-}
-
-/* Responsive */
-@media (max-width: 575.98px) {
-  .card.product .bottom {
-    grid-template-columns: 1fr;
-  }
-  .btn-primary-pill {
-    width: 100%;
-    text-align: center;
-  }
-}
-
 /* ===== Add to Cart (Bootstrap-aware + premium hover) ===== */
 .btn-primary-pill.btn {
-  /* Tell Bootstrap what colors to use */
   --bs-btn-color: #fff;
   --bs-btn-hover-color: #fff;
   --bs-btn-bg: #111;
   --bs-btn-border-color: #111;
-  --bs-btn-hover-bg: #000; /* slightly deeper on hover */
+  --bs-btn-hover-bg: #000;
   --bs-btn-hover-border-color: #000;
   --bs-btn-active-bg: #000;
   --bs-btn-active-border-color: #000;
-
   border-radius: 999px;
   padding: 0.58rem 1.25rem;
   line-height: 1;
+  transition: transform 0.14s, box-shadow 0.2s, background-color 0.15s,
+    border-color 0.15s;
   position: relative;
-  transition: transform 0.14s ease, box-shadow 0.2s ease,
-    background-color 0.15s ease, border-color 0.15s ease;
 }
-
-/* keep text white on all interactive states */
 .btn-primary-pill,
 .btn-primary-pill:hover,
 .btn-primary-pill:focus {
   color: #fff !important;
 }
-
-/* lift + soft ring on hover */
 .btn-primary-pill:hover {
   transform: translateY(-1px);
   box-shadow: 0 8px 22px rgba(17, 17, 17, 0.18);
 }
-
-/* tactile press */
 .btn-primary-pill:active {
   transform: translateY(0);
   box-shadow: 0 4px 14px rgba(17, 17, 17, 0.18);
 }
-
-/* keyboard focus */
 .btn-primary-pill:focus-visible {
   outline: none;
   box-shadow: 0 0 0 4px rgba(17, 17, 17, 0.15),
     0 8px 22px rgba(17, 17, 17, 0.18);
 }
-
-/* subtle “shine” sweep on hover */
+/* shine */
 .btn-primary-pill::after {
   content: "";
   position: absolute;
@@ -216,14 +136,13 @@
     transparent 60%
   );
   transform: translateX(-120%);
-  transition: transform 0.45s ease;
+  transition: transform 0.45s;
   pointer-events: none;
 }
 .btn-primary-pill:hover::after {
   transform: translateX(100%);
 }
-
-/* Added-state pulse (optional, when you toggle .btn-added) */
+/* Added pulse */
 @keyframes btn-pulse {
   0% {
     box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.35);
@@ -238,19 +157,67 @@
 .btn-added {
   --bs-btn-bg: #16a34a;
   --bs-btn-border-color: #16a34a;
+  animation: btn-pulse 0.7s ease-out 1;
 }
 .btn-added:hover {
   --bs-btn-hover-bg: #15803d;
   --bs-btn-hover-border-color: #15803d;
 }
-.btn-added {
-  animation: btn-pulse 0.7s ease-out 1;
+
+/* ==== RESPONSIVE TWEAKS ==== */
+/* Phones: stack price + add button; make secondary actions full-width row */
+@media (max-width: 575.98px) {
+  .card.product .bottom {
+    grid-template-columns: 1fr;
+  }
+  .btn-primary-pill {
+    width: 100%;
+    text-align: center;
+  }
+  .actions-secondary {
+    gap: 0.5rem;
+  }
+  .actions-secondary .btn {
+    flex: 1 1 calc(50% - 0.5rem);
+    text-align: center;
+  }
 }
 
-/* respectful motion for users who prefer less animation */
+/* Very small phones: keep images tall enough to be recognizable */
+@media (max-width: 360px) {
+  .card.product .media {
+    aspect-ratio: 1/1;
+  }
+}
+
+/* Product detail image area */
+.detail-figure {
+  background: linear-gradient(180deg, #f7f8f9, #eef2f5);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+}
+.detail-figure img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* QuickView: improve modal padding on small screens */
+@media (max-width: 575.98px) {
+  .modal .modal-content {
+    border-radius: 0;
+    min-height: 100vh;
+  }
+}
+
+/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .btn-primary-pill,
-  .btn-primary-pill::after {
-    transition: none;
+  .btn-primary-pill::after,
+  .card.product,
+  .card.product .media img {
+    transition: none !important;
   }
 }
