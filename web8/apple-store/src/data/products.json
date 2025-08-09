@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "iPhone 15 Pro",
+    "category": "iPhone",
+    "price": 1099,
+    "image": "https://images.macrumors.com/t/oLmS7-N8e4crfKGFE4zCpF1VQoI=/1600x900/smart/article-new/2023/09/iphone-15-pro-gray.jpg",
+    "description": "A17 Pro chip, titanium design, Pro camera system."
+  },
+  {
+    "id": 2,
+    "name": "MacBook Air 15”",
+    "category": "Mac",
+    "price": 1299,
+    "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/318/659/products/macbook-air-m3-13-d2fr-d1-jpeg-b0cde1ce-f57f-400e-aa43-d30a512d9823.jpg?v=1712727957947",
+    "description": "Ultra-thin design with M-series performance."
+  }
+]
