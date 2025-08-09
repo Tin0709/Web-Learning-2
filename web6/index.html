@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Daily Mood Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Chart.js CDN (pure JS allowed) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <h1>Daily Mood Tracker</h1>
+    <button id="themeToggle" aria-label="Toggle theme">🌓</button>
+  </header>
+
+  <main class="grid">
+    <!-- Log / Edit -->
+    <section class="card">
+      <h2>Log your mood</h2>
+      <form id="moodForm">
+        <label class="date-row">
+          <span>Date</span>
+          <input id="entryDate" type="date" required />
+        </label>
+
+        <fieldset class="moods">
+          <legend>Mood</legend>
+          <!-- value: 1..5 -->
+          <label><input type="radio" name="mood" value="1" required /> 😞</label>
+          <label><input type="radio" name="mood" value="2" /> 🙁</label>
+          <label><input type="radio" name="mood" value="3" /> 😐</label>
+          <label><input type="radio" name="mood" value="4" /> 🙂</label>
+          <label><input type="radio" name="mood" value="5" /> 😄</label>
+        </fieldset>
+
+        <label class="notes-row">
+          <span>Notes (optional)</span>
+          <textarea id="entryNote" rows="3" placeholder="What influenced your mood today?"></textarea>
+        </label>
+
+        <div class="row">
+          <button id="saveBtn" type="submit">Save</button>
+          <button id="resetBtn" type="button" class="secondary">Reset</button>
+        </div>
+        <input type="hidden" id="editingId" />
+      </form>
+    </section>
+
+    <!-- Stats -->
+    <section class="card">
+      <h2>7-day trend</h2>
+      <canvas id="moodChart" height="160"></canvas>
+      <div class="stats">
+        <div><strong>Current streak:</strong> <span id="streak">0</span> day(s)</div>
+        <div><strong>Average (30d):</strong> <span id="avg30">–</span></div>
+        <div><strong>Best day:</strong> <span id="bestDay">–</span></div>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section class="card">
+      <h2>History</h2>
+      <div class="toolbar">
+        <input id="search" type="search" placeholder="Search notes…" />
+        <select id="filterMood">
+          <option value="">All moods</option>
+          <option value="5">😄 Great</option>
+          <option value="4">🙂 Good</option>
+          <option value="3">😐 Okay</option>
+          <option value="2">🙁 Low</option>
+          <option value="1">😞 Bad</option>
+        </select>
+        <button id="exportBtn" class="secondary">Export</button>
+        <label class="import">
+          <input id="importFile" type="file" accept="application/json" hidden />
+          <span class="secondary">Import</span>
+        </label>
+      </div>
+      <ul id="history" class="list"></ul>
+      <button id="clearAll" class="danger">Clear all data</button>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <small>Data is stored locally in your browser. No accounts, no servers.</small>
+  </footer>
+
+  <template id="historyItem">
+    <li class="item">
+      <div class="left">
+        <div class="date"></div>
+        <div class="note"></div>
+      </div>
+      <div class="right">
+        <span class="moodBadge" title="Mood"></span>
+        <button class="icon edit" title="Edit">✏️</button>
+        <button class="icon delete" title="Delete">🗑️</button>
+      </div>
+    </li>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
