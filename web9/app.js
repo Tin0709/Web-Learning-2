@@ -18,3 +18,23 @@ function setFact(text) {
 newBtn.addEventListener("click", () => {});
 
 copyBtn.addEventListener("click", async () => {});
+
+const placeholderFacts = [
+  "Bananas are berries, but strawberries aren’t.",
+  "Honey never spoils—edible honey has been found in ancient tombs.",
+  "Octopuses have three hearts.",
+  "Hot water can freeze faster than cold under certain conditions (Mpemba effect).",
+];
+
+function randomLocalFact() {
+  return placeholderFacts[Math.floor(Math.random() * placeholderFacts.length)];
+}
+
+// initial render
+setFact(randomLocalFact());
+
+// wire button to cycle placeholder for now
+newBtn.addEventListener("click", () => {
+  setStatus("Finding a new fact…");
+  setTimeout(() => setFact(randomLocalFact()), 200);
+});
