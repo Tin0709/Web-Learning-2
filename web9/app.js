@@ -1,11 +1,14 @@
+// Footer year
 const yearEl = document.getElementById("year");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+// Elements
 const factEl = document.getElementById("fact");
 const statusEl = document.getElementById("status");
 const newBtn = document.getElementById("newFactBtn");
 const copyBtn = document.getElementById("copyBtn");
 
+// Helpers
 function setStatus(msg) {
   statusEl.textContent = msg || "";
 }
@@ -15,10 +18,7 @@ function setFact(text) {
   setStatus("");
 }
 
-newBtn.addEventListener("click", () => {});
-
-copyBtn.addEventListener("click", async () => {});
-
+// Local fallback facts
 const placeholderFacts = [
   "Bananas are berries, but strawberries aren’t.",
   "Honey never spoils—edible honey has been found in ancient tombs.",
@@ -30,20 +30,11 @@ function randomLocalFact() {
   return placeholderFacts[Math.floor(Math.random() * placeholderFacts.length)];
 }
 
-// initial render
-setFact(randomLocalFact());
-
-// wire button to cycle placeholder for now
-newBtn.addEventListener("click", () => {
-  setStatus("Finding a new fact…");
-  setTimeout(() => setFact(randomLocalFact()), 200);
-});
-
+// API fetcher with timeout + cache-bust
 async function getRandomFactFromApi({ timeoutMs = 6000 } = {}) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    // cache-bust param to reduce stale responses
     const url = `https://uselessfacts.jsph.pl/api/v2/facts/random?timestamp=${Date.now()}`;
     const res = await fetch(url, {
       signal: controller.signal,
@@ -51,8 +42,7 @@ async function getRandomFactFromApi({ timeoutMs = 6000 } = {}) {
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    // API returns { id, text, source, ... }
-    return data.text?.trim();
+    return (data.text || "").trim();
   } finally {
     clearTimeout(id);
   }
@@ -71,16 +61,13 @@ async function showNewFact() {
   }
 }
 
-// initial load now uses API
+// Initial load
 showNewFact();
 
-// rewire button to API path
-newBtn.replaceWith(newBtn.cloneNode(true)); // remove duplicate listeners if any
-document.getElementById("newFactBtn").addEventListener("click", showNewFact);
+// Events
+newBtn.addEventListener("click", showNewFact);
 
-// copy now works on current fact
-copyBtn.replaceWith(copyBtn.cloneNode(true));
-document.getElementById("copyBtn").addEventListener("click", async () => {
+copyBtn.addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(factEl.textContent.trim());
     setStatus("Copied to clipboard!");
