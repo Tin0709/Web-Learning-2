@@ -1,4 +1,19 @@
-/* minimal base; more styling later */
+:root {
+  --bg: #fafafa;
+  --fg: #111;
+  --muted: #555;
+  --card: #fff;
+  --border: #e6e6e6;
+  --shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  --radius: 12px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -10,29 +25,25 @@ body {
 body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   line-height: 1.6;
-  color: #111;
-  background: #fafafa;
+  color: var(--fg);
+  background: var(--bg);
 }
 .site-header,
 .site-footer {
   text-align: center;
-  padding: 1rem;
+  padding: var(--space-4);
 }
 .container {
   max-width: 720px;
-  margin: 2rem auto;
-  padding: 1rem;
+  margin: var(--space-6) auto;
+  padding: 0 var(--space-4);
 }
-.hidden {
-  display: none !important;
-}
-
 .card {
-  background: #fff;
-  border: 1px solid #e6e6e6;
-  border-radius: 12px;
-  padding: 1.25rem 1.5rem;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-5);
+  box-shadow: var(--shadow);
   min-height: 120px;
 }
 .fact-text {
@@ -40,23 +51,30 @@ body {
 }
 .controls {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 1rem;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
 }
 button {
   cursor: pointer;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   background: #fff;
   border-radius: 10px;
   padding: 0.6rem 1rem;
   font-size: 1rem;
+}
+button:hover {
+  transform: translateY(-1px);
+}
+button:active {
+  transform: translateY(0);
 }
 button:focus {
   outline: 2px solid #333;
   outline-offset: 2px;
 }
 .status {
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
   min-height: 1.25rem;
-  color: #555;
+  color: var(--muted);
 }
