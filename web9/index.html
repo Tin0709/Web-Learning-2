@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>One Random Fact</title>
     <link rel="stylesheet" href="styles.css" />
+    <meta
+      name="description"
+      content="Get a fresh random fact with one click."
+    />
   </head>
   <body>
     <header class="site-header">
       <h1>One Random Fact</h1>
     </header>
+
     <main id="app" class="container">
       <section class="card" aria-live="polite" aria-atomic="true">
         <p id="fact" class="fact-text">Loading a fascinating fact…</p>
@@ -22,9 +27,11 @@
 
       <p id="status" class="status" role="status" aria-live="polite"></p>
     </main>
+
     <footer class="site-footer">
       <small>© <span id="year"></span> One Random Fact</small>
     </footer>
+
     <script src="app.js" defer></script>
   </body>
 </html>
