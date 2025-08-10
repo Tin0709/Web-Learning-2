@@ -22,22 +22,26 @@ body {
   margin: 0;
   padding: 0;
 }
+
 body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   line-height: 1.6;
   color: var(--fg);
   background: var(--bg);
 }
+
 .site-header,
 .site-footer {
   text-align: center;
   padding: var(--space-4);
 }
+
 .container {
   max-width: 720px;
   margin: var(--space-6) auto;
   padding: 0 var(--space-4);
 }
+
 .card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -46,15 +50,18 @@ body {
   box-shadow: var(--shadow);
   min-height: 120px;
 }
+
 .fact-text {
   font-size: 1.25rem;
 }
+
 .controls {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
   margin-top: var(--space-4);
 }
+
 button {
   cursor: pointer;
   border: 1px solid var(--border);
@@ -62,7 +69,9 @@ button {
   border-radius: 10px;
   padding: 0.6rem 1rem;
   font-size: 1rem;
+  transition: transform 0.06s ease;
 }
+
 button:hover {
   transform: translateY(-1px);
 }
@@ -73,8 +82,13 @@ button:focus {
   outline: 2px solid #333;
   outline-offset: 2px;
 }
+
 .status {
   margin-top: var(--space-2);
   min-height: 1.25rem;
   color: var(--muted);
+}
+
+.hidden {
+  display: none !important;
 }
