@@ -26,3 +26,37 @@ body {
 .hidden {
   display: none !important;
 }
+
+.card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  min-height: 120px;
+}
+.fact-text {
+  font-size: 1.25rem;
+}
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+button {
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+}
+button:focus {
+  outline: 2px solid #333;
+  outline-offset: 2px;
+}
+.status {
+  margin-top: 0.5rem;
+  min-height: 1.25rem;
+  color: #555;
+}

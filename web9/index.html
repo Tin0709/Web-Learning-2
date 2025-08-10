@@ -11,7 +11,16 @@
       <h1>One Random Fact</h1>
     </header>
     <main id="app" class="container">
-      <!-- content will come next commits -->
+      <section class="card" aria-live="polite" aria-atomic="true">
+        <p id="fact" class="fact-text">Loading a fascinating fact…</p>
+      </section>
+
+      <div class="controls">
+        <button id="newFactBtn" type="button">New fact</button>
+        <button id="copyBtn" type="button" aria-label="Copy fact">Copy</button>
+      </div>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
     </main>
     <footer class="site-footer">
       <small>© <span id="year"></span> One Random Fact</small>
