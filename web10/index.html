@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SkillSwap — Trade skills, not cash</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <h1 class="logo">
+          <span class="logo-mark" aria-hidden="true">⇄</span>
+          SkillSwap
+        </h1>
+        <p class="tagline">Trade skills, not cash.</p>
+        <div class="header-actions">
+          <input
+            id="search"
+            class="search"
+            type="search"
+            placeholder="Search skills (e.g., guitar, React, cooking)"
+            aria-label="Search skills"
+          />
+          <button
+            id="clearDataBtn"
+            class="btn btn-ghost"
+            title="Clear all data"
+          >
+            Reset demo
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="panel">
+        <h2>Post your listing</h2>
+        <form id="listingForm" class="grid" autocomplete="off">
+          <label class="field">
+            <span>Name</span>
+            <input
+              required
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Your display name"
+            />
+          </label>
+
+          <label class="field">
+            <span>Skills you can teach <em>(comma-separated)</em></span>
+            <input
+              required
+              id="offers"
+              name="offers"
+              type="text"
+              placeholder="e.g., guitar, spanish basics, Figma"
+            />
+          </label>
+
+          <label class="field">
+            <span>Skills you want to learn <em>(comma-separated)</em></span>
+            <input
+              required
+              id="wants"
+              name="wants"
+              type="text"
+              placeholder="e.g., React, budgeting"
+            />
+          </label>
+
+          <label class="field">
+            <span>Availability</span>
+            <input
+              id="availability"
+              name="availability"
+              type="text"
+              placeholder="e.g., Weeknights, Sat mornings"
+            />
+          </label>
+
+          <label class="field">
+            <span>Contact (email or handle)</span>
+            <input
+              id="contact"
+              name="contact"
+              type="text"
+              placeholder="e.g., alex@mail.com or @alex"
+            />
+          </label>
+
+          <div class="actions">
+            <button class="btn" type="submit">Add listing</button>
+            <div id="formStatus" class="sr-only" aria-live="polite"></div>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>People near you (demo data included)</h2>
+          <span id="count" class="muted"></span>
+        </div>
+        <ul id="cards" class="cards" aria-live="polite" aria-busy="false"></ul>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Suggested matches</h2>
+          <span class="muted">Mutual “I teach ⇄ I want” pairs</span>
+        </div>
+        <ul
+          id="matches"
+          class="matches"
+          aria-live="polite"
+          aria-busy="false"
+        ></ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <small>Built for fun. No servers, just your browser.</small>
+      </div>
+    </footer>
+
+    <template id="cardTmpl">
+      <li class="card">
+        <div class="card-head">
+          <div class="avatar" aria-hidden="true"></div>
+          <div>
+            <h3 class="card-title"></h3>
+            <p class="muted contact"></p>
+          </div>
+        </div>
+        <div class="pill-row">
+          <strong>Teaches:</strong>
+          <div class="pills pills-offers"></div>
+        </div>
+        <div class="pill-row">
+          <strong>Wants:</strong>
+          <div class="pills pills-wants"></div>
+        </div>
+        <p class="muted availability"></p>
+        <button
+          class="btn btn-ghost btn-delete"
+          type="button"
+          title="Delete listing"
+        >
+          Delete
+        </button>
+      </li>
+    </template>
+
+    <template id="matchTmpl">
+      <li class="match">
+        <div class="match-row">
+          <div class="match-person a">
+            <div class="avatar" aria-hidden="true"></div>
+            <div class="who"></div>
+          </div>
+          <div class="match-arrow" aria-hidden="true">⇄</div>
+          <div class="match-person b">
+            <div class="avatar" aria-hidden="true"></div>
+            <div class="who"></div>
+          </div>
+        </div>
+        <div class="match-details">
+          <div>
+            <div class="muted">A teaches → B wants</div>
+            <div class="pills pills-a2b"></div>
+          </div>
+          <div>
+            <div class="muted">B teaches → A wants</div>
+            <div class="pills pills-b2a"></div>
+          </div>
+        </div>
+      </li>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
