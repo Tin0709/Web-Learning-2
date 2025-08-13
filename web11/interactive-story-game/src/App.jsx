@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import Header from "./components/Header.jsx";
+import StoryEngine from "./components/StoryEngine.jsx";
+import ProgressBar from "./components/ProgressBar.jsx";
+import { useLocalStorage } from "./components/hooks.js";
+import story from "./story.js";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [save, setSave] = useLocalStorage("story-save", null);
+  const [showToast, setShowToast] = React.useState(false);
+
+  const handleSave = (data) => {
+    setSave(data);
+    setShowToast(true);
+    window.clearTimeout(window.__toastTimer);
+    window.__toastTimer = window.setTimeout(() => setShowToast(false), 1500);
+  };
+
+  const handleReset = () => setSave(null);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="app-shell">
+      <Header onReset={handleReset} hasSave={!!save} />
+      <main className="container">
+        <ProgressBar percent={save?.progress ?? 0} />
+        <StoryEngine
+          key={save?.id || "fresh"}
+          story={story}
+          initialState={save}
+          onSave={handleSave}
+        />
+      </main>
 
-export default App
+      <div
+        className={"toast " + (showToast ? "toast--visible" : "")}
+        role="status"
+        aria-live="polite"
+      >
+        Progress saved ✓
+      </div>
+    </div>
+  );
+}
