@@ -17,18 +17,28 @@ export function useLocalStorage(key, initialValue) {
       } else {
         window.localStorage.setItem(key, JSON.stringify(value));
       }
-    } catch {}
+    } catch {
+      /* ignore */
+    }
   }, [key, value]);
 
   return [value, setValue];
 }
 
-export function useKey(handler, deps = []) {
+export function useKey(handler) {
+  const handlerRef = useRef(handler);
+
+  // keep ref synced with latest handler
   useEffect(() => {
-    const fn = (e) => handler(e);
+    handlerRef.current = handler;
+  }, [handler]);
+
+  // add/remove listener once; always call latest handler via ref
+  useEffect(() => {
+    const fn = (e) => handlerRef.current(e);
     window.addEventListener("keydown", fn);
     return () => window.removeEventListener("keydown", fn);
-  }, deps);
+  }, []);
 }
 
 export function useTypewriter(text, speed = 18) {
