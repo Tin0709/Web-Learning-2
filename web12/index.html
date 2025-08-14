@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>2048 – Vanilla JS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="topbar">
+        <div class="brand">
+          <h1>2048</h1>
+          <p class="subtitle">
+            Join the numbers to reach <strong>2048</strong>!
+          </p>
+        </div>
+
+        <div class="panels">
+          <div class="panel" aria-live="polite" aria-atomic="true">
+            <div class="label">Score</div>
+            <div id="score" class="value">0</div>
+          </div>
+          <div class="panel">
+            <div class="label">Best</div>
+            <div id="best" class="value">0</div>
+          </div>
+          <div class="actions">
+            <button id="newGame" class="btn">New Game</button>
+            <button
+              id="undo"
+              class="btn btn--ghost"
+              title="Undo last move (1 step)"
+            >
+              Undo
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="board" role="application" aria-label="2048 board">
+        <!-- Background grid -->
+        <div id="grid" class="grid"></div>
+        <!-- Dynamic tiles layer -->
+        <div
+          id="tiles"
+          class="tiles"
+          aria-live="polite"
+          aria-atomic="true"
+        ></div>
+
+        <div id="overlay" class="overlay hidden" aria-hidden="true">
+          <div id="overlayText" class="overlay__text">Game Over</div>
+          <button id="keepPlaying" class="btn btn--ghost hidden">
+            Keep Playing
+          </button>
+          <button id="tryAgain" class="btn">Try Again</button>
+        </div>
+      </section>
+
+      <section class="help">
+        <p>
+          <strong>How to play:</strong> Use your <kbd>←</kbd><kbd>↑</kbd
+          ><kbd>→</kbd><kbd>↓</kbd> keys (or swipe) to move tiles. When two
+          tiles with the same number touch, they merge.
+        </p>
+        <p class="small">
+          Supports keyboard (arrows / WASD), mouse drag, and touch gestures.
+          Your best score is saved.
+        </p>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
