@@ -1,8 +1,9 @@
-/* 2048 – Vanilla JS
-   - Keyboard (arrows/WASD) + touch/mouse swipe
+/* 2048 – Vanilla JS (keyboard + pointer drag)
+   - Keyboard (arrows/WASD/HJKL)
+   - Pointer drag (mouse/touch/pen) on the board
    - Score + Best (localStorage)
-   - Undo (one-step stack, can extend easily)
-   - Simple animations for new and merged tiles
+   - Undo (multi-step stack)
+   - Simple animations for new/merged tiles
 */
 
 (() => {
@@ -20,13 +21,14 @@
   const overlayText = document.getElementById("overlayText");
   const keepPlayingBtn = document.getElementById("keepPlaying");
   const tryAgainBtn = document.getElementById("tryAgain");
+  const boardEl = document.querySelector(".board");
 
   // State
   let board = makeEmptyBoard();
   let score = 0;
   let best = Number(localStorage.getItem("best-2048") || 0);
   let reached2048 = false;
-  let undoStack = []; // stores snapshots {board, score}
+  let undoStack = []; // snapshots {board, score}
 
   // For animations
   let newTileSet = new Set(); // "r-c" of newly spawned tile
@@ -39,15 +41,6 @@
 
   function cloneBoard(b) {
     return b.map((row) => row.slice());
-  }
-
-  function boardsEqual(a, b) {
-    for (let r = 0; r < SIZE; r++) {
-      for (let c = 0; c < SIZE; c++) {
-        if (a[r][c] !== b[r][c]) return false;
-      }
-    }
-    return true;
   }
 
   function emptyCells(b) {
@@ -107,6 +100,7 @@
     }
     scoreEl.textContent = score;
     bestEl.textContent = best;
+
     // clear animation sets for next paint cycle
     newTileSet.clear();
     mergedTileSet.clear();
@@ -155,8 +149,7 @@
 
   function pushUndoSnapshot() {
     undoStack.push({ board: cloneBoard(board), score });
-    // limit memory of undo to a few steps if desired
-    if (undoStack.length > 20) undoStack.shift();
+    if (undoStack.length > 20) undoStack.shift(); // cap depth (adjustable)
   }
 
   function undo() {
@@ -188,7 +181,7 @@
       if (filtered[i] === filtered[i + 1]) {
         filtered[i] *= 2;
         score += filtered[i];
-        mergedIndices.add(i); // index in the compacted (left-aligned) array
+        mergedIndices.add(i);
         filtered.splice(i + 1, 1);
         i += 1;
       } else {
@@ -202,7 +195,7 @@
 
   function move(direction) {
     // direction: 'left'|'right'|'up'|'down'
-    const before = cloneBoard(board);
+    const before = board.map((r) => r.slice());
     let anyChanged = false;
     mergedTileSet.clear();
 
@@ -216,12 +209,11 @@
         board[r] = result;
         if (changed) anyChanged = true;
 
-        // Mark merged cells for animation (final board coordinates)
+        // Mark merged cells for animation (final coordinates)
         if (mergedIndices.size) {
           if (direction === "left") {
             mergedIndices.forEach((idx) => mergedTileSet.add(`${r}-${idx}`));
           } else {
-            // right
             mergedIndices.forEach((idx) => {
               const col = SIZE - 1 - idx;
               mergedTileSet.add(`${r}-${col}`);
@@ -230,7 +222,6 @@
         }
       }
     } else {
-      // up/down -> work column-wise
       for (let c = 0; c < SIZE; c++) {
         const col = [];
         for (let r = 0; r < SIZE; r++) col.push(board[r][c]);
@@ -241,12 +232,10 @@
         for (let r = 0; r < SIZE; r++) board[r][c] = result[r];
         if (changed) anyChanged = true;
 
-        // Mark merged cells
         if (mergedIndices.size) {
           if (direction === "up") {
             mergedIndices.forEach((idx) => mergedTileSet.add(`${idx}-${c}`));
           } else {
-            // down
             mergedIndices.forEach((idx) => {
               const row = SIZE - 1 - idx;
               mergedTileSet.add(`${row}-${c}`);
@@ -258,7 +247,7 @@
 
     if (!anyChanged) return false;
 
-    // Win check (once)
+    // Win check (one-time)
     if (!reached2048 && board.some((row) => row.some((v) => v === 2048))) {
       reached2048 = true;
       showOverlay("You win! 🎉", true);
@@ -271,7 +260,6 @@
 
   function canMove(b = board) {
     if (emptyCells(b).length) return true;
-    // Check adjacents
     for (let r = 0; r < SIZE; r++) {
       for (let c = 0; c < SIZE; c++) {
         const v = b[r][c];
@@ -298,7 +286,7 @@
     overlay.setAttribute("aria-hidden", "true");
   }
 
-  // Input handlers
+  // Keyboard input
   function handleKey(e) {
     const key = e.key.toLowerCase();
     const map = {
@@ -322,7 +310,6 @@
     pushUndoSnapshot();
     const changed = move(dir);
     if (!changed) {
-      // revert useless snapshot
       undoStack.pop();
       return;
     }
@@ -331,20 +318,29 @@
     if (!canMove()) showOverlay("Game Over 💥");
   }
 
-  // Touch & mouse swipe
+  // Unified pointer (mouse/touch/pen) swipe on the board
   let dragStart = null;
-  const THRESHOLD = 20;
+  const THRESHOLD = 20; // px – prevent accidental moves
 
-  function onPointerDown(x, y) {
-    dragStart = { x, y };
+  function onPointerDown(e) {
+    // Ignore secondary buttons
+    if (e.button !== undefined && e.button !== 0) return;
+    boardEl.setPointerCapture?.(e.pointerId);
+    dragStart = { x: e.clientX, y: e.clientY };
   }
-  function onPointerUp(x, y) {
+
+  function onPointerMove(_e) {
+    // Optional: add visual feedback while dragging
+  }
+
+  function onPointerUp(e) {
     if (!dragStart) return;
-    const dx = x - dragStart.x;
-    const dy = y - dragStart.y;
+    const dx = e.clientX - dragStart.x;
+    const dy = e.clientY - dragStart.y;
     dragStart = null;
 
     if (Math.max(Math.abs(dx), Math.abs(dy)) < THRESHOLD) return;
+
     const horizontal = Math.abs(dx) > Math.abs(dy);
     const dir = horizontal
       ? dx > 0
@@ -368,36 +364,14 @@
   // Event wiring
   document.addEventListener("keydown", handleKey, { passive: false });
 
-  // Touch
-  tilesEl.addEventListener(
-    "touchstart",
-    (e) => {
-      const t = e.changedTouches[0];
-      onPointerDown(t.clientX, t.clientY);
-    },
-    { passive: true }
-  );
-  tilesEl.addEventListener(
-    "touchend",
-    (e) => {
-      const t = e.changedTouches[0];
-      onPointerUp(t.clientX, t.clientY);
-    },
-    { passive: true }
-  );
-
-  // Mouse drag (desktop)
-  let mouseDown = false;
-  tilesEl.addEventListener("mousedown", (e) => {
-    mouseDown = true;
-    onPointerDown(e.clientX, e.clientY);
+  // Pointer events (works for mouse, touch, pen)
+  boardEl.addEventListener("pointerdown", onPointerDown, { passive: true });
+  boardEl.addEventListener("pointermove", onPointerMove, { passive: true });
+  boardEl.addEventListener("pointerup", onPointerUp, { passive: true });
+  boardEl.addEventListener("pointercancel", () => {
+    dragStart = null;
   });
-  window.addEventListener("mouseup", (e) => {
-    if (mouseDown) {
-      mouseDown = false;
-      onPointerUp(e.clientX, e.clientY);
-    }
-  });
+  boardEl.addEventListener("contextmenu", (e) => e.preventDefault()); // prevent right-click menu during drags
 
   newGameBtn.addEventListener("click", startNewGame);
   undoBtn.addEventListener("click", undo);
@@ -409,7 +383,7 @@
   if (!loadFromStorage()) {
     startNewGame();
   } else {
-    // If loaded, ensure at least one tile exists (safety)
+    // Safety: ensure some tiles exist
     if (emptyCells(board).length === SIZE * SIZE) {
       addRandomTile(board);
       addRandomTile(board);
