@@ -5,18 +5,16 @@
   --text: #e8ebf3;
   --accent: #6ea8fe;
   --ring: #2a65ff55;
-  --radius: 14px;
+  --radius: 16px;
 }
 
 * {
   box-sizing: border-box;
 }
-
 html,
 body {
   height: 100%;
 }
-
 body {
   margin: 0;
   background: radial-gradient(
@@ -30,6 +28,7 @@ body {
     "Segoe UI Emoji";
 }
 
+/* header/footer */
 .app-header,
 .app-footer {
   max-width: 1100px;
@@ -40,13 +39,25 @@ body {
   justify-content: space-between;
   gap: 12px;
 }
-
+.app-header {
+  position: sticky;
+  top: 8px;
+  z-index: 10;
+  padding: 10px 16px;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 12, 18, 0.6),
+    rgba(10, 12, 18, 0.2)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  backdrop-filter: blur(8px);
+}
 .app-header h1 {
   margin: 0;
-  font-size: 22px;
+  font-size: 24px;
   letter-spacing: 0.3px;
 }
-
 .app-footer {
   margin-top: 18px;
   justify-content: center;
@@ -60,18 +71,18 @@ body {
   font-size: 13px;
 }
 
+/* buttons */
 .actions {
   display: flex;
   gap: 10px;
 }
-
 .btn {
   appearance: none;
   border: 1px solid #2b3145;
   background: linear-gradient(#1a1f2d, #161b27);
   color: var(--text);
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   transition: transform 0.06s ease, border-color 0.2s ease, box-shadow 0.2s ease,
     background 0.2s ease;
@@ -92,40 +103,43 @@ body {
   background: linear-gradient(#203071, #1b2449);
 }
 
+/* responsive grid – auto-fit */
 .palette {
+  --col-min: 260px;
   max-width: 1100px;
   margin: 18px auto 0;
   padding: 16px;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 14px;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(var(--col-min), 1fr));
 }
 
-@media (max-width: 980px) {
-  .palette {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media (max-width: 620px) {
-  .palette {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 430px) {
-  .palette {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* swatch card */
 .swatch {
   position: relative;
+  min-height: 190px;
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--panel);
   border: 1px solid #23283a;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25),
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
-  min-height: 180px;
+  transform: translateY(0);
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.2s ease;
+  /* will be set from JS */
+  --col-rgb: 255 255 255;
+}
+.swatch:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(var(--col-rgb), 0.22), 0 0 28px rgba(var(--col-rgb), 0.12);
+  border-color: rgba(var(--col-rgb), 0.35);
+}
+.swatch.locked {
+  border-color: #3a61ff99;
+  background: #101526;
+  box-shadow: 0 12px 28px rgba(16, 21, 38, 0.6), 0 0 0 1px #3a61ff55;
 }
 
 .color {
@@ -133,9 +147,12 @@ body {
   inset: 0;
 }
 
+/* glass info bar */
 .info {
   position: absolute;
-  inset: auto 10px 10px 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -144,37 +161,44 @@ body {
   border-radius: 12px;
   background: linear-gradient(
     to bottom,
-    rgba(10, 12, 18, 0.75),
-    rgba(10, 12, 18, 0.8)
+    rgba(10, 12, 18, 0.72),
+    rgba(10, 12, 18, 0.82)
   );
   border: 1px solid rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(6px);
 }
 
 .hex {
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.6px;
   cursor: copy;
   user-select: all;
-  padding: 4px 8px;
-  border-radius: 8px;
-  transition: background 0.2s ease;
+  padding: 5px 10px;
+  border-radius: 10px;
+  transition: background 0.2s ease, transform 0.08s ease;
 }
 .hex:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
+}
+.hex:active {
+  transform: scale(0.98);
+}
+/* success pulse when copied */
+.swatch.copied .hex {
+  background: rgba(20, 255, 120, 0.22);
+  box-shadow: 0 0 0 2px rgba(20, 255, 120, 0.25) inset;
 }
 
 .tools {
   display: flex;
   gap: 8px;
 }
-
 .icon-btn {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   display: grid;
   place-items: center;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid #2b3145;
   background: #131824;
   cursor: pointer;
@@ -191,18 +215,13 @@ body {
   outline: 0;
   box-shadow: 0 0 0 4px var(--ring);
 }
-
 .icon {
   width: 18px;
   height: 18px;
   display: inline-block;
 }
 
-.locked {
-  border-color: #3a61ff99;
-  background: #101526;
-}
-
+/* number badge */
 .badge {
   position: absolute;
   top: 10px;
@@ -210,12 +229,13 @@ body {
   padding: 4px 8px;
   border-radius: 999px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.4px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(0, 0, 0, 0.35);
 }
 
+/* toast */
 #toast {
   position: fixed;
   left: 50%;
