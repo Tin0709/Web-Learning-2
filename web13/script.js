@@ -6,7 +6,6 @@ function randomHex() {
   return `#${n.toString(16).padStart(6, "0").toUpperCase()}`;
 }
 
-// Perceived luminance for contrast (WCAG-ish)
 function getTextColor(hex) {
   const [r, g, b] = hexToRgb(hex);
   const srgb = [r, g, b].map((v) => {
@@ -50,7 +49,7 @@ try {
     state = cached;
   }
 } catch {
-  /* noop */
+  /* ignore */
 }
 
 // ===== DOM =====
@@ -127,7 +126,7 @@ function setSwatch(i, hex) {
   const textColor = getTextColor(hex);
   colorLayer.style.background = hex;
   hexEl.textContent = hex;
-  hexEl.style.color = textColor; // 👈 added line
+  hexEl.style.color = textColor;
 
   const [r, g, b] = hexToRgb(hex);
   swatch.style.setProperty("--col-rgb", `${r} ${g} ${b}`);
@@ -135,6 +134,18 @@ function setSwatch(i, hex) {
   swatch.querySelector(".info").style.color = textColor;
   swatch.querySelector(".badge").style.color = textColor;
   swatch.querySelector(".badge").style.borderColor = textColor + "33";
+
+  // removed per-button icon color override → icons stay bright via CSS
+}
+
+function toggleLock(i, btn, swatch) {
+  state.locks[i] = !state.locks[i];
+  btn.setAttribute("aria-pressed", String(state.locks[i]));
+  swatch.classList.toggle("locked", state.locks[i]);
+  btn.innerHTML = state.locks[i]
+    ? `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17 8V6a5 5 0 0 0-10 0v2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-2Zm-8 0V6a3 3 0 1 1 6 0v3Z"/></svg>`
+    : `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5Zm3 8H9V6a3 3 0 1 1 6 0v3Z"/></svg>`;
+  persist();
 }
 
 function copyHex(i) {
@@ -168,10 +179,9 @@ function persist() {
 // ===== Init =====
 buildSwatches();
 
-// If we have cached colors, render them; else generate new ones
+// Render cached or generate new
 if (state.colors.length === SWATCH_COUNT && state.colors.every(Boolean)) {
   state.colors.forEach((hex, i) => setSwatch(i, hex));
-  // restore locked visuals
   [...palette.children].forEach((swatch, i) => {
     if (state.locks[i]) swatch.classList.add("locked");
     const btn = swatch.querySelector(".icon-btn:last-child");
@@ -185,7 +195,7 @@ if (state.colors.length === SWATCH_COUNT && state.colors.every(Boolean)) {
 generateBtn.addEventListener("click", () => generatePalette(true));
 shuffleBtn.addEventListener("click", () => generatePalette(false));
 
-// Keyboard: Space to generate, L to toggle current hovered lock
+// Keyboard: Space to generate
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     e.preventDefault();
@@ -193,7 +203,7 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
-// Accessibility hint: announce new colors
+// Accessibility hint
 const observer = new MutationObserver(() => {
   const labels = state.colors.map((c, i) => `Color ${i + 1} ${c}`).join(", ");
   palette.setAttribute("aria-label", `Palette: ${labels}`);

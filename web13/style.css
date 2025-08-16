@@ -204,6 +204,14 @@ body {
   cursor: pointer;
   transition: transform 0.06s ease, border-color 0.2s ease, background 0.2s ease,
     box-shadow 0.2s ease;
+
+  color: #fff;
+}
+.icon-btn:hover {
+  color: #cfe0ff;
+}
+.icon-btn:active {
+  color: #9fe6c3;
 }
 .icon-btn:hover {
   border-color: #3a4360;
