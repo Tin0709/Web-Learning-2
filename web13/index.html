@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Color Palette Generator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Color Palette</h1>
+      <div class="actions">
+        <button
+          id="generateBtn"
+          class="btn primary"
+          aria-label="Generate palette (Space)"
+        >
+          🔁 Generate
+        </button>
+        <button
+          id="shuffleCountBtn"
+          class="btn"
+          aria-label="Shuffle unlocked colors (Space)"
+        >
+          🎲 Shuffle
+        </button>
+      </div>
+    </header>
+
+    <main class="palette" id="palette" aria-live="polite">
+      <!-- Swatches are injected by JS -->
+    </main>
+
+    <footer class="app-footer">
+      <p>
+        Tip: Press <kbd>Space</kbd> to generate. Click a hex code to copy. Use
+        the lock to keep a color.
+      </p>
+    </footer>
+
+    <!-- Tiny toast -->
+    <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
