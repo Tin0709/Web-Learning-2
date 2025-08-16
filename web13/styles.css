@@ -1,0 +1,236 @@
+:root {
+  --bg: #0f1115;
+  --panel: #151924;
+  --muted: #8b90a3;
+  --text: #e8ebf3;
+  --accent: #6ea8fe;
+  --ring: #2a65ff55;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(
+    1200px 600px at 15% -10%,
+    #1a2030 0%,
+    #0f1115 55%
+  );
+  color: var(--text);
+  font: 500 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+    Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
+.app-header,
+.app-footer {
+  max-width: 1100px;
+  margin: 24px auto 0;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: 0.3px;
+}
+
+.app-footer {
+  margin-top: 18px;
+  justify-content: center;
+  color: var(--muted);
+}
+.app-footer kbd {
+  background: #0b0d12;
+  border: 1px solid #262938;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid #2b3145;
+  background: linear-gradient(#1a1f2d, #161b27);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.06s ease, border-color 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease;
+  user-select: none;
+}
+.btn:hover {
+  border-color: #3a4360;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 4px var(--ring);
+}
+.btn.primary {
+  border-color: #3a61ff66;
+  background: linear-gradient(#203071, #1b2449);
+}
+
+.palette {
+  max-width: 1100px;
+  margin: 18px auto 0;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 980px) {
+  .palette {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 620px) {
+  .palette {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 430px) {
+  .palette {
+    grid-template-columns: 1fr;
+  }
+}
+
+.swatch {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid #23283a;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  min-height: 180px;
+}
+
+.color {
+  position: absolute;
+  inset: 0;
+}
+
+.info {
+  position: absolute;
+  inset: auto 10px 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 12, 18, 0.75),
+    rgba(10, 12, 18, 0.8)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(6px);
+}
+
+.hex {
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  cursor: copy;
+  user-select: all;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+.hex:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.tools {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  border: 1px solid #2b3145;
+  background: #131824;
+  cursor: pointer;
+  transition: transform 0.06s ease, border-color 0.2s ease, background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.icon-btn:hover {
+  border-color: #3a4360;
+}
+.icon-btn:active {
+  transform: translateY(1px);
+}
+.icon-btn:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
+
+.locked {
+  border-color: #3a61ff99;
+  background: #101526;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+  background: #0c111f;
+  border: 1px solid #2b3145;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
