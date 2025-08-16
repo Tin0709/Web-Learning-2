@@ -127,12 +127,11 @@ function setSwatch(i, hex) {
   const textColor = getTextColor(hex);
   colorLayer.style.background = hex;
   hexEl.textContent = hex;
+  hexEl.style.color = textColor; // 👈 added line
 
-  // NEW: expose rgb to CSS for subtle glow/border
   const [r, g, b] = hexToRgb(hex);
   swatch.style.setProperty("--col-rgb", `${r} ${g} ${b}`);
 
-  // Apply contrasting text color
   swatch.querySelector(".info").style.color = textColor;
   swatch.querySelector(".badge").style.color = textColor;
   swatch.querySelector(".badge").style.borderColor = textColor + "33";
