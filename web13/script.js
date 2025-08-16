@@ -128,27 +128,26 @@ function setSwatch(i, hex) {
   colorLayer.style.background = hex;
   hexEl.textContent = hex;
 
+  // NEW: expose rgb to CSS for subtle glow/border
+  const [r, g, b] = hexToRgb(hex);
+  swatch.style.setProperty("--col-rgb", `${r} ${g} ${b}`);
+
   // Apply contrasting text color
   swatch.querySelector(".info").style.color = textColor;
   swatch.querySelector(".badge").style.color = textColor;
   swatch.querySelector(".badge").style.borderColor = textColor + "33";
 }
 
-function toggleLock(i, btn, swatch) {
-  state.locks[i] = !state.locks[i];
-  btn.setAttribute("aria-pressed", String(state.locks[i]));
-  swatch.classList.toggle("locked", state.locks[i]);
-  btn.innerHTML = state.locks[i]
-    ? `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17 8V6a5 5 0 0 0-10 0v2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-2Zm-8 0V6a3 3 0 1 1 6 0v2H9Z"/></svg>`
-    : `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5Zm3 8H9V6a3 3 0 1 1 6 0v3Z"/></svg>`;
-  persist();
-}
-
 function copyHex(i) {
   const hex = state.colors[i];
   if (!hex) return;
+  const swatch = palette.children[i];
   navigator.clipboard?.writeText(hex).then(
-    () => showToast(`Copied ${hex}`),
+    () => {
+      showToast(`Copied ${hex}`);
+      swatch.classList.add("copied");
+      setTimeout(() => swatch.classList.remove("copied"), 600);
+    },
     () => showToast(`Copy failed. ${hex}`)
   );
 }
