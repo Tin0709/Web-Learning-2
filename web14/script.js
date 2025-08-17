@@ -103,3 +103,113 @@ updateClock();
 [formatToggle, secondsToggle].forEach((el) =>
   el.addEventListener("change", updateClock)
 );
+/* ==========================
+   TIMER
+========================== */
+const tHours = qs("#tHours");
+const tMinutes = qs("#tMinutes");
+const tSeconds = qs("#tSeconds");
+const timerDisplay = qs("#timerDisplay");
+const btnTimerStart = qs("#timerStart");
+const btnTimerPause = qs("#timerPause");
+const btnTimerReset = qs("#timerReset");
+
+let timerState = {
+  durationMs: 60_000,
+  endAt: null,
+  remainingMs: 60_000,
+  ticking: false,
+  rafId: null,
+};
+
+function readTimerInputs() {
+  const h = Math.max(0, Math.min(99, Number(tHours.value || 0)));
+  const m = Math.max(0, Math.min(59, Number(tMinutes.value || 0)));
+  const s = Math.max(0, Math.min(59, Number(tSeconds.value || 0)));
+  const total = ((h * 60 + m) * 60 + s) * 1000;
+  timerState.durationMs = total;
+  timerState.remainingMs = total;
+  timerDisplay.textContent = formatHMS(total);
+}
+
+[tHours, tMinutes, tSeconds].forEach((inp) => {
+  inp.addEventListener("input", readTimerInputs);
+  inp.addEventListener("change", readTimerInputs);
+});
+readTimerInputs();
+
+function tickTimer() {
+  if (!timerState.ticking) return;
+  const now = performance.now();
+  const remaining = Math.max(0, Math.round(timerState.endAt - now));
+  timerState.remainingMs = remaining;
+  timerDisplay.textContent = formatHMS(remaining);
+  if (remaining <= 0) {
+    stopTimer(false);
+    timerComplete();
+    return;
+  }
+  timerState.rafId = requestAnimationFrame(tickTimer);
+}
+
+function startTimer() {
+  if (timerState.ticking) {
+    pauseTimer();
+    return;
+  }
+  if (timerState.remainingMs <= 0) readTimerInputs();
+  if (timerState.durationMs <= 0) return;
+  timerState.ticking = true;
+  timerState.endAt = performance.now() + timerState.remainingMs;
+  btnTimerStart.textContent = "Pause";
+  btnTimerPause.disabled = false;
+  btnTimerReset.disabled = false;
+  timerState.rafId = requestAnimationFrame(tickTimer);
+}
+
+function pauseTimer() {
+  timerState.ticking = false;
+  cancelAnimationFrame(timerState.rafId);
+  btnTimerStart.textContent = "Resume";
+}
+
+function stopTimer(reset = true) {
+  timerState.ticking = false;
+  cancelAnimationFrame(timerState.rafId);
+  btnTimerStart.textContent = "Start";
+  if (reset) {
+    timerState.remainingMs = timerState.durationMs;
+    timerDisplay.textContent = formatHMS(timerState.durationMs);
+    btnTimerPause.disabled = true;
+    btnTimerReset.disabled = true;
+  }
+}
+
+function timerComplete() {
+  timerDisplay.textContent = "00:00:00";
+  beep(600, "triangle", 0.25);
+  // Gentle document title alert
+  const original = document.title;
+  document.title = "⏰ Time’s up!";
+  setTimeout(() => {
+    document.title = original;
+  }, 2000);
+}
+
+btnTimerStart.addEventListener("click", startTimer);
+btnTimerPause.addEventListener("click", pauseTimer);
+btnTimerReset.addEventListener("click", () => stopTimer(true));
+
+/* Keyboard shortcuts for Timer tab */
+document.addEventListener("keydown", (e) => {
+  const onTimerTab = qs("#panel-timer").classList.contains("is-active");
+  if (!onTimerTab) return;
+  if (e.code === "Space") {
+    e.preventDefault();
+    startTimer();
+  }
+  if (e.key.toLowerCase() === "r") {
+    e.preventDefault();
+    stopTimer(true);
+  }
+});
