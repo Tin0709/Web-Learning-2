@@ -38,3 +38,26 @@ const beep = (duration = 500, type = "sine", volume = 0.2) => {
     /* noop if blocked */
   }
 };
+
+/* ==========================
+   TABS
+========================== */
+const tabButtons = qsa(".tab");
+const panels = qsa(".panel");
+
+tabButtons.forEach((btn) => {
+  btn.addEventListener("click", () => switchTab(btn.id));
+});
+
+function switchTab(tabId) {
+  tabButtons.forEach((b) => {
+    const active = b.id === tabId;
+    b.classList.toggle("is-active", active);
+    b.setAttribute("aria-selected", String(active));
+  });
+  panels.forEach((p) => {
+    const show = p.id === `panel-${tabId.split("tab-")[1]}`;
+    p.hidden = !show;
+    p.classList.toggle("is-active", show);
+  });
+}
