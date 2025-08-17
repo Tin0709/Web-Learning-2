@@ -19,6 +19,7 @@ const formatHMS = (totalMs, showHours = true) => {
   if (showHours) return `${sign}${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
   return `${sign}${pad(mins)}:${pad(secs)}.${pad(cs)}`;
 };
+
 // Simple beep (Web Audio API)
 const beep = (duration = 500, type = "sine", volume = 0.2) => {
   try {
@@ -103,6 +104,7 @@ updateClock();
 [formatToggle, secondsToggle].forEach((el) =>
   el.addEventListener("change", updateClock)
 );
+
 /* ==========================
    TIMER
 ========================== */
@@ -213,6 +215,7 @@ document.addEventListener("keydown", (e) => {
     stopTimer(true);
   }
 });
+
 /* ==========================
    STOPWATCH
 ========================== */
