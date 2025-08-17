@@ -1,0 +1,23 @@
+:root {
+  --bg: #0f0f12;
+  --surface: #18181d;
+  --text: #e9e9ee;
+  --muted: #b7b7c2;
+  --accent: #6aa6ff;
+  --accent-2: #77e0c3;
+  --ring: #9bb9ff;
+  --shadow: 0 6px 30px rgb(0 0 0 / 25%);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f6f7fb;
+    --surface: #fff;
+    --text: #16161a;
+    --muted: #5b5b66;
+    --accent: #2f6fff;
+    --accent-2: #0dbf90;
+    --ring: #2f6fff;
+    --shadow: 0 10px 30px rgb(16 24 40 / 10%);
+  }
+}
