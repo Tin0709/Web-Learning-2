@@ -213,3 +213,132 @@ document.addEventListener("keydown", (e) => {
     stopTimer(true);
   }
 });
+/* ==========================
+   STOPWATCH
+========================== */
+const swDisplay = qs("#swDisplay");
+const swStart = qs("#swStart");
+const swLap = qs("#swLap");
+const swReset = qs("#swReset");
+const swLaps = qs("#swLaps");
+
+let swState = {
+  running: false,
+  startTs: 0,
+  elapsedBefore: 0,
+  rafId: null,
+  lastLapMs: 0,
+  laps: [],
+};
+
+function renderStopwatch(ms) {
+  swDisplay.textContent = formatHMS(ms, false);
+}
+
+function tickSw() {
+  if (!swState.running) return;
+  const now = performance.now();
+  const elapsed = swState.elapsedBefore + (now - swState.startTs);
+  renderStopwatch(elapsed);
+  swState.rafId = requestAnimationFrame(tickSw);
+}
+
+function startSw() {
+  if (swState.running) {
+    // pause
+    swState.running = false;
+    swState.elapsedBefore += performance.now() - swState.startTs;
+    cancelAnimationFrame(swState.rafId);
+    swStart.textContent = "Resume";
+    swLap.disabled = true;
+    return;
+  }
+  // start / resume
+  swState.running = true;
+  swState.startTs = performance.now();
+  swStart.textContent = "Pause";
+  swLap.disabled = false;
+  swReset.disabled = false;
+  tickSw();
+}
+
+function resetSw() {
+  swState.running = false;
+  swState.startTs = 0;
+  swState.elapsedBefore = 0;
+  swState.lastLapMs = 0;
+  swState.laps = [];
+  cancelAnimationFrame(swState.rafId);
+  renderStopwatch(0);
+  swStart.textContent = "Start";
+  swLap.disabled = true;
+  swReset.disabled = true;
+  swLaps.innerHTML = "";
+}
+
+function addLap() {
+  const nowElapsed = swState.running
+    ? swState.elapsedBefore + (performance.now() - swState.startTs)
+    : swState.elapsedBefore;
+
+  const lapTime = nowElapsed - swState.lastLapMs;
+  swState.lastLapMs = nowElapsed;
+  swState.laps.unshift({ total: nowElapsed, lap: lapTime }); // newest first
+  renderLaps();
+}
+
+function renderLaps() {
+  swLaps.innerHTML = "";
+  swState.laps.forEach((l, i) => {
+    const li = document.createElement("li");
+    const left = document.createElement("span");
+    left.textContent = `Lap ${swState.laps.length - i}`;
+    const right = document.createElement("span");
+    right.innerHTML = `<strong>${formatHMS(
+      l.lap,
+      false
+    )}</strong> <span class="laps__meta">(${formatHMS(
+      l.total,
+      false
+    )} total)</span>`;
+    li.append(left, right);
+    swLaps.appendChild(li);
+  });
+}
+
+swStart.addEventListener("click", startSw);
+swReset.addEventListener("click", resetSw);
+swLap.addEventListener("click", addLap);
+
+/* Keyboard shortcuts for Stopwatch tab */
+document.addEventListener("keydown", (e) => {
+  const onSwTab = qs("#panel-stopwatch").classList.contains("is-active");
+  if (!onSwTab) return;
+  if (e.code === "Space") {
+    e.preventDefault();
+    startSw();
+  }
+  if (e.key.toLowerCase() === "l") {
+    e.preventDefault();
+    if (!swLap.disabled) addLap();
+  }
+  if (e.key.toLowerCase() === "r") {
+    e.preventDefault();
+    resetSw();
+  }
+});
+
+/* ==========================
+   ACCESSIBILITY EXTRAS
+========================== */
+tabButtons.forEach((btn, idx) => {
+  btn.addEventListener("keydown", (e) => {
+    const k = e.key;
+    if (k === "ArrowRight" || k === "ArrowLeft") {
+      e.preventDefault();
+      const dir = k === "ArrowRight" ? 1 : -1;
+      const next = (idx + dir + tabButtons.length) % tabButtons.length;
+      tabButtons[next].focus();
+    }
+  });
+});
