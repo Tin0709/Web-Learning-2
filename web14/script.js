@@ -61,3 +61,45 @@ function switchTab(tabId) {
     p.classList.toggle("is-active", show);
   });
 }
+
+/* ==========================
+   CLOCK
+========================== */
+const clockTimeEl = qs("#clockTime");
+const clockDateEl = qs("#clockDate");
+const formatToggle = qs("#formatToggle");
+const secondsToggle = qs("#secondsToggle");
+
+function updateClock() {
+  const now = new Date();
+  const use24 = formatToggle.checked;
+  const showSeconds = secondsToggle.checked;
+
+  let h = now.getHours();
+  const m = now.getMinutes();
+  const s = now.getSeconds();
+
+  let suffix = "";
+  if (!use24) {
+    suffix = h >= 12 ? " PM" : " AM";
+    h = h % 12 || 12;
+  }
+
+  const time = showSeconds
+    ? `${pad(h)}:${pad(m)}:${pad(s)}`
+    : `${pad(h)}:${pad(m)}`;
+  clockTimeEl.textContent = time + suffix;
+
+  const dateFmt = new Intl.DateTimeFormat(undefined, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  clockDateEl.textContent = dateFmt.format(now);
+}
+let clockInterval = setInterval(updateClock, 1000);
+updateClock();
+[formatToggle, secondsToggle].forEach((el) =>
+  el.addEventListener("change", updateClock)
+);
