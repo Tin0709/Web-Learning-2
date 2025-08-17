@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clock • Timer • Stopwatch</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app" aria-label="Clock, Timer, and Stopwatch">
+      <header class="app__header">
+        <h1 class="app__title">Clock • Timer • Stopwatch</h1>
+        <div class="app__toggles">
+          <label class="switch" title="Toggle 24-hour time">
+            <input id="formatToggle" type="checkbox" />
+            <span class="slider" aria-hidden="true"></span>
+            <span class="switch__label">24h</span>
+          </label>
+          <label class="switch" title="Toggle seconds">
+            <input id="secondsToggle" type="checkbox" checked />
+            <span class="slider" aria-hidden="true"></span>
+            <span class="switch__label">Sec</span>
+          </label>
+        </div>
+      </header>
+
+      <nav class="tabs" role="tablist" aria-label="Modes">
+        <button
+          class="tab is-active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-clock"
+          id="tab-clock"
+        >
+          Clock
+        </button>
+        <button
+          class="tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-timer"
+          id="tab-timer"
+        >
+          Timer
+        </button>
+        <button
+          class="tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-stopwatch"
+          id="tab-stopwatch"
+        >
+          Stopwatch
+        </button>
+      </nav>
+
+      <!-- CLOCK -->
+      <section
+        id="panel-clock"
+        class="panel is-active"
+        role="tabpanel"
+        aria-labelledby="tab-clock"
+      >
+        <div class="clock">
+          <div class="clock__time" aria-live="polite" aria-atomic="true">
+            <span id="clockTime">--:--:--</span>
+          </div>
+          <div class="clock__date" id="clockDate">—</div>
+        </div>
+      </section>
+
+      <!-- TIMER -->
+      <section
+        id="panel-timer"
+        class="panel"
+        role="tabpanel"
+        aria-labelledby="tab-timer"
+        hidden
+      >
+        <form class="timer__inputs" id="timerForm" autocomplete="off">
+          <label>
+            <span>Hours</span>
+            <input
+              id="tHours"
+              type="number"
+              min="0"
+              max="99"
+              inputmode="numeric"
+              value="0"
+            />
+          </label>
+          <label>
+            <span>Minutes</span>
+            <input
+              id="tMinutes"
+              type="number"
+              min="0"
+              max="59"
+              inputmode="numeric"
+              value="1"
+            />
+          </label>
+          <label>
+            <span>Seconds</span>
+            <input
+              id="tSeconds"
+              type="number"
+              min="0"
+              max="59"
+              inputmode="numeric"
+              value="0"
+            />
+          </label>
+        </form>
+
+        <div
+          class="timer__display"
+          id="timerDisplay"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          00:01:00
+        </div>
+
+        <div class="controls">
+          <button id="timerStart" class="btn primary">Start</button>
+          <button id="timerPause" class="btn" disabled>Pause</button>
+          <button id="timerReset" class="btn" disabled>Reset</button>
+        </div>
+
+        <p class="hint">
+          Tip: Press <kbd>Space</kbd> to start/pause, <kbd>R</kbd> to reset
+          while on Timer tab.
+        </p>
+      </section>
+
+      <!-- STOPWATCH -->
+      <section
+        id="panel-stopwatch"
+        class="panel"
+        role="tabpanel"
+        aria-labelledby="tab-stopwatch"
+        hidden
+      >
+        <div
+          class="stopwatch__display"
+          id="swDisplay"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          00:00.00
+        </div>
+        <div class="controls">
+          <button id="swStart" class="btn primary">Start</button>
+          <button id="swLap" class="btn" disabled>Lap</button>
+          <button id="swReset" class="btn" disabled>Reset</button>
+        </div>
+
+        <ol class="laps" id="swLaps" aria-label="Laps"></ol>
+        <p class="hint">
+          Shortcuts: <kbd>Space</kbd> start/pause, <kbd>L</kbd> lap,
+          <kbd>R</kbd> reset while on Stopwatch tab.
+        </p>
+      </section>
+
+      <footer class="app__footer">
+        <small
+          >Accessible, responsive, no frameworks. Supports dark mode via
+          <code>prefers-color-scheme</code>.</small
+        >
+      </footer>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
