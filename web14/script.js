@@ -19,3 +19,22 @@ const formatHMS = (totalMs, showHours = true) => {
   if (showHours) return `${sign}${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
   return `${sign}${pad(mins)}:${pad(secs)}.${pad(cs)}`;
 };
+// Simple beep (Web Audio API)
+const beep = (duration = 500, type = "sine", volume = 0.2) => {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = 880;
+    gain.gain.value = volume;
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+    setTimeout(() => {
+      osc.stop();
+      ctx.close();
+    }, duration);
+  } catch (e) {
+    /* noop if blocked */
+  }
+};
