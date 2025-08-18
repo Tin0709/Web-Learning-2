@@ -27,3 +27,49 @@ const domainFromUrl = (url) => {
     return "";
   }
 };
+const faviconUrl = (url) => {
+  // Reliable, no-CORS favicon service
+  const domain = domainFromUrl(url);
+  return domain
+    ? `https://www.google.com/s2/favicons?domain=${encodeURIComponent(
+        domain
+      )}&sz=64`
+    : "";
+};
+
+const save = (items) => localStorage.setItem(storeKey, JSON.stringify(items));
+const load = () => {
+  const raw = localStorage.getItem(storeKey);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+};
+
+// === State ===
+let items = load(); // [{id,title,url,tags:[],created,order}]
+let editingId = null; // currently editing item id
+let activeTag = null; // single-select tag filter
+
+// === Elements ===
+const formTitle = $("#formTitle");
+const form = $("#bookmarkForm");
+const titleInput = $("#titleInput");
+const urlInput = $("#urlInput");
+const tagsInput = $("#tagsInput");
+const cancelEditBtn = $("#cancelEditBtn");
+const formError = $("#formError");
+
+const searchInput = $("#searchInput");
+const sortSelect = $("#sortSelect");
+const tagChips = $("#tagChips");
+const countSpan = $("#countSpan");
+
+const listEl = $("#bookmarkList");
+const emptyState = $("#emptyState");
+
+const exportBtn = $("#exportBtn");
+const importFile = $("#importFile");
+const clearAllBtn = $("#clearAllBtn");
