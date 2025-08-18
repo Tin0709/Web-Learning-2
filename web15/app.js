@@ -27,6 +27,7 @@ const domainFromUrl = (url) => {
     return "";
   }
 };
+
 const faviconUrl = (url) => {
   // Reliable, no-CORS favicon service
   const domain = domainFromUrl(url);
@@ -73,6 +74,7 @@ const emptyState = $("#emptyState");
 const exportBtn = $("#exportBtn");
 const importFile = $("#importFile");
 const clearAllBtn = $("#clearAllBtn");
+
 // === Rendering ===
 function render() {
   // Build filtered/sorted view
@@ -221,6 +223,7 @@ function remove(id) {
   save(items);
   render();
 }
+
 // === Edit state ===
 function beginEdit(id) {
   const it = items.find((i) => i.id === id);
