@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bookmark Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="container">
+      <h1>🔖 Bookmark Manager</h1>
+      <div class="actions">
+        <button id="exportBtn" class="btn">Export</button>
+        <label for="importFile" class="btn btn-outline">Import</label>
+        <input id="importFile" type="file" accept="application/json" hidden />
+        <button id="clearAllBtn" class="btn btn-danger">Clear All</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Add / Edit form -->
+      <section class="card">
+        <h2 id="formTitle">Add Bookmark</h2>
+        <form id="bookmarkForm" autocomplete="off">
+          <div class="grid">
+            <label>
+              <span>Title</span>
+              <input
+                id="titleInput"
+                type="text"
+                placeholder="e.g. MDN – Array.prototype.map"
+                required
+              />
+            </label>
+            <label>
+              <span>URL</span>
+              <input
+                id="urlInput"
+                type="url"
+                placeholder="https://developer.mozilla.org/"
+                required
+              />
+            </label>
+            <label class="full">
+              <span>Tags (comma separated)</span>
+              <input
+                id="tagsInput"
+                type="text"
+                placeholder="javascript, docs, reference"
+              />
+            </label>
+          </div>
+          <div class="form-row">
+            <button class="btn" type="submit">Save</button>
+            <button
+              class="btn btn-outline"
+              type="button"
+              id="cancelEditBtn"
+              hidden
+            >
+              Cancel
+            </button>
+          </div>
+          <p id="formError" class="error" role="alert" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <!-- Controls -->
+      <section class="card controls">
+        <div class="search-group">
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search title, URL, or tags…"
+          />
+        </div>
+        <div class="filters">
+          <div class="tag-chips" id="tagChips"></div>
+          <div class="sort-wrap">
+            <label>
+              Sort by:
+              <select id="sortSelect">
+                <option value="created_desc">Newest</option>
+                <option value="created_asc">Oldest</option>
+                <option value="title_asc">Title A–Z</option>
+                <option value="title_desc">Title Z–A</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- List -->
+      <section class="card">
+        <div class="list-header">
+          <span><strong id="countSpan">0</strong> bookmarks</span>
+          <span class="hint">Tip: drag cards to reorder</span>
+        </div>
+        <ul id="bookmarkList" class="bookmark-list" aria-live="polite"></ul>
+        <p id="emptyState" class="empty">
+          No bookmarks yet. Add your first one above ✨
+        </p>
+      </section>
+    </main>
+
+    <template id="bookmarkItemTemplate">
+      <li class="bm-item" draggable="true">
+        <div class="bm-drag-handle" title="Drag to reorder" aria-hidden="true">
+          ⋮⋮
+        </div>
+        <div class="bm-main">
+          <a class="bm-title" target="_blank" rel="noopener noreferrer"></a>
+          <div class="bm-meta">
+            <img class="bm-favicon" alt="" />
+            <a class="bm-url" target="_blank" rel="noopener noreferrer"></a>
+          </div>
+          <div class="bm-tags"></div>
+        </div>
+        <div class="bm-actions">
+          <button class="btn btn-small btn-outline editBtn">Edit</button>
+          <button class="btn btn-small btn-danger deleteBtn">Delete</button>
+        </div>
+      </li>
+    </template>
+
+    <footer class="container footer">
+      <small>Data is stored locally in your browser (localStorage).</small>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
