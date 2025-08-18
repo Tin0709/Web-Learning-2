@@ -221,3 +221,160 @@ function remove(id) {
   save(items);
   render();
 }
+// === Edit state ===
+function beginEdit(id) {
+  const it = items.find((i) => i.id === id);
+  if (!it) return;
+  editingId = id;
+  formTitle.textContent = "Edit Bookmark";
+  titleInput.value = it.title;
+  urlInput.value = it.url;
+  tagsInput.value = it.tags.join(", ");
+  cancelEditBtn.hidden = false;
+  titleInput.focus();
+}
+
+function endEdit() {
+  editingId = null;
+  formTitle.textContent = "Add Bookmark";
+  form.reset();
+  cancelEditBtn.hidden = true;
+  formError.textContent = "";
+}
+
+// === Form handling ===
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  formError.textContent = "";
+
+  const title = titleInput.value.trim();
+  const url = urlInput.value.trim();
+  const tags = parseTags(tagsInput.value);
+
+  if (!title) {
+    formError.textContent = "Title is required.";
+    return;
+  }
+  if (!isValidUrl(url)) {
+    formError.textContent = "Please enter a valid http(s) URL.";
+    return;
+  }
+
+  if (editingId) {
+    update(editingId, { title, url, tags });
+  } else {
+    add({ title, url, tags });
+  }
+
+  endEdit();
+});
+
+cancelEditBtn.addEventListener("click", endEdit);
+
+// === Search / Sort ===
+searchInput.addEventListener("input", render);
+sortSelect.addEventListener("change", render);
+
+function toggleTagFilter(t) {
+  activeTag = activeTag === t ? null : t;
+  render();
+}
+
+// === Drag & Drop reorder ===
+let dragId = null;
+
+function onDragStart(e) {
+  const li = e.currentTarget;
+  dragId = li.dataset.id;
+  e.dataTransfer.effectAllowed = "move";
+  e.dataTransfer.setData("text/plain", dragId);
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  const over = e.currentTarget;
+  over.style.outline = "2px dashed var(--accent)";
+}
+
+function onDrop(e) {
+  e.preventDefault();
+  $$(".bm-item", listEl).forEach((li) => (li.style.outline = ""));
+  const targetId = e.currentTarget.dataset.id;
+  if (!dragId || dragId === targetId) return;
+
+  // Recalculate 'order' by swapping
+  const a = items.find((i) => i.id === dragId);
+  const b = items.find((i) => i.id === targetId);
+  const tmp = a.order;
+  a.order = b.order;
+  b.order = tmp;
+
+  save(items);
+  render();
+  dragId = null;
+}
+
+listEl.addEventListener("dragleave", (e) => {
+  if (e.target.classList?.contains("bm-item")) e.target.style.outline = "";
+});
+
+// === Import / Export / Clear ===
+exportBtn.addEventListener("click", () => {
+  const data = JSON.stringify(items, null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `bookmarks-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+importFile.addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!Array.isArray(data)) throw new Error("Invalid import format.");
+    // Normalize
+    const now = Date.now();
+    items = data
+      .map((d, i) => ({
+        id: d.id || uid(),
+        title: String(d.title || d.url || "Untitled"),
+        url: String(d.url || ""),
+        tags: Array.isArray(d.tags)
+          ? d.tags.map((t) => String(t).toLowerCase())
+          : [],
+        created: Number(d.created) || now + i,
+        order: Number(d.order) || i + 1,
+      }))
+      .filter((d) => isValidUrl(d.url));
+    save(items);
+    render();
+  } catch (err) {
+    alert("Failed to import: " + err.message);
+  } finally {
+    importFile.value = "";
+  }
+});
+
+clearAllBtn.addEventListener("click", () => {
+  if (!items.length) return;
+  if (
+    !confirm(
+      "This will permanently remove all bookmarks from this browser. Continue?"
+    )
+  )
+    return;
+  items = [];
+  save(items);
+  render();
+});
+
+// === Kickoff ===
+render();
