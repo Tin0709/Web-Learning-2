@@ -1,0 +1,32 @@
+:root {
+  --bg: #0f1216;
+  --card: #171b21;
+  --fg: #e9eef3;
+  --muted: #9fb0c3;
+  --accent: #5fb3ff;
+  --danger: #ff6b6b;
+  --outline: #2a323d;
+  --chip: #212832;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+    sans-serif;
+  background: radial-gradient(
+      1200px 600px at 80% -10%,
+      #1b222b 0,
+      transparent 60%
+    ),
+    var(--bg);
+  color: var(--fg);
+}
