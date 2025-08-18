@@ -73,3 +73,151 @@ const emptyState = $("#emptyState");
 const exportBtn = $("#exportBtn");
 const importFile = $("#importFile");
 const clearAllBtn = $("#clearAllBtn");
+// === Rendering ===
+function render() {
+  // Build filtered/sorted view
+  const q = searchInput.value.trim().toLowerCase();
+  const sort = sortSelect.value;
+
+  let view = items.slice();
+
+  if (q) {
+    view = view.filter((it) => {
+      const inTitle = it.title.toLowerCase().includes(q);
+      const inUrl = it.url.toLowerCase().includes(q);
+      const inTags = it.tags.join(" ").includes(q);
+      return inTitle || inUrl || inTags;
+    });
+  }
+
+  if (activeTag) {
+    view = view.filter((it) => it.tags.includes(activeTag));
+  }
+
+  view.sort((a, b) => {
+    switch (sort) {
+      case "created_asc":
+        return a.created - b.created;
+      case "created_desc":
+        return b.created - a.created;
+      case "title_asc":
+        return a.title.localeCompare(b.title);
+      case "title_desc":
+        return b.title.localeCompare(a.title);
+      default:
+        return (a.order ?? 0) - (b.order ?? 0);
+    }
+  });
+
+  // Count & empty state
+  countSpan.textContent = String(view.length);
+  emptyState.style.display = view.length ? "none" : "block";
+
+  // List
+  listEl.innerHTML = "";
+  const tpl = $("#bookmarkItemTemplate");
+  view.forEach((it) => {
+    const li = tpl.content.firstElementChild.cloneNode(true);
+    li.dataset.id = it.id;
+
+    // Title & link
+    const titleA = $(".bm-title", li);
+    titleA.textContent = it.title || it.url;
+    titleA.href = it.url;
+
+    const urlA = $(".bm-url", li);
+    urlA.textContent = it.url;
+    urlA.href = it.url;
+
+    // Favicon
+    const fav = $(".bm-favicon", li);
+    fav.src = faviconUrl(it.url);
+    fav.alt = `${domainFromUrl(it.url)} favicon`;
+
+    // Tags
+    const tagsWrap = $(".bm-tags", li);
+    tagsWrap.innerHTML = "";
+    it.tags.forEach((t) => {
+      const span = document.createElement("span");
+      span.className = "tag";
+      span.textContent = `#${t}`;
+      span.role = "button";
+      span.tabIndex = 0;
+      span.addEventListener("click", () => toggleTagFilter(t));
+      span.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") toggleTagFilter(t);
+      });
+      tagsWrap.appendChild(span);
+    });
+
+    // Actions
+    $(".editBtn", li).addEventListener("click", () => beginEdit(it.id));
+    $(".deleteBtn", li).addEventListener("click", () => remove(it.id));
+
+    // DnD
+    li.addEventListener("dragstart", onDragStart);
+    li.addEventListener("dragover", onDragOver);
+    li.addEventListener("drop", onDrop);
+
+    listEl.appendChild(li);
+  });
+
+  renderTagChips();
+}
+
+function renderTagChips() {
+  // Unique tags
+  const tags = Array.from(new Set(items.flatMap((x) => x.tags))).sort();
+  tagChips.innerHTML = "";
+  if (!tags.length) return;
+
+  const all = document.createElement("button");
+  all.className = `chip ${activeTag ? "" : "active"}`;
+  all.textContent = "All";
+  all.addEventListener("click", () => {
+    activeTag = null;
+    render();
+  });
+  tagChips.appendChild(all);
+
+  tags.forEach((t) => {
+    const btn = document.createElement("button");
+    btn.className = `chip ${activeTag === t ? "active" : ""}`;
+    btn.textContent = `#${t}`;
+    btn.addEventListener("click", () => {
+      activeTag = activeTag === t ? null : t;
+      render();
+    });
+    tagChips.appendChild(btn);
+  });
+}
+
+// === CRUD ===
+function add({ title, url, tags }) {
+  const item = {
+    id: uid(),
+    title: title.trim(),
+    url: url.trim(),
+    tags: tags,
+    created: Date.now(),
+    order: items.length ? Math.max(...items.map((i) => i.order ?? 0)) + 1 : 1,
+  };
+  items.push(item);
+  save(items);
+  render();
+}
+
+function update(id, { title, url, tags }) {
+  const idx = items.findIndex((i) => i.id === id);
+  if (idx === -1) return;
+  items[idx] = { ...items[idx], title: title.trim(), url: url.trim(), tags };
+  save(items);
+  render();
+}
+
+function remove(id) {
+  if (!confirm("Delete this bookmark?")) return;
+  items = items.filter((i) => i.id !== id);
+  save(items);
+  render();
+}
