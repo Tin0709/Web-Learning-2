@@ -199,3 +199,76 @@ a {
     align-items: flex-start;
   }
 }
+/* Cards */
+.card {
+  background: radial-gradient(
+      1200px 400px at -20% -20%,
+      rgba(167, 139, 250, 0.08),
+      transparent 40%
+    ),
+    var(--card);
+  border: 1px solid var(--ring);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.card .media {
+  aspect-ratio: 4 / 3;
+  background: #0b0e14;
+  overflow: hidden;
+}
+.card .body {
+  padding: 0.75rem 0.9rem 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.card .title {
+  font-weight: 700;
+}
+.card .desc {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.35;
+  min-height: 2.6em;
+}
+.card .meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.price {
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+.badge {
+  background: rgba(125, 211, 252, 0.15);
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--brand);
+}
+.card .actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.qty button {
+  background: var(--card);
+  border: 1px solid var(--ring);
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.add-btn {
+  margin-left: auto;
+}
