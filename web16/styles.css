@@ -170,6 +170,7 @@ a {
   padding: 0.45rem 0.6rem;
   border-radius: 10px;
 }
+
 /* Grid */
 .product-grid {
   display: grid;
@@ -199,6 +200,7 @@ a {
     align-items: flex-start;
   }
 }
+
 /* Cards */
 .card {
   background: radial-gradient(
@@ -272,6 +274,7 @@ a {
 .add-btn {
   margin-left: auto;
 }
+
 /* Cart drawer */
 .overlay {
   position: fixed;
@@ -375,6 +378,7 @@ a {
 .center {
   text-align: center;
 }
+
 /* Footer */
 .site-footer {
   border-top: 1px solid var(--ring);
