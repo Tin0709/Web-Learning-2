@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leaf & Loom — Storefront</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Skip link for accessibility -->
+    <a class="skip-link" href="#products">Skip to products</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand">
+          <span class="logo" aria-hidden="true">🛍️</span>
+          <a href="#" class="brand-name">Leaf & Loom</a>
+        </div>
+
+        <form
+          id="searchForm"
+          class="search"
+          role="search"
+          aria-label="Search products"
+        >
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search products…"
+            aria-label="Search"
+          />
+          <button class="btn" type="submit" aria-label="Search">Search</button>
+        </form>
+
+        <button
+          id="openCartBtn"
+          class="cart-btn"
+          aria-haspopup="dialog"
+          aria-controls="cartDrawer"
+        >
+          <span class="cart-icon" aria-hidden="true">🧺</span>
+          <span>Cart</span>
+          <span id="cartCount" class="cart-count" aria-live="polite">0</span>
+        </button>
+      </div>
+
+      <div class="container controls">
+        <label>
+          Category
+          <select id="categorySelect" aria-label="Filter by category">
+            <option value="all">All</option>
+          </select>
+        </label>
+
+        <label>
+          Sort
+          <select id="sortSelect" aria-label="Sort products">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name: A → Z</option>
+            <option value="name-desc">Name: Z → A</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="container">
+      <section
+        id="products"
+        class="product-grid"
+        aria-label="Products"
+      ></section>
+    </main>
+
+    <!-- Cart Drawer -->
+    <div id="cartOverlay" class="overlay" hidden></div>
+    <aside
+      id="cartDrawer"
+      class="cart-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cartTitle"
+      hidden
+    >
+      <header class="cart-header">
+        <h2 id="cartTitle">Your Cart</h2>
+        <button id="closeCartBtn" class="icon-btn" aria-label="Close cart">
+          ✕
+        </button>
+      </header>
+
+      <div id="cartItems" class="cart-items" aria-live="polite"></div>
+
+      <footer class="cart-footer">
+        <div class="totals">
+          <div class="row">
+            <span>Subtotal</span><span id="subtotal">$0.00</span>
+          </div>
+          <div class="row">
+            <span>Tax (8%)</span><span id="tax">$0.00</span>
+          </div>
+          <div class="row total">
+            <span>Total</span><span id="total">$0.00</span>
+          </div>
+        </div>
+        <button id="checkoutBtn" class="btn primary" type="button">
+          Checkout
+        </button>
+        <p class="muted center">Demo checkout — no real payment is taken.</p>
+      </footer>
+    </aside>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          © <span id="year"></span> Leaf & Loom. Built with ❤️ using HTML, CSS,
+          and JS.
+        </p>
+      </div>
+    </footer>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
