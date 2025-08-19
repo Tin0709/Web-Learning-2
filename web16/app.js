@@ -72,6 +72,7 @@ const state = {
   cart: {}, // id -> {product, qty}
   taxRate: 0.08,
 };
+
 // --- Utils
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
