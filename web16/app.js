@@ -87,3 +87,107 @@ function loadCart() {
     if (raw) state.cart = JSON.parse(raw) || {};
   } catch {}
 }
+
+// --- Rendering
+function renderCategoryOptions() {
+  const select = $("#categorySelect");
+  const cats = Array.from(
+    new Set(state.products.map((p) => p.category))
+  ).sort();
+  cats.forEach((c) => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    select.appendChild(opt);
+  });
+}
+
+function productCard(p) {
+  const el = document.createElement("article");
+  el.className = "card";
+  el.innerHTML = `
+      <div class="media">
+        <img loading="lazy" src="${p.img}" alt="${p.name}" />
+      </div>
+      <div class="body">
+        <div class="meta">
+          <h3 class="title">${p.name}</h3>
+          <span class="badge">${p.category}</span>
+        </div>
+        <p class="desc">${p.desc}</p>
+        <div class="meta">
+          <div class="price">${fmt(p.price)}</div>
+          <div class="actions">
+            <div class="qty" aria-label="Choose quantity">
+              <button class="dec" aria-label="Decrease quantity">−</button>
+              <span class="qval" aria-live="polite">1</span>
+              <button class="inc" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="btn add-btn" aria-label="Add ${
+              p.name
+            } to cart">Add</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+  let q = 1;
+  const qval = el.querySelector(".qval");
+  el.querySelector(".inc").addEventListener("click", () => {
+    q++;
+    qval.textContent = q;
+  });
+  el.querySelector(".dec").addEventListener("click", () => {
+    q = Math.max(1, q - 1);
+    qval.textContent = q;
+  });
+  el.querySelector(".add-btn").addEventListener("click", () =>
+    addToCart(p.id, q)
+  );
+  return el;
+}
+
+function renderProducts(list) {
+  const grid = $("#products");
+  grid.innerHTML = "";
+  if (!list.length) {
+    grid.innerHTML = `<p class="muted">No products match your filters.</p>`;
+    return;
+  }
+  list.forEach((p) => grid.appendChild(productCard(p)));
+}
+
+function getFilters() {
+  return {
+    term: $("#searchInput").value.trim().toLowerCase(),
+    category: $("#categorySelect").value,
+    sort: $("#sortSelect").value,
+  };
+}
+
+function applyFilters() {
+  const { term, category, sort } = getFilters();
+  let list = state.products.filter(
+    (p) =>
+      (category === "all" || p.category === category) &&
+      (term === "" || (p.name + " " + p.desc).toLowerCase().includes(term))
+  );
+
+  switch (sort) {
+    case "price-asc":
+      list.sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      list.sort((a, b) => b.price - a.price);
+      break;
+    case "name-asc":
+      list.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case "name-desc":
+      list.sort((a, b) => b.name.localeCompare(a.name));
+      break;
+    default:
+      /* featured: leave as-is */ break;
+  }
+  renderProducts(list);
+}
