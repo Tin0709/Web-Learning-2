@@ -72,3 +72,18 @@ const state = {
   cart: {}, // id -> {product, qty}
   taxRate: 0.08,
 };
+// --- Utils
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+const fmt = (n) =>
+  n.toLocaleString(undefined, { style: "currency", currency: "USD" });
+
+function saveCart() {
+  localStorage.setItem("demo_cart", JSON.stringify(state.cart));
+}
+function loadCart() {
+  try {
+    const raw = localStorage.getItem("demo_cart");
+    if (raw) state.cart = JSON.parse(raw) || {};
+  } catch {}
+}
