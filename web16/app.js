@@ -191,3 +191,89 @@ function applyFilters() {
   }
   renderProducts(list);
 }
+
+// --- Cart
+function addToCart(id, qty = 1) {
+  const product = state.products.find((p) => p.id === id);
+  if (!product) return;
+
+  if (!state.cart[id]) state.cart[id] = { product, qty: 0 };
+  state.cart[id].qty += qty;
+
+  saveCart();
+  renderCart();
+  openCart();
+}
+
+function changeQty(id, delta) {
+  if (!state.cart[id]) return;
+  state.cart[id].qty += delta;
+  if (state.cart[id].qty <= 0) delete state.cart[id];
+  saveCart();
+  renderCart();
+}
+
+function removeItem(id) {
+  delete state.cart[id];
+  saveCart();
+  renderCart();
+}
+
+function cartTotals() {
+  const items = Object.values(state.cart);
+  const subtotal = items.reduce((s, it) => s + it.product.price * it.qty, 0);
+  const tax = subtotal * state.taxRate;
+  const total = subtotal + tax;
+  return {
+    subtotal,
+    tax,
+    total,
+    count: items.reduce((c, it) => c + it.qty, 0),
+  };
+}
+
+function renderCart() {
+  const wrap = $("#cartItems");
+  wrap.innerHTML = "";
+  const items = Object.values(state.cart);
+
+  if (!items.length) {
+    wrap.innerHTML = `<p class="muted">Your cart is empty. Add something you love ✨</p>`;
+  } else {
+    items.forEach(({ product, qty }) => {
+      const row = document.createElement("div");
+      row.className = "cart-row";
+      row.innerHTML = `
+          <img src="${product.img}" alt="${product.name}">
+          <div>
+            <div class="name">${product.name}</div>
+            <div class="meta">${product.category} · ${fmt(product.price)}</div>
+            <div class="controls">
+              <button class="icon-btn" aria-label="Decrease ${
+                product.name
+              } quantity">−</button>
+              <span aria-live="polite">${qty}</span>
+              <button class="icon-btn" aria-label="Increase ${
+                product.name
+              } quantity">+</button>
+              <button class="icon-btn rm" aria-label="Remove ${
+                product.name
+              }">Remove</button>
+            </div>
+          </div>
+          <div class="line">${fmt(product.price * qty)}</div>
+        `;
+      const [dec, , inc, rm] = row.querySelectorAll(".controls > *");
+      dec.addEventListener("click", () => changeQty(product.id, -1));
+      inc.addEventListener("click", () => changeQty(product.id, +1));
+      rm.addEventListener("click", () => removeItem(product.id));
+      wrap.appendChild(row);
+    });
+  }
+
+  const { subtotal, tax, total, count } = cartTotals();
+  $("#subtotal").textContent = fmt(subtotal);
+  $("#tax").textContent = fmt(tax);
+  $("#total").textContent = fmt(total);
+  $("#cartCount").textContent = count;
+}
