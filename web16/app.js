@@ -277,3 +277,59 @@ function renderCart() {
   $("#total").textContent = fmt(total);
   $("#cartCount").textContent = count;
 }
+
+// --- Drawer controls
+function openCart() {
+  $("#cartOverlay").hidden = false;
+  $("#cartDrawer").hidden = false;
+  requestAnimationFrame(() => $("#cartDrawer").classList.add("open"));
+}
+function closeCart() {
+  $("#cartDrawer").classList.remove("open");
+  setTimeout(() => {
+    $("#cartOverlay").hidden = true;
+    $("#cartDrawer").hidden = true;
+  }, 250);
+}
+
+// --- Init
+function bindEvents() {
+  $("#searchForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    applyFilters();
+  });
+  $("#categorySelect").addEventListener("change", applyFilters);
+  $("#sortSelect").addEventListener("change", applyFilters);
+  $("#openCartBtn").addEventListener("click", openCart);
+  $("#closeCartBtn").addEventListener("click", closeCart);
+  $("#cartOverlay").addEventListener("click", closeCart);
+
+  $("#checkoutBtn").addEventListener("click", () => {
+    if (Object.keys(state.cart).length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
+    const { total } = cartTotals();
+    alert(`Demo checkout complete! 🎉\n\nCharged: ${fmt(total)} (not really)`);
+    state.cart = {};
+    saveCart();
+    renderCart();
+    closeCart();
+  });
+
+  // Escape closes drawer
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !$("#cartDrawer").hidden) closeCart();
+  });
+}
+
+function main() {
+  document.getElementById("year").textContent = new Date().getFullYear();
+  renderCategoryOptions();
+  loadCart();
+  renderCart();
+  applyFilters();
+  bindEvents();
+}
+
+document.addEventListener("DOMContentLoaded", main);
