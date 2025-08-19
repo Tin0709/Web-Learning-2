@@ -375,3 +375,9 @@ a {
 .center {
   text-align: center;
 }
+/* Footer */
+.site-footer {
+  border-top: 1px solid var(--ring);
+  padding: 1.25rem 0 2rem;
+  color: var(--muted);
+}
