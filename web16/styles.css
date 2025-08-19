@@ -58,3 +58,115 @@ a {
   border-radius: 8px;
   z-index: 1000;
 }
+
+/* Header */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(8px);
+  background: linear-gradient(
+    180deg,
+    rgba(15, 17, 21, 0.9),
+    rgba(15, 17, 21, 0.65) 80%,
+    transparent
+  );
+  border-bottom: 1px solid var(--ring);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 0;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.logo {
+  font-size: 1.25rem;
+}
+.brand-name {
+  color: var(--brand);
+}
+
+.search {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+.search input {
+  background: var(--card);
+  border: 1px solid var(--ring);
+  color: var(--text);
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  min-width: 250px;
+}
+.btn {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--ring);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+}
+.btn.primary {
+  background: linear-gradient(135deg, var(--accent), var(--brand));
+  color: #0b0e14;
+  border: none;
+  font-weight: 700;
+}
+.btn:focus,
+.icon-btn:focus,
+.cart-btn:focus {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.cart-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--card);
+  border: 1px solid var(--ring);
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+.cart-icon {
+  font-size: 1rem;
+}
+.cart-count {
+  background: var(--accent);
+  color: #0b0e14;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-weight: 700;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 0 1rem;
+}
+.controls label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.controls select {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--ring);
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+}
