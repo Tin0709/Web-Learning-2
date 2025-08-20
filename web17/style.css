@@ -1,0 +1,52 @@
+:root {
+  --bg: #0f1220;
+  --bg-soft: #161a2e;
+  --card: #151a32;
+  --muted: #9aa3b2;
+  --text: #eef2ff;
+  --primary: #6c8cff;
+  --primary-ghost: #2a3a89;
+  --income: #37d399;
+  --expense: #ff7676;
+  --danger: #ff5c7a;
+  --ring: #6c8cff55;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --gap: 18px;
+  --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter,
+    "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Light theme */
+:root.light {
+  --bg: #f6f7fb;
+  --bg-soft: #eef1f7;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --text: #0f172a;
+  --primary: #3b82f6;
+  --primary-ghost: #dbeafe;
+  --income: #10b981;
+  --expense: #ef4444;
+  --danger: #ef4444;
+  --ring: #3b82f655;
+  --shadow: 0 10px 25px rgba(2, 6, 23, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--text);
+  background: radial-gradient(80% 60% at 70% -10%, #1a1f4a 0, transparent 60%)
+      no-repeat,
+    radial-gradient(60% 50% at -10% 20%, #212652 0, transparent 55%) no-repeat,
+    var(--bg);
+}
