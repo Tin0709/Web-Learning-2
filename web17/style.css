@@ -82,3 +82,90 @@ body {
   display: flex;
   gap: 10px;
 }
+
+/* Cards */
+.card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.02)
+  );
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 18px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: var(--gap);
+}
+
+.balance h2 {
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+.figure {
+  font-size: clamp(26px, 4vw, 40px);
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+.income .figure {
+  color: var(--income);
+}
+.expense .figure {
+  color: var(--expense);
+}
+
+/* Form */
+.form-card h2 {
+  margin: 0 0 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap);
+}
+.field,
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.field-note {
+  grid-column: span 2;
+}
+.actions {
+  align-self: end;
+  flex-direction: row;
+  gap: 10px;
+}
+
+label {
+  font-size: 12px;
+  color: var(--muted);
+}
+input,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--bg-soft);
+  color: var(--text);
+  outline: none;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease,
+    transform 0.02s ease;
+}
+:root.light input,
+:root.light select {
+  border-color: #e5e7eb;
+  background: #fff;
+}
+input:focus,
+select:focus {
+  box-shadow: 0 0 0 4px var(--ring);
+  border-color: var(--primary);
+}
