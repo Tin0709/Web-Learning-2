@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Budget Tracker</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>💸 Budget Tracker</h1>
+      <div class="header-actions">
+        <button id="exportBtn" class="btn ghost" title="Export data">
+          Export
+        </button>
+        <label class="file-btn">
+          <input id="importInput" type="file" accept="application/json" />
+          Import
+        </label>
+        <button id="themeToggle" class="btn ghost" title="Toggle theme">
+          Theme
+        </button>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Summary -->
+      <section aria-label="Summary" class="summary">
+        <div class="card balance">
+          <h2>Balance</h2>
+          <p id="balance" class="figure">0</p>
+        </div>
+        <div class="card income">
+          <h3>Income</h3>
+          <p id="totalIncome" class="figure">0</p>
+        </div>
+        <div class="card expense">
+          <h3>Expense</h3>
+          <p id="totalExpense" class="figure">0</p>
+        </div>
+      </section>
+
+      <!-- Add transaction -->
+      <section class="card form-card" aria-label="Add transaction">
+        <h2>Add Transaction</h2>
+        <form id="txForm">
+          <div class="grid">
+            <div class="field">
+              <label for="type">Type</label>
+              <select id="type" required>
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="category">Category</label>
+              <input
+                id="category"
+                list="categoryList"
+                placeholder="e.g., Groceries"
+                required
+              />
+              <datalist id="categoryList">
+                <option>Salary</option>
+                <option>Groceries</option>
+                <option>Rent</option>
+                <option>Bills</option>
+                <option>Dining</option>
+                <option>Transport</option>
+                <option>Entertainment</option>
+                <option>Health</option>
+                <option>Misc</option>
+              </datalist>
+            </div>
+
+            <div class="field">
+              <label for="amount">Amount</label>
+              <input
+                id="amount"
+                type="number"
+                step="0.01"
+                min="0"
+                placeholder="0.00"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="date">Date</label>
+              <input id="date" type="date" required />
+            </div>
+
+            <div class="field field-note">
+              <label for="note">Note (optional)</label>
+              <input id="note" type="text" placeholder="Add a short note…" />
+            </div>
+
+            <div class="actions">
+              <button class="btn primary" type="submit">Add</button>
+              <button class="btn danger ghost" id="clearAll" type="button">
+                Clear All
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Filters -->
+      <section class="filters">
+        <div class="field">
+          <label for="monthFilter">Month</label>
+          <input id="monthFilter" type="month" />
+        </div>
+        <div class="field">
+          <label for="categoryFilter">Category</label>
+          <select id="categoryFilter">
+            <option value="all">All</option>
+          </select>
+        </div>
+        <div class="field search">
+          <label for="searchFilter">Search</label>
+          <input
+            id="searchFilter"
+            type="search"
+            placeholder="Find by note/category…"
+          />
+        </div>
+        <div class="field">
+          <label for="sortBy">Sort</label>
+          <select id="sortBy">
+            <option value="date_desc">Date ↓</option>
+            <option value="date_asc">Date ↑</option>
+            <option value="amount_desc">Amount ↓</option>
+            <option value="amount_asc">Amount ↑</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Chart -->
+      <section class="card chart-card" aria-label="Monthly chart">
+        <div class="chart-head">
+          <h2>Monthly Overview</h2>
+          <div class="legend">
+            <span class="dot income"></span> Income
+            <span class="dot expense"></span> Expense
+          </div>
+        </div>
+        <canvas
+          id="barChart"
+          width="900"
+          height="300"
+          role="img"
+          aria-label="Monthly income and expense bar chart"
+        ></canvas>
+      </section>
+
+      <!-- Transaction list -->
+      <section class="card list-card" aria-label="Transactions">
+        <div class="list-head">
+          <h2>Transactions</h2>
+          <span id="txCount" class="muted">0 items</span>
+        </div>
+        <div class="table-wrap">
+          <table class="tx-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Category</th>
+                <th class="right">Amount</th>
+                <th>Note</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="txBody">
+              <!-- Rows injected here -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Made with ❤️ — your money, your rules.</p>
+    </footer>
+
+    <template id="rowTemplate">
+      <tr>
+        <td class="date"></td>
+        <td class="type"></td>
+        <td class="category"></td>
+        <td class="amount right"></td>
+        <td class="note"></td>
+        <td class="row-actions">
+          <button class="icon-btn edit" title="Edit">✏️</button>
+          <button class="icon-btn delete" title="Delete">🗑️</button>
+        </td>
+      </tr>
+    </template>
+
+    <dialog id="editDialog">
+      <form method="dialog" id="editForm" class="edit-form">
+        <h3>Edit Transaction</h3>
+        <input type="hidden" id="editId" />
+        <div class="grid">
+          <div class="field">
+            <label for="editType">Type</label>
+            <select id="editType" required>
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="editCategory">Category</label>
+            <input id="editCategory" required />
+          </div>
+          <div class="field">
+            <label for="editAmount">Amount</label>
+            <input id="editAmount" type="number" step="0.01" min="0" required />
+          </div>
+          <div class="field">
+            <label for="editDate">Date</label>
+            <input id="editDate" type="date" required />
+          </div>
+          <div class="field field-note">
+            <label for="editNote">Note</label>
+            <input id="editNote" />
+          </div>
+          <div class="actions">
+            <button class="btn" value="cancel">Cancel</button>
+            <button class="btn primary" value="default">Save</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
