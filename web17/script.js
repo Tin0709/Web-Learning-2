@@ -77,3 +77,26 @@ const editNote = $("#editNote");
 
 const barCanvas = $("#barChart");
 const ctx = barCanvas.getContext("2d");
+/* ===== Init ===== */
+load();
+applyTheme(state.theme);
+primeFormDefaults();
+render();
+
+function primeFormDefaults() {
+  const today = new Date().toISOString().slice(0, 10);
+  dateInput.value = today;
+  monthFilter.value = today.slice(0, 7);
+}
+
+function load() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) {
+    try {
+      state = { ...state, ...JSON.parse(raw) };
+    } catch {}
+  }
+}
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
