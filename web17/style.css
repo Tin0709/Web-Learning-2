@@ -50,3 +50,35 @@ body {
     radial-gradient(60% 50% at -10% 20%, #212652 0, transparent 55%) no-repeat,
     var(--bg);
 }
+/* Layout */
+.container {
+  width: min(1100px, 92vw);
+  margin: 24px auto 80px;
+  display: grid;
+  gap: var(--gap);
+}
+
+.app-header,
+.app-footer {
+  width: min(1100px, 92vw);
+  margin: 18px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 32px);
+  letter-spacing: 0.2px;
+}
+.app-footer {
+  justify-content: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
