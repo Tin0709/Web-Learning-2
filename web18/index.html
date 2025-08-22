@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Markdown Blog</title>
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Markdown parser -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+      defer
+    ></script>
+    <!-- Syntax highlighting for code blocks -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
+      defer
+    ></script>
+
+    <!-- Our app -->
+    <script src="app.js" type="module" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#/">My Markdown Blog</a>
+      <div class="header-actions">
+        <input
+          id="search"
+          type="search"
+          placeholder="Search posts…"
+          aria-label="Search posts"
+        />
+        <button id="themeToggle" title="Toggle theme">🌓</button>
+      </div>
+    </header>
+
+    <main id="app">
+      <!-- Populated by app.js -->
+    </main>
+
+    <footer class="site-footer">
+      <p>© <span id="year"></span> You. Built with HTML, CSS, and JS.</p>
+    </footer>
+  </body>
+</html>
