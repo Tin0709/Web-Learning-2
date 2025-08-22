@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 async function fetchIndex() {
   const res = await fetch("posts/posts.json");
   if (!res.ok) throw new Error("Failed to load posts index");
@@ -64,26 +65,24 @@ function formatDate(d) {
 function renderList(posts) {
   app.innerHTML =
     `
-      <section aria-label="Post list">
-        ${posts
-          .map(
-            (p) => `
-          <article class="post-card">
-            <h2><a href="#/post/${encodeURIComponent(p.slug)}">${
-              p.title
-            }</a></h2>
-            <p class="post-meta">${formatDate(p.date)} · ${
-              p.tags?.join(", ") || ""
-            }</p>
-            <p>${p.description || ""} <a href="#/post/${encodeURIComponent(
-              p.slug
-            )}">Read →</a></p>
-          </article>
-        `
-          )
-          .join("")}
-      </section>
-    ` || `<p>No posts yet.</p>`;
+    <section aria-label="Post list">
+      ${posts
+        .map(
+          (p) => `
+        <article class="post-card">
+          <h2><a href="#/post/${encodeURIComponent(p.slug)}">${p.title}</a></h2>
+          <p class="post-meta">${formatDate(p.date)} · ${
+            p.tags?.join(", ") || ""
+          }</p>
+          <p>${p.description || ""} <a href="#/post/${encodeURIComponent(
+            p.slug
+          )}">Read →</a></p>
+        </article>
+      `
+        )
+        .join("")}
+    </section>
+  ` || `<p>No posts yet.</p>`;
 }
 
 async function renderPost(slug) {
@@ -102,15 +101,15 @@ async function renderPost(slug) {
         (s) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[s])
       )}</pre>`;
   app.innerHTML = `
-      <article class="post-content">
-        <a href="#/">← Back</a>
-        <h1>${post.title}</h1>
-        <p class="post-meta">${formatDate(post.date)} · ${
+    <article class="post-content">
+      <a href="#/">← Back</a>
+      <h1>${post.title}</h1>
+      <p class="post-meta">${formatDate(post.date)} · ${
     post.tags?.join(", ") || ""
   }</p>
-        <div class="md-body">${html}</div>
-      </article>
-    `;
+      <div class="md-body">${html}</div>
+    </article>
+  `;
 
   // Re-run highlight.js on dynamic content
   if (window.hljs) {
@@ -134,3 +133,37 @@ function handleSearch(value) {
   }
   renderList(state.filtered);
 }
+
+// Basic hash router
+function router() {
+  const hash = location.hash || "#/";
+  const [, route, param] = hash.split("/");
+  if (route === "" || route === "#") {
+    renderList(state.filtered);
+  } else if (route === "post" && param) {
+    renderPost(decodeURIComponent(param));
+  } else {
+    app.innerHTML = `<p>Not found. <a href="#/">Home</a></p>`;
+  }
+}
+
+window.addEventListener("hashchange", router);
+
+searchInput.addEventListener("input", (e) => handleSearch(e.target.value));
+
+themeToggle.addEventListener("click", () => {
+  state.theme = state.theme === "dark" ? "light" : "dark";
+  localStorage.setItem("theme", state.theme);
+  document.documentElement.classList.toggle("dark", state.theme === "dark");
+});
+
+// Boot
+(async function init() {
+  try {
+    await fetchIndex();
+  } catch (e) {
+    app.innerHTML = `<p>Failed to load posts. Make sure you're serving files over HTTP (not file://).<br>${e.message}</p>`;
+    return;
+  }
+  router();
+})();
