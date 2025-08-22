@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "hello-world",
+    "title": "Hello, World 👋",
+    "date": "2025-08-01",
+    "tags": ["intro", "meta"],
+    "description": "Kicking off the blog with goals, stack, and what to expect."
+  },
+  {
+    "slug": "second-post",
+    "title": "Markdown Goodies & Code Blocks",
+    "date": "2025-08-05",
+    "tags": ["markdown", "syntax"],
+    "description": "Showcase of headings, lists, images, and highlighted code."
+  }
+]
