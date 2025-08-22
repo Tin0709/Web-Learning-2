@@ -37,3 +37,100 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+async function fetchIndex() {
+  const res = await fetch("posts/posts.json");
+  if (!res.ok) throw new Error("Failed to load posts index");
+  const data = await res.json();
+  // Normalize + sort by date desc
+  const normalized = data
+    .map((p) => ({
+      ...p,
+      date: new Date(p.date),
+    }))
+    .sort((a, b) => b.date - a.date);
+  state.postsIndex = normalized;
+  state.filtered = normalized;
+}
+
+function formatDate(d) {
+  const dt = d instanceof Date ? d : new Date(d);
+  return dt.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function renderList(posts) {
+  app.innerHTML =
+    `
+      <section aria-label="Post list">
+        ${posts
+          .map(
+            (p) => `
+          <article class="post-card">
+            <h2><a href="#/post/${encodeURIComponent(p.slug)}">${
+              p.title
+            }</a></h2>
+            <p class="post-meta">${formatDate(p.date)} · ${
+              p.tags?.join(", ") || ""
+            }</p>
+            <p>${p.description || ""} <a href="#/post/${encodeURIComponent(
+              p.slug
+            )}">Read →</a></p>
+          </article>
+        `
+          )
+          .join("")}
+      </section>
+    ` || `<p>No posts yet.</p>`;
+}
+
+async function renderPost(slug) {
+  const post = state.postsIndex.find((p) => p.slug === slug);
+  if (!post) {
+    app.innerHTML = `<p>Post not found. <a href="#/">Go back</a></p>`;
+    return;
+  }
+  const res = await fetch(`posts/${post.slug}.md`);
+  const md = await res.text();
+
+  const html = window.marked
+    ? marked.parse(md)
+    : `<pre>${md.replace(
+        /[&<>]/g,
+        (s) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[s])
+      )}</pre>`;
+  app.innerHTML = `
+      <article class="post-content">
+        <a href="#/">← Back</a>
+        <h1>${post.title}</h1>
+        <p class="post-meta">${formatDate(post.date)} · ${
+    post.tags?.join(", ") || ""
+  }</p>
+        <div class="md-body">${html}</div>
+      </article>
+    `;
+
+  // Re-run highlight.js on dynamic content
+  if (window.hljs) {
+    document
+      .querySelectorAll("pre code")
+      .forEach((block) => hljs.highlightElement(block));
+  }
+}
+
+function handleSearch(value) {
+  const q = value.trim().toLowerCase();
+  if (!q) {
+    state.filtered = state.postsIndex;
+  } else {
+    state.filtered = state.postsIndex.filter(
+      (p) =>
+        p.title.toLowerCase().includes(q) ||
+        (p.description || "").toLowerCase().includes(q) ||
+        (p.tags || []).some((t) => t.toLowerCase().includes(q))
+    );
+  }
+  renderList(state.filtered);
+}
