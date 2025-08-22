@@ -1,0 +1,21 @@
+:root {
+  --bg: #ffffff;
+  --fg: #131417;
+  --muted: #667085;
+  --link: #0a66c2;
+  --card: #f6f7f9;
+  --border: #e5e7eb;
+}
+
+:root.dark {
+  --bg: #0b0d12;
+  --fg: #e6e8ee;
+  --muted: #9aa3af;
+  --link: #6fb1ff;
+  --card: #11151c;
+  --border: #1f2430;
+}
+
+* {
+  box-sizing: border-box;
+}
