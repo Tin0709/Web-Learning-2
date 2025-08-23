@@ -81,3 +81,27 @@ const shuffle = (arr) =>
 function formatSeconds(s) {
   return `${Math.max(0, Math.round(s))}s`;
 }
+// --- Persistence ---------------------------------------------------
+const STORAGE_KEYS = {
+  HIGH: "quickquiz_highscore",
+  LAST: "quickquiz_lastscore",
+  THEME: "quickquiz_theme",
+};
+
+function getHighScore() {
+  return Number(localStorage.getItem(STORAGE_KEYS.HIGH) || 0);
+}
+function setHighScore(v) {
+  localStorage.setItem(STORAGE_KEYS.HIGH, String(v));
+}
+function setLastScore(v) {
+  localStorage.setItem(STORAGE_KEYS.LAST, String(v));
+}
+function getLastScore() {
+  const v = localStorage.getItem(STORAGE_KEYS.LAST);
+  return v === null ? null : Number(v);
+}
+function applyStoredTheme() {
+  const t = localStorage.getItem(STORAGE_KEYS.THEME);
+  if (t === "light") document.body.classList.add("light");
+}
