@@ -62,3 +62,22 @@ const QUESTION_BANK = [
   },
   // add more here...
 ];
+// --- State ---------------------------------------------------------
+let settings = {
+  total: 10,
+  timePerQuestion: 15,
+};
+let game = null;
+let timerId = null;
+
+// --- Utils ---------------------------------------------------------
+const $ = (sel) => document.querySelector(sel);
+const shuffle = (arr) =>
+  arr
+    .map((v) => [Math.random(), v])
+    .sort((a, b) => a[0] - b[0])
+    .map((v) => v[1]);
+
+function formatSeconds(s) {
+  return `${Math.max(0, Math.round(s))}s`;
+}
