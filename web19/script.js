@@ -1,0 +1,64 @@
+// --- Data ----------------------------------------------------------
+const QUESTION_BANK = [
+  {
+    q: "Which language runs in a web browser?",
+    choices: ["Java", "C", "Python", "JavaScript"],
+    answer: 3,
+  },
+  {
+    q: "What does CSS stand for?",
+    choices: [
+      "Colorful Style Sheets",
+      "Cascading Style Sheets",
+      "Computer Style Sheets",
+      "Creative Styling System",
+    ],
+    answer: 1,
+  },
+  {
+    q: "Which HTML tag is used to define an unordered list?",
+    choices: ["<ol>", "<ul>", "<li>", "<list>"],
+    answer: 1,
+  },
+  {
+    q: "What year was ECMAScript 6 (ES2015) released?",
+    choices: ["2013", "2015", "2017", "2019"],
+    answer: 1,
+  },
+  {
+    q: "Which array method creates a new array with elements that pass a test?",
+    choices: ["map()", "reduce()", "filter()", "forEach()"],
+    answer: 2,
+  },
+  {
+    q: "Which HTTP status code means ‘Not Found’?",
+    choices: ["200", "301", "404", "500"],
+    answer: 2,
+  },
+  {
+    q: "What does HTML stand for?",
+    choices: [
+      "Hyperlinks and Text Markup Language",
+      "Home Tool Markup Language",
+      "HyperText Markup Language",
+      "Hyper Transfer Markup Language",
+    ],
+    answer: 2,
+  },
+  {
+    q: "const x = { a: 1 }; What is typeof x?",
+    choices: ["'array'", "'object'", "'map'", "'struct'"],
+    answer: 1,
+  },
+  {
+    q: "Which CSS property controls the text size?",
+    choices: ["text-style", "font-style", "text-size", "font-size"],
+    answer: 3,
+  },
+  {
+    q: "Which company developed the React library?",
+    choices: ["Google", "Facebook (Meta)", "Microsoft", "Twitter"],
+    answer: 1,
+  },
+  // add more here...
+];
