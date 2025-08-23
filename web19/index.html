@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>QuickQuiz</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1 class="logo">Quick<span>Quiz</span></h1>
+      <button
+        id="themeToggle"
+        class="btn btn-ghost"
+        aria-pressed="false"
+        title="Toggle theme"
+      >
+        🌓
+      </button>
+    </header>
+
+    <!-- Start Screen -->
+    <main id="screen-start" class="screen active">
+      <section class="card">
+        <h2>Ready to test your brain?</h2>
+        <p>
+          10 questions. 15 seconds each. Streaks give bonus points. Good luck!
+        </p>
+
+        <form id="settingsForm" class="settings">
+          <label>
+            Questions
+            <input
+              id="questionCount"
+              type="number"
+              min="5"
+              max="50"
+              step="5"
+              value="10"
+            />
+          </label>
+          <label>
+            Time per question (sec)
+            <input
+              id="timePerQuestion"
+              type="number"
+              min="5"
+              max="60"
+              step="5"
+              value="15"
+            />
+          </label>
+        </form>
+
+        <div class="actions">
+          <button id="btnStart" class="btn btn-primary">Start Quiz</button>
+        </div>
+
+        <div class="stats">
+          <div>High score: <strong id="highScore">0</strong></div>
+          <div>Last score: <strong id="lastScore">—</strong></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Quiz Screen -->
+    <main id="screen-quiz" class="screen" aria-live="polite" aria-atomic="true">
+      <section class="hud">
+        <div class="progress">
+          <div id="progressBar" class="progress__bar" style="width: 0%"></div>
+        </div>
+        <div class="hud__stats">
+          <div class="pill" aria-label="Question number">
+            <span id="qIndex">1</span>/<span id="qTotal">10</span>
+          </div>
+          <div class="pill" aria-label="Score">
+            <span id="score">0</span> pts
+          </div>
+          <div class="pill" aria-label="Time left">
+            <span id="timeLeft">15</span>s
+          </div>
+          <div class="pill" aria-label="Streak">
+            <span id="streak">0</span> 🔥
+          </div>
+        </div>
+      </section>
+
+      <section class="card question-card">
+        <h2 id="questionText" class="question" tabindex="-1">Question text</h2>
+        <ol
+          id="choices"
+          class="choices"
+          role="listbox"
+          aria-label="Answer choices"
+        >
+          <!-- Choices injected here -->
+        </ol>
+        <p id="feedback" class="feedback" aria-live="polite"></p>
+
+        <div class="actions">
+          <button id="btnNext" class="btn" disabled>Next</button>
+          <button id="btnSkip" class="btn btn-ghost">Skip</button>
+        </div>
+        <p class="hint">
+          Tip: press <kbd>1</kbd>–<kbd>4</kbd> to answer, <kbd>Enter</kbd> for
+          next.
+        </p>
+      </section>
+    </main>
+
+    <!-- Results Screen -->
+    <main id="screen-results" class="screen">
+      <section class="card results-card">
+        <h2>Results</h2>
+        <p class="scoreline">
+          You scored <strong id="finalScore">0</strong> points!
+        </p>
+        <p id="newHighBadge" class="badge" hidden>🎉 New High Score!</p>
+
+        <div class="results__grid">
+          <div><span>Correct</span><strong id="correctCount">0</strong></div>
+          <div><span>Wrong</span><strong id="wrongCount">0</strong></div>
+          <div><span>Best Streak</span><strong id="bestStreak">0</strong></div>
+          <div><span>Time Avg</span><strong id="avgTime">0s</strong></div>
+        </div>
+
+        <div class="actions">
+          <button id="btnRestart" class="btn btn-primary">Play Again</button>
+          <button id="btnHome" class="btn">Home</button>
+        </div>
+
+        <details class="review">
+          <summary>Review questions</summary>
+          <div id="reviewList"></div>
+        </details>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <small>Made with ❤️ — no frameworks.</small>
+    </footer>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
