@@ -65,6 +65,7 @@ body {
     transform: translateY(6px);
   }
 }
+
 .card {
   background: linear-gradient(
     180deg,
@@ -301,4 +302,12 @@ body.light {
   background: radial-gradient(1200px 600px at 20% -10%, #e7ebff 0%, #f6f7fb 60%)
       fixed,
     var(--bg);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
 }
