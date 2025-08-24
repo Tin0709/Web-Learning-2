@@ -1,1 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Community Board</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">🗂️</span>
+        <h1>Community Board</h1>
+      </div>
 
+      <div class="controls">
+        <label class="sr-only" for="search">Search posts</label>
+        <input
+          id="search"
+          type="search"
+          placeholder="Search by title, description, or location..."
+          autocomplete="off"
+        />
+
+        <select id="categoryFilter" aria-label="Filter by category">
+          <option value="all">All categories</option>
+          <option>Announcements</option>
+          <option>Events</option>
+          <option>For Sale</option>
+          <option>Lost &amp; Found</option>
+          <option>Services</option>
+        </select>
+
+        <select id="sortBy" aria-label="Sort posts">
+          <option value="newest">Newest first</option>
+          <option value="popular">Most liked</option>
+        </select>
+
+        <button id="newPostBtn" class="primary">+ New Post</button>
+      </div>
+    </header>
+
+    <main class="app-main" id="main">
+      <section id="posts" class="posts" aria-live="polite" aria-busy="false">
+        <!-- Cards inserted here -->
+      </section>
+    </main>
+
+    <!-- Modal for creating a post -->
+    <div
+      id="modal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+      hidden
+    >
+      <div class="modal__card" role="document">
+        <div class="modal__header">
+          <h2 id="modalTitle">Create a Post</h2>
+          <button id="closeModal" class="icon-btn" aria-label="Close">✖</button>
+        </div>
+        <form id="postForm" novalidate>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="title">Title <span class="req">*</span></label>
+              <input
+                id="title"
+                name="title"
+                required
+                maxlength="120"
+                placeholder="e.g., Neighborhood cleanup this Saturday"
+              />
+              <div class="field-hint" id="titleHint" role="status"></div>
+            </div>
+
+            <div class="form-field">
+              <label for="category">Category <span class="req">*</span></label>
+              <select id="category" name="category" required>
+                <option value="">Select...</option>
+                <option>Announcements</option>
+                <option>Events</option>
+                <option>For Sale</option>
+                <option>Lost &amp; Found</option>
+                <option>Services</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="location">Location</label>
+              <div class="inline">
+                <input
+                  id="location"
+                  name="location"
+                  placeholder="e.g., 123 Maple St or 'District 1'"
+                />
+                <button
+                  type="button"
+                  id="geoBtn"
+                  class="ghost"
+                  title="Use my location"
+                >
+                  📍
+                </button>
+              </div>
+              <small class="muted"
+                >Only approximate coordinates are stored locally.</small
+              >
+            </div>
+
+            <div class="form-field">
+              <label for="eventDate">Event date (optional)</label>
+              <input id="eventDate" name="eventDate" type="datetime-local" />
+            </div>
+
+            <div class="form-field form-field--full">
+              <label for="description"
+                >Description <span class="req">*</span></label
+              >
+              <textarea
+                id="description"
+                name="description"
+                rows="5"
+                required
+                maxlength="2000"
+                placeholder="Add details, contact info, or instructions..."
+              ></textarea>
+            </div>
+
+            <div class="form-field form-field--full">
+              <label for="images">Images (up to 3)</label>
+              <input
+                id="images"
+                name="images"
+                type="file"
+                accept="image/*"
+                multiple
+              />
+              <div
+                id="imagePreview"
+                class="image-preview"
+                aria-live="polite"
+              ></div>
+              <small class="muted"
+                >Images are compressed and stored in your browser only.</small
+              >
+            </div>
+          </div>
+
+          <div class="modal__footer">
+            <button type="button" class="ghost" id="resetForm">Reset</button>
+            <button type="submit" class="primary">Post</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <template id="postCardTemplate">
+      <article class="card">
+        <div class="card__header">
+          <div class="tag"></div>
+          <time class="time"></time>
+        </div>
+        <h3 class="title"></h3>
+        <div class="desc"></div>
+        <div class="gallery" hidden></div>
+        <div class="meta">
+          <span class="loc" hidden></span>
+          <a class="map-link" target="_blank" rel="noopener" hidden>Map</a>
+          <span class="event" hidden></span>
+        </div>
+        <div class="actions">
+          <button class="like-btn" aria-pressed="false">
+            👍 <span class="likes">0</span>
+          </button>
+          <button class="comment-toggle">💬 Comments</button>
+          <button class="delete-btn">🗑️ Delete</button>
+        </div>
+        <div class="comments" hidden>
+          <div class="comment-list"></div>
+          <form class="comment-form">
+            <label class="sr-only">Add a comment</label>
+            <input
+              type="text"
+              name="comment"
+              placeholder="Write a comment..."
+              maxlength="280"
+              required
+            />
+            <button type="submit">Post</button>
+          </form>
+        </div>
+      </article>
+    </template>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
