@@ -49,3 +49,230 @@ body {
     sans-serif;
   line-height: 1.45;
 }
+/* Header */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 15, 20, 0.75);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.brand .logo {
+  font-size: 1.5rem;
+}
+.brand h1 {
+  font-size: 1.15rem;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 0.5rem;
+}
+.controls input[type="search"],
+.controls select {
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  background: #0e1620;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.controls input[type="search"]:focus,
+.controls select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.primary {
+  background: linear-gradient(180deg, var(--primary), var(--primary-600));
+  color: #fff;
+  border: none;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px -6px var(--shadow);
+  cursor: pointer;
+}
+.primary:hover {
+  filter: brightness(1.05);
+}
+.ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--text);
+  padding: 0.5rem 0.65rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Main */
+.app-main {
+  max-width: 1100px;
+  margin: 1rem auto;
+  padding: 0 1rem 2rem;
+}
+.posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: 0 10px 25px -12px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: #0e1620;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--accent);
+}
+.time {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.title {
+  font-size: 1.05rem;
+  margin: 0.25rem 0 0.25rem;
+}
+.desc {
+  color: #d7e3f0;
+  white-space: pre-wrap;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.25rem;
+}
+.gallery img {
+  border-radius: 8px;
+  height: 90px;
+  width: 100%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.meta .event {
+  color: #ffd166;
+}
+.meta .map-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+.meta .map-link:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+.actions button {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #0e1620;
+  color: var(--text);
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+}
+.actions .like-btn[aria-pressed="true"] {
+  background: rgba(93, 231, 177, 0.12);
+  border-color: rgba(93, 231, 177, 0.45);
+}
+.actions .delete-btn {
+  border-color: rgba(255, 107, 107, 0.35);
+}
+.actions .delete-btn:hover {
+  background: rgba(255, 107, 107, 0.12);
+}
+
+.comments {
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+  padding-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.comment {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.comment .bubble {
+  background: #0e1620;
+  padding: 0.4rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.comment .stamp {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.comment-form {
+  display: flex;
+  gap: 0.5rem;
+}
+.comment-form input {
+  flex: 1;
+  padding: 0.5rem 0.6rem;
+  border-radius: 10px;
+  background: #0e1620;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.comment-form button {
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #0e1620;
+  color: var(--text);
+  cursor: pointer;
+}
