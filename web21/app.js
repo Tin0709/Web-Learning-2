@@ -180,3 +180,32 @@ const CATALOG = [
     lengthSec: 206,
   },
 ];
+// Compute a URL for each track lazily (YouTube search).
+const trackToUrl = (t) => {
+  const q = encodeURIComponent(`${t.artist} ${t.title}`);
+  return `https://www.youtube.com/results?search_query=${q}`;
+};
+
+// ======= DOM =======
+const $ = (sel) => document.querySelector(sel);
+const moodEl = $("#mood");
+const genresEl = $("#genres");
+const durationEl = $("#duration");
+const bpmMinEl = $("#bpmMin");
+const bpmMaxEl = $("#bpmMax");
+const energyMinEl = $("#energyMin");
+const energyMaxEl = $("#energyMax");
+const bpmMinLabel = $("#bpmMinLabel");
+const bpmMaxLabel = $("#bpmMaxLabel");
+const energyMinLabel = $("#energyMinLabel");
+const energyMaxLabel = $("#energyMaxLabel");
+const resultsEl = $("#results");
+const statsEl = $("#stats");
+const saveBtn = $("#save");
+const exportBtn = $("#export");
+const playlistNameEl = $("#playlistName");
+const surpriseBtn = $("#surprise");
+const generateBtn = $("#generate");
+const clearBtn = $("#clear");
+const savedListEl = $("#saved");
+const savedEmptyEl = $("#savedEmpty");
