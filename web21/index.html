@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Music Playlist Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>🎵 Music Playlist Generator</h1>
+      <p>Create smart playlists by mood, genre, BPM, and duration.</p>
+    </header>
+
+    <main class="container">
+      <section class="panel">
+        <h2>1) Your Vibe</h2>
+        <div class="grid">
+          <label>
+            Mood
+            <select id="mood">
+              <option value="">Any</option>
+              <option>Happy</option>
+              <option>Chill</option>
+              <option>Focus</option>
+              <option>Workout</option>
+              <option>Sad</option>
+              <option>Party</option>
+            </select>
+          </label>
+
+          <label>
+            Genres (multi-select)
+            <select id="genres" multiple size="6">
+              <option>Pop</option>
+              <option>Hip-Hop</option>
+              <option>Rock</option>
+              <option>EDM</option>
+              <option>Lo-fi</option>
+              <option>Jazz</option>
+              <option>Classical</option>
+              <option>Indie</option>
+              <option>R&B</option>
+            </select>
+          </label>
+
+          <label>
+            Target duration (minutes)
+            <input id="duration" type="number" min="5" max="180" value="40" />
+          </label>
+
+          <label>
+            BPM range
+            <div class="range-pair">
+              <input id="bpmMin" type="range" min="60" max="200" value="80" />
+              <input id="bpmMax" type="range" min="60" max="200" value="150" />
+            </div>
+            <div class="range-labels">
+              <span id="bpmMinLabel">80</span>
+              <span id="bpmMaxLabel">150</span>
+            </div>
+          </label>
+
+          <label>
+            Energy
+            <div class="range-pair">
+              <input id="energyMin" type="range" min="0" max="100" value="0" />
+              <input
+                id="energyMax"
+                type="range"
+                min="0"
+                max="100"
+                value="100"
+              />
+            </div>
+            <div class="range-labels">
+              <span id="energyMinLabel">0</span>
+              <span id="energyMaxLabel">100</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button id="surprise">🎲 Surprise Me</button>
+          <button id="generate" class="primary">Generate Playlist</button>
+          <button id="clear">Reset</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>2) Results</h2>
+        <div id="stats" class="stats"></div>
+        <ul id="results" class="track-list" aria-live="polite"></ul>
+
+        <div class="actions">
+          <input
+            id="playlistName"
+            type="text"
+            placeholder="Playlist name (e.g., Monday Run)"
+          />
+          <button id="save">💾 Save</button>
+          <button id="export">⬇️ Export .m3u</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>3) Saved Playlists</h2>
+        <div id="savedEmpty" class="muted">No saved playlists yet.</div>
+        <ul id="saved" class="saved-list"></ul>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <small
+        >Built with vanilla HTML, CSS, and JS. Links open a YouTube search for
+        the track.</small
+      >
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
