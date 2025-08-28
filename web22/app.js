@@ -21,6 +21,7 @@ const els = {
   definitions: document.getElementById("definitions"),
   notes: document.getElementById("notes"),
 };
+
 const LANGS = [
   // Common + supported by LibreTranslate
   { code: "auto", name: "Auto-detect" },
@@ -43,6 +44,7 @@ const LANGS = [
   { code: "ko", name: "Korean" },
   { code: "hi", name: "Hindi" },
 ];
+
 function populateLangs() {
   for (const l of LANGS) {
     const opt1 = document.createElement("option");
@@ -86,6 +88,7 @@ els.search.addEventListener("click", runSearch);
 els.input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") runSearch();
 });
+
 function setLoading(on, text = "Looking up…") {
   els.status.hidden = !on;
   els.statusText.textContent = text;
@@ -105,6 +108,7 @@ function showResults() {
   els.error.hidden = true;
   els.status.hidden = true;
 }
+
 async function runSearch() {
   const q = els.input.value.trim();
   const fromPref = els.from.value;
@@ -155,6 +159,7 @@ async function runSearch() {
     showError(err?.message || "Something went wrong. Try again.");
   }
 }
+
 async function detectLang(text) {
   const res = await fetch(`${LT_BASE}/detect`, {
     method: "POST",
@@ -180,3 +185,138 @@ async function translate(text, from, to) {
   const data = await res.json();
   return data?.translatedText || "";
 }
+
+async function getEnglishDefinitions(word) {
+  const res = await fetch(DICT_BASE + encodeURIComponent(word));
+  if (!res.ok) {
+    // 404 means not found; we’ll just show translation without defs
+    if (res.status === 404) return null;
+    throw new Error("Dictionary lookup failed.");
+  }
+  const data = await res.json();
+  if (!Array.isArray(data) || !data[0]) return null;
+
+  const entry = data[0];
+  // Parse a simple structure
+  const phonetic = entry.phonetic || entry.phonetics?.find((p) => p.text)?.text;
+  const audio = entry.phonetics?.find((p) => p.audio)?.audio || "";
+  const meanings = (entry.meanings || []).map((m) => ({
+    partOfSpeech: m.partOfSpeech,
+    definitions:
+      m.definitions?.map((d) => ({
+        def: d.definition,
+        example: d.example || "",
+        syns: d.synonyms || [],
+      })) || [],
+  }));
+
+  return { phonetic, audio, meanings };
+}
+
+function renderWord(displayWord, phonetic, audioUrl) {
+  els.wordOut.textContent = displayWord || "—";
+  els.phoneticOut.textContent = phonetic
+    ? `/${phonetic.replace(/\//g, "")}/`
+    : "";
+  if (audioUrl) {
+    els.audio.src = audioUrl;
+    els.audio.hidden = false;
+  } else {
+    els.audio.hidden = true;
+    els.audio.removeAttribute("src");
+  }
+}
+
+async function renderDefinitions(meanings, to) {
+  els.definitions.innerHTML = "";
+  if (!meanings || meanings.length === 0) {
+    els.definitions.innerHTML = `<p class="tiny">No dictionary definitions found. You still have the translation above.</p>`;
+    return;
+  }
+
+  // Build a list of strings to translate if needed
+  let needsTranslation = to !== "en";
+  let batch = [];
+  if (needsTranslation) {
+    for (const m of meanings) {
+      for (const d of m.definitions) {
+        if (d.def) batch.push(d.def);
+        if (d.example) batch.push(d.example);
+      }
+    }
+  }
+
+  // Translate in small batches to be gentle on free endpoints
+  let translated = [];
+  if (needsTranslation && batch.length) {
+    // Split into chunks of 20 strings each
+    const chunkSize = 20;
+    for (let i = 0; i < batch.length; i += chunkSize) {
+      const chunk = batch.slice(i, i + chunkSize);
+      const translatedChunk = await Promise.all(
+        chunk.map((txt) => translate(txt, "en", to))
+      );
+      translated.push(...translatedChunk);
+    }
+  }
+
+  // Helper to pull translated strings in order
+  let tIdx = 0;
+  function nextT() {
+    return translated[tIdx++];
+  }
+
+  // Render
+  for (const m of meanings) {
+    // Heading for part of speech
+    const block = document.createElement("div");
+    block.className = "definition";
+
+    const pos = document.createElement("div");
+    pos.className = "pos";
+    pos.textContent = m.partOfSpeech || "—";
+    block.appendChild(pos);
+
+    m.definitions.slice(0, 4).forEach((d, i) => {
+      const p = document.createElement("p");
+      p.className = "meaning";
+      let en = d.def || "";
+      let tr = needsTranslation && d.def ? nextT() : "";
+      p.innerHTML =
+        needsTranslation && tr
+          ? `<strong>${i + 1}.</strong> ${escapeHtml(en)}<br><em>${escapeHtml(
+              tr
+            )}</em>`
+          : `<strong>${i + 1}.</strong> ${escapeHtml(en)}`;
+      block.appendChild(p);
+
+      if (d.example) {
+        const ex = document.createElement("p");
+        ex.className = "example";
+        const exTr = needsTranslation ? nextT() : "";
+        ex.innerHTML =
+          needsTranslation && exTr
+            ? `“${escapeHtml(d.example)}”<br><em>“${escapeHtml(exTr)}”</em>`
+            : `“${escapeHtml(d.example)}”`;
+        block.appendChild(ex);
+      }
+    });
+
+    els.definitions.appendChild(block);
+  }
+}
+
+function escapeHtml(s) {
+  return s.replace(
+    /[&<>"']/g,
+    (ch) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[
+        ch
+      ])
+  );
+}
+
+// ====== Optional: hydrate example query on first load
+window.addEventListener("DOMContentLoaded", () => {
+  els.input.value = "liberté";
+});
