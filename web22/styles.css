@@ -1,0 +1,41 @@
+:root {
+  --bg: #0f1220;
+  --panel: #151935;
+  --card: #1c2147;
+  --text: #e7eaf6;
+  --muted: #b9bfd8;
+  --accent: #8aa1ff;
+  --accent-2: #7ef0d4;
+  --danger: #ff6b6b;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(
+    1200px 800px at 20% -10%,
+    #1b2045 0%,
+    var(--bg) 40%,
+    #0b0f1b 100%
+  );
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    "Helvetica Neue", Arial;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--accent-2);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
