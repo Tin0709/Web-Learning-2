@@ -86,3 +86,22 @@ els.search.addEventListener("click", runSearch);
 els.input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") runSearch();
 });
+function setLoading(on, text = "Looking up…") {
+  els.status.hidden = !on;
+  els.statusText.textContent = text;
+  if (on) {
+    els.results.hidden = true;
+    els.error.hidden = true;
+  }
+}
+function showError(msg) {
+  els.error.textContent = msg;
+  els.error.hidden = false;
+  els.results.hidden = true;
+  els.status.hidden = true;
+}
+function showResults() {
+  els.results.hidden = false;
+  els.error.hidden = true;
+  els.status.hidden = true;
+}
