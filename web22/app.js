@@ -155,3 +155,28 @@ async function runSearch() {
     showError(err?.message || "Something went wrong. Try again.");
   }
 }
+async function detectLang(text) {
+  const res = await fetch(`${LT_BASE}/detect`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ q: text }),
+  });
+  if (!res.ok) throw new Error("Language detection failed.");
+  const data = await res.json();
+  // LibreTranslate returns array with confidences; choose the top
+  const best = (data || [])[0];
+  return best?.language || "en";
+}
+
+async function translate(text, from, to) {
+  if (!text) return "";
+  if (from === to) return text;
+  const res = await fetch(`${LT_BASE}/translate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ q: text, source: from, target: to, format: "text" }),
+  });
+  if (!res.ok) throw new Error(`Translate failed (${from}→${to}).`);
+  const data = await res.json();
+  return data?.translatedText || "";
+}
