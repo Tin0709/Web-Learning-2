@@ -43,3 +43,46 @@ const LANGS = [
   { code: "ko", name: "Korean" },
   { code: "hi", name: "Hindi" },
 ];
+function populateLangs() {
+  for (const l of LANGS) {
+    const opt1 = document.createElement("option");
+    opt1.value = l.code;
+    opt1.textContent = l.name;
+    // Avoid putting 'auto' in "to" selector.
+    if (l.code !== "auto") {
+      const opt2 = opt1.cloneNode(true);
+      els.to.appendChild(opt2);
+    }
+    els.from.appendChild(opt1);
+  }
+  els.from.value = "auto";
+  els.to.value = "en";
+  els.toLabel.textContent = getLangName(els.to.value);
+}
+populateLangs();
+
+function getLangName(code) {
+  return LANGS.find((l) => l.code === code)?.name || code;
+}
+
+els.swap.addEventListener("click", () => {
+  const from = els.from.value;
+  const to = els.to.value;
+  if (from === "auto") {
+    // If auto, try to keep auto and just set TO to English for convenience
+    els.to.value = "en";
+  } else {
+    els.from.value = to === "auto" ? "en" : to;
+    els.to.value = from;
+  }
+  els.toLabel.textContent = getLangName(els.to.value);
+});
+
+els.to.addEventListener("change", () => {
+  els.toLabel.textContent = getLangName(els.to.value);
+});
+
+els.search.addEventListener("click", runSearch);
+els.input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") runSearch();
+});
