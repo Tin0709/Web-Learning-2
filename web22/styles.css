@@ -39,3 +39,203 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.app-header {
+  text-align: center;
+  padding: 36px 16px 10px;
+}
+.app-header h1 {
+  margin: 0 0 6px;
+  font-size: clamp(26px, 4vw, 38px);
+}
+.tagline {
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px 90px;
+}
+
+.controls {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 16px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+label span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+select,
+input[type="text"] {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  min-width: 220px;
+  outline: none;
+}
+input[type="text"] {
+  flex: 1;
+  min-width: 240px;
+}
+
+.primary,
+.swap {
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+.primary {
+  background: linear-gradient(135deg, var(--accent), #6ec7ff);
+  color: #0a0c1a;
+}
+.swap {
+  background: var(--card);
+  color: var(--text);
+}
+
+.input-row {
+  margin-top: 4px;
+}
+
+.checkbox {
+  gap: 6px;
+  flex-direction: row;
+  align-items: center;
+}
+.checkbox input {
+  width: 16px;
+  height: 16px;
+}
+
+.status {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  margin: 16px 0;
+  padding: 10px 12px;
+  background: rgba(138, 161, 255, 0.12);
+  border: 1px solid rgba(138, 161, 255, 0.28);
+  border-radius: var(--radius-sm);
+}
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: var(--accent-2);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.results .panel {
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  margin-top: 8px;
+}
+.panel-title {
+  margin: 6px 0 16px;
+  font-size: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.word {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 2px 0 4px;
+}
+.phonetic {
+  color: var(--muted);
+  margin: 0;
+}
+.translation {
+  font-size: 18px;
+}
+
+.defs h3 {
+  margin: 16px 0 10px;
+}
+.definition {
+  margin: 10px 0;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+}
+.definition .pos {
+  color: var(--accent-2);
+  font-weight: 700;
+}
+.definition .meaning {
+  margin: 6px 0;
+}
+.definition .example {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.notes {
+  color: var(--muted);
+  margin-top: 10px;
+}
+.tiny {
+  font-size: 13px;
+}
+
+.error {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 107, 107, 0.12);
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  color: #ffdada;
+  border-radius: var(--radius-sm);
+}
+
+.footer {
+  text-align: center;
+  padding: 24px 16px 50px;
+  color: var(--muted);
+}
