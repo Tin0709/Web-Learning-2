@@ -105,3 +105,53 @@ function showResults() {
   els.error.hidden = true;
   els.status.hidden = true;
 }
+async function runSearch() {
+  const q = els.input.value.trim();
+  const fromPref = els.from.value;
+  const to = els.to.value;
+
+  if (!q) {
+    showError("Please type a word or short phrase to look up.");
+    return;
+  }
+  if (fromPref === to) {
+    // It's valid, but often users want a different target
+  }
+
+  setLoading(true);
+
+  try {
+    // 1) Detect language (if auto)
+    let detected = fromPref;
+    if (els.auto.checked || fromPref === "auto") {
+      detected = await detectLang(q);
+    }
+
+    // 2) Translate the query into English for dictionary lookup.
+    // We will use the English form for definitions.
+    const qEn = detected === "en" ? q : await translate(q, detected, "en");
+
+    // 3) Translate the query to target (for display)
+    const qTo = to === "en" ? qEn : await translate(qEn, "en", to);
+
+    // 4) Try to fetch English dictionary data (definitions/pronunciation/audio)
+    const dict = await getEnglishDefinitions(qEn);
+
+    // 5) Prepare UI
+    renderWord(qTo, dict?.phonetic, dict?.audio);
+
+    // 6) Show definitions in EN and (if target != en) translated
+    await renderDefinitions(dict?.meanings || [], to);
+
+    // 7) Notes
+    const bits = [];
+    if (detected) bits.push(`Detected: ${getLangName(detected)} (${detected})`);
+    if (qEn && detected !== "en") bits.push(`Lookup base word (EN): “${qEn}”`);
+    els.notes.innerHTML = bits.join(" &middot; ");
+
+    showResults();
+  } catch (err) {
+    console.error(err);
+    showError(err?.message || "Something went wrong. Try again.");
+  }
+}
