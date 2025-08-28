@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Multi-language Dictionary</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>🌐 Multi-language Dictionary</h1>
+      <p class="tagline">
+        Translate, define, and pronounce words across languages.
+      </p>
+    </header>
+
+    <main class="container">
+      <section class="controls">
+        <div class="row">
+          <label>
+            <span>From</span>
+            <select id="fromLang"></select>
+          </label>
+
+          <button
+            id="swapBtn"
+            class="swap"
+            title="Swap languages"
+            aria-label="Swap languages"
+          >
+            ⇄
+          </button>
+
+          <label>
+            <span>To</span>
+            <select id="toLang"></select>
+          </label>
+        </div>
+
+        <div class="row input-row">
+          <input
+            id="queryInput"
+            type="text"
+            placeholder="Type a word or short phrase (e.g., 'liberté', 'こんにちは')"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button id="searchBtn" class="primary">Search</button>
+        </div>
+
+        <div class="row tiny">
+          <label class="checkbox">
+            <input id="autoDetect" type="checkbox" checked />
+            <span>Auto-detect source language</span>
+          </label>
+        </div>
+      </section>
+
+      <section id="status" class="status" hidden>
+        <div class="spinner" aria-hidden="true"></div>
+        <span id="statusText">Looking up…</span>
+      </section>
+
+      <section id="results" class="results" hidden>
+        <div class="panel">
+          <h2 class="panel-title">Result</h2>
+
+          <div class="grid">
+            <div class="card">
+              <h3>Word</h3>
+              <p id="wordOut" class="word"></p>
+              <p id="phoneticOut" class="phonetic"></p>
+              <audio id="audioPlayer" controls hidden></audio>
+            </div>
+
+            <div class="card">
+              <h3>Translation (<span id="toLangLabel">–</span>)</h3>
+              <p id="translationOut" class="translation"></p>
+            </div>
+          </div>
+
+          <div class="defs">
+            <h3>Definitions</h3>
+            <div id="definitions"></div>
+          </div>
+
+          <div id="notes" class="notes tiny"></div>
+        </div>
+      </section>
+
+      <section id="error" class="error" hidden role="alert"></section>
+    </main>
+
+    <footer class="footer tiny">
+      <p>
+        Data:
+        <a href="https://dictionaryapi.dev" target="_blank" rel="noopener"
+          >Free Dictionary API</a
+        >
+        (English) &middot;
+        <a href="https://libretranslate.com/" target="_blank" rel="noopener"
+          >LibreTranslate</a
+        >
+        (translate/detect)
+      </p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
