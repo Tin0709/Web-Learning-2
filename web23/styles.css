@@ -1,0 +1,32 @@
+:root {
+  --bg: #0f1220;
+  --panel: #171a2b;
+  --muted: #9aa3b2;
+  --accent: #7c9aff;
+  --x: #ffd166; /* warm amber */
+  --o: #80ed99; /* soft green */
+  --draw: #cbd5e1;
+  --ring: #ffffff44;
+  --win: #94a3b8;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  color: #eef2ff;
+  background: radial-gradient(1200px 800px at 20% 0%, #1b1f37, #0c0f1a),
+    var(--bg);
+  display: grid;
+  place-items: center;
+  line-height: 1.4;
+}
