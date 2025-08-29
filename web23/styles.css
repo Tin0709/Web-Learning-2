@@ -30,3 +30,34 @@ body {
   place-items: center;
   line-height: 1.4;
 }
+.app {
+  width: min(92vw, 680px);
+  display: grid;
+  gap: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 1.1rem + 1.5vw, 2rem);
+  letter-spacing: 0.5px;
+}
+.controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.mode {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--panel);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.6rem;
+  box-shadow: var(--shadow);
+}
