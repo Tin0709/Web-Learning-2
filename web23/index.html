@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app" role="main">
+      <header class="header">
+        <h1>Tic-Tac-Toe</h1>
+        <div class="controls">
+          <label class="mode">
+            <span>Mode:</span>
+            <select id="modeSelect" aria-label="Game mode">
+              <option value="human" selected>2 Players</option>
+              <option value="cpu">Vs Computer</option>
+            </select>
+          </label>
+          <button
+            id="resetBtn"
+            class="btn"
+            type="button"
+            aria-label="Reset game"
+          >
+            Reset
+          </button>
+        </div>
+      </header>
+
+      <section class="scoreboard" aria-label="Scoreboard">
+        <div class="score">
+          <span class="badge x">X</span>
+          <span id="scoreX">0</span>
+        </div>
+        <div class="score">
+          <span class="badge o">O</span>
+          <span id="scoreO">0</span>
+        </div>
+        <div class="score">
+          <span class="badge d">Draws</span>
+          <span id="scoreD">0</span>
+        </div>
+      </section>
+
+      <section
+        class="board"
+        id="board"
+        role="grid"
+        aria-label="Tic-Tac-Toe board"
+      >
+        <!-- 9 cells (auto-generated if you prefer, but here we spell them out for clarity) -->
+        <button
+          class="cell"
+          role="gridcell"
+          aria-label="Cell 1"
+          data-index="0"
+        ></button>
+        <button
+          class="cell"
+          role="gridcell"
+          aria-label="Cell 2"
+          data-index="1"
+        ></button>
+        <button
+          class="cell"
+          role="gridcell"
+          aria-label="Cell 3"
+          data-index="2"
+        ></button>
+        <button
+          class="cell"
+          role="gridcell"
+          aria-label="Cell 4"
+          data-index="3"
+        ></button>
+        <button
+          class="cell"
+          role="gridcell"
+          aria-label="Cell 5"
+          data-index="4"
+        ></button>
+        <button
+          class="cell"
+          role="gridcell"
+          aria-label="Cell 6"
+          data-index="5"
+        ></button>
+        <button
+          class="cell"
+          role="gridcell"
+          aria-label="Cell 7"
+          data-index="6"
+        ></button>
+        <button
+          class="cell"
+          role="gridcell"
+          aria-label="Cell 8"
+          data-index="7"
+        ></button>
+        <button
+          class="cell"
+          role="gridcell"
+          aria-label="Cell 9"
+          data-index="8"
+        ></button>
+      </section>
+
+      <p id="status" class="status" aria-live="polite">X to move</p>
+
+      <footer class="footer">
+        <small>Keyboard: arrows to move, Enter/Space to place.</small>
+      </footer>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
