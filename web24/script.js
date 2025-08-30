@@ -1,6 +1,10 @@
 // --- Config ---
 const EMOJIS = ["🍎", "🍌", "🍒", "🍇", "🍉", "🍊", "🥝", "🍓"]; // 8 pairs = 16 cards (4x4)
 const FLIP_DELAY = 800; // ms before hiding mismatched cards
+
+// --- State ---
+let first, second, lock, matches, moves, startTime, timerId;
+
 // --- Elements ---
 const grid = document.getElementById("grid");
 const timeEl = document.getElementById("time");
@@ -39,6 +43,7 @@ function stopTimer() {
   clearInterval(timerId);
   timerId = null;
 }
+
 // --- Game Setup ---
 function setup() {
   // Reset state
@@ -62,9 +67,9 @@ function setup() {
     card.setAttribute("data-index", index);
 
     card.innerHTML = `
-        <div class="card-face card-front" aria-hidden="true">❓</div>
-        <div class="card-face card-back">${emoji}</div>
-      `;
+      <div class="card-face card-front" aria-hidden="true">❓</div>
+      <div class="card-face card-back">${emoji}</div>
+    `;
 
     card.addEventListener("click", () => onFlip(card));
     grid.appendChild(card);
@@ -121,3 +126,19 @@ function onFlip(card) {
     }, FLIP_DELAY);
   }
 }
+
+// --- Events ---
+resetBtn.addEventListener("click", () => {
+  winModal.classList.remove("show");
+  winModal.setAttribute("aria-hidden", "true");
+  setup();
+});
+
+playAgainBtn.addEventListener("click", () => {
+  winModal.classList.remove("show");
+  winModal.setAttribute("aria-hidden", "true");
+  setup();
+});
+
+// Kick off
+setup();
