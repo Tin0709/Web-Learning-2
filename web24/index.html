@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Match</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Memory Match</h1>
+      <div class="stats">
+        <div>Time: <span id="time">0:00</span></div>
+        <div>Moves: <span id="moves">0</span></div>
+        <button id="reset" class="btn">New Game</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="grid" class="grid" aria-label="Memory cards"></section>
+    </main>
+
+    <div
+      id="win"
+      class="modal"
+      aria-hidden="true"
+      Memory
+      Match
+      role="dialog"
+      aria-labelledby="win-title"
+    >
+      <div class="modal-card">
+        <h2 id="win-title">You win! 🎉</h2>
+        <p>
+          <strong>Time:</strong> <span id="final-time">0:00</span> &nbsp; •
+          &nbsp; <strong>Moves:</strong> <span id="final-moves">0</span>
+        </p>
+        <button id="play-again" class="btn">Play again</button>
+      </div>
+    </div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
