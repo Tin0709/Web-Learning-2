@@ -39,3 +39,85 @@ function stopTimer() {
   clearInterval(timerId);
   timerId = null;
 }
+// --- Game Setup ---
+function setup() {
+  // Reset state
+  first = second = null;
+  lock = false;
+  matches = 0;
+  moves = 0;
+  movesEl.textContent = "0";
+  timeEl.textContent = "0:00";
+  if (timerId) stopTimer();
+
+  // Build deck and grid
+  const deck = shuffle([...EMOJIS, ...EMOJIS]);
+  grid.innerHTML = "";
+
+  deck.forEach((emoji, index) => {
+    const card = document.createElement("button");
+    card.className = "card";
+    card.setAttribute("aria-label", "Hidden card");
+    card.setAttribute("data-emoji", emoji);
+    card.setAttribute("data-index", index);
+
+    card.innerHTML = `
+        <div class="card-face card-front" aria-hidden="true">❓</div>
+        <div class="card-face card-back">${emoji}</div>
+      `;
+
+    card.addEventListener("click", () => onFlip(card));
+    grid.appendChild(card);
+  });
+}
+
+function onFlip(card) {
+  if (lock) return;
+  if (
+    card.classList.contains("is-flipped") ||
+    card.classList.contains("is-matched")
+  )
+    return;
+
+  // first flip starts timer
+  if (!timerId) startTimer();
+
+  card.classList.add("is-flipped");
+
+  if (!first) {
+    first = card;
+    return;
+  }
+
+  // second pick
+  second = card;
+  moves++;
+  movesEl.textContent = String(moves);
+
+  const match = first.dataset.emoji === second.dataset.emoji;
+
+  if (match) {
+    first.classList.add("is-matched");
+    second.classList.add("is-matched");
+    first.setAttribute("aria-label", `Matched ${first.dataset.emoji}`);
+    second.setAttribute("aria-label", `Matched ${second.dataset.emoji}`);
+    first = second = null;
+    matches++;
+
+    if (matches === EMOJIS.length) {
+      stopTimer();
+      finalTimeEl.textContent = timeEl.textContent;
+      finalMovesEl.textContent = String(moves);
+      winModal.classList.add("show");
+      winModal.setAttribute("aria-hidden", "false");
+    }
+  } else {
+    lock = true;
+    setTimeout(() => {
+      first.classList.remove("is-flipped");
+      second.classList.remove("is-flipped");
+      first = second = null;
+      lock = false;
+    }, FLIP_DELAY);
+  }
+}
