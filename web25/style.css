@@ -1,0 +1,28 @@
+:root {
+  --bg: #0f1220;
+  --card: #171a2b;
+  --muted: #9096b2;
+  --text: #e8ebff;
+  --accent: #6ea8ff;
+  --good: #4ade80;
+  --bad: #ff6b6b;
+  --next: #ffd166;
+  --outline: #2a2f4a;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter,
+    Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: radial-gradient(1200px 800px at 70% -10%, #1d2240 0%, #0f1220 55%)
+      fixed,
+    var(--bg);
+  color: var(--text);
+}
