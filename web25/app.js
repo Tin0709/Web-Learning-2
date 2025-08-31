@@ -26,3 +26,24 @@ const TEXTS = {
     "type test pace focus hands keys speed light move clear",
   ],
 };
+// ===== State =====
+let target = "";
+let index = 0;
+let started = false;
+let timer = null;
+let timeLeft = 30;
+
+let totalTyped = 0; // all keystrokes (excluding backspaces)
+let correctTyped = 0; // correct characters typed
+
+// ===== Elements =====
+const wpmEl = $("wpm");
+const accEl = $("accuracy");
+const timeEl = $("time");
+const bestEl = $("best");
+const textEl = $("text");
+const inputEl = $("input");
+const startBtn = $("startBtn");
+const resetBtn = $("resetBtn");
+const durationSel = $("duration");
+const catSel = $("category");
