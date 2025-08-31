@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Typing Speed Challenge</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Typing Speed Challenge</h1>
+      <div class="stats">
+        <div class="stat"><span id="wpm">0</span><label>WPM</label></div>
+        <div class="stat">
+          <span id="accuracy">100%</span><label>Accuracy</label>
+        </div>
+        <div class="stat"><span id="time">00:30</span><label>Time</label></div>
+        <div class="stat best">
+          <span id="best">—</span><label>Best WPM</label>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="panel">
+        <div class="controls">
+          <div class="control">
+            <label for="duration">Duration</label>
+            <select id="duration" aria-label="Test duration">
+              <option value="15">15s</option>
+              <option value="30" selected>30s</option>
+              <option value="60">60s</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="category">Text</label>
+            <select id="category" aria-label="Text category">
+              <option value="quotes" selected>Quotes</option>
+              <option value="tech">Tech</option>
+              <option value="short">Short words</option>
+            </select>
+          </div>
+          <button id="startBtn" class="primary">Start</button>
+          <button id="resetBtn" class="ghost" disabled>Reset</button>
+        </div>
+
+        <div class="playground" aria-live="polite">
+          <div id="text" class="text" aria-label="Text to type"></div>
+
+          <label for="input" class="sr-only">Type here</label>
+          <input
+            id="input"
+            class="input"
+            type="text"
+            autocomplete="off"
+            autocapitalize="none"
+            spellcheck="false"
+            disabled
+            placeholder="Press Start, then type here…"
+          />
+        </div>
+
+        <div class="footer-hint">
+          Tip: the clock starts on your first keystroke • press
+          <kbd>Esc</kbd> to reset line
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">built with ♥ — vanilla HTML/CSS/JS</footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
