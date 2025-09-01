@@ -1,0 +1,252 @@
+:root {
+  --bg: #0f1222;
+  --card: #161a31;
+  --muted: #9aa0b4;
+  --text: #eef1f7;
+  --accent: #7aa5ff;
+  --accent-2: #ffd166;
+  --danger: #ff6b6b;
+  --border: #242947;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  background: radial-gradient(
+    1200px 600px at 20% -10%,
+    #1a1f3d 0%,
+    #0f1222 60%
+  );
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.site-header {
+  text-align: center;
+  padding: 3rem 1rem 1rem;
+}
+h1 {
+  margin: 0 0 0.25rem;
+  font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+}
+.subtitle {
+  color: var(--muted);
+  margin: 0;
+}
+
+.container {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.controls {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr repeat(3, max-content);
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.6rem;
+  background: #0e1226;
+  border: 1px solid var(--border);
+  color: var(--text);
+  outline: none;
+}
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgb(122 165 255 / 0.18);
+}
+.select-wrap {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--muted);
+}
+
+.btn {
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.6rem;
+  border: 1px solid transparent;
+  background: linear-gradient(180deg, #5a7bff, #3d5df6);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn:hover {
+  filter: brightness(1.05);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn-light {
+  background: #222744;
+  border-color: #2e3563;
+}
+.btn-secondary {
+  background: #2a2f4f;
+  border-color: #384072;
+}
+.btn-danger {
+  background: #aa2e2e;
+}
+.hidden {
+  display: none !important;
+}
+
+.card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.grid > label:nth-child(3),
+.grid > label:nth-child(4) {
+  grid-column: span 1;
+}
+@media (max-width: 720px) {
+  .controls {
+    grid-template-columns: 1fr;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stars {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.2rem;
+  align-items: center;
+}
+.stars input {
+  display: none;
+}
+.stars label {
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #3b3f65;
+  transition: transform 0.05s ease-in-out;
+}
+.stars label:hover,
+.stars label:hover ~ label {
+  color: var(--accent-2);
+  transform: translateY(-1px);
+}
+.stars input:checked ~ label {
+  color: var(--accent-2);
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.results-info {
+  color: var(--muted);
+  margin: 1rem 0 0.25rem;
+}
+
+.reviews {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+}
+
+.review-card {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 0.8rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  padding: 0.8rem;
+}
+.cover-wrap {
+  width: 92px;
+  height: 130px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #0e1226;
+  border: 1px solid var(--border);
+}
+.cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.review-content header {
+  margin-bottom: 0.4rem;
+}
+.book-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.book-author {
+  margin: 0.1rem 0 0.25rem;
+  color: var(--muted);
+}
+.rating {
+  letter-spacing: 0.12rem;
+  color: var(--accent-2);
+}
+.review-text {
+  margin: 0.4rem 0 0.6rem;
+  color: #dfe3f2;
+}
+.review-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--muted);
+}
+.site-footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--muted);
+}
+
+.select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #6e7394 50%),
+    linear-gradient(135deg, #6e7394 50%, transparent 50%),
+    linear-gradient(to right, #0e1226, #0e1226);
+  background-position: calc(100% - 16px) calc(1em + 2px),
+    calc(100% - 11px) calc(1em + 2px), 100% 0;
+  background-size: 5px 5px, 5px 5px, 2.6rem 3rem;
+  background-repeat: no-repeat;
+}
