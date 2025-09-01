@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book Review Platform</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>📚 Book Review Platform</h1>
+      <p class="subtitle">Add, search, sort, and filter your book reviews</p>
+    </header>
+
+    <main class="container">
+      <!-- Controls -->
+      <section class="controls" aria-label="Search and filters">
+        <input
+          id="searchInput"
+          class="input"
+          type="search"
+          placeholder="Search by title or author…"
+          aria-label="Search by title or author"
+        />
+
+        <label class="select-wrap" aria-label="Minimum rating">
+          <span>Min rating</span>
+          <select id="minRating" class="select">
+            <option value="0">Any</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+            <option value="4">4+</option>
+            <option value="5">5</option>
+          </select>
+        </label>
+
+        <label class="select-wrap" aria-label="Sort reviews">
+          <span>Sort</span>
+          <select id="sortBy" class="select">
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="highest">Highest rating</option>
+            <option value="lowest">Lowest rating</option>
+          </select>
+        </label>
+
+        <button
+          id="clearAll"
+          class="btn btn-secondary"
+          title="Clear all reviews"
+        >
+          Clear All
+        </button>
+      </section>
+
+      <!-- Add/Edit form -->
+      <section class="card" aria-label="Add a new review">
+        <h2 id="formTitle">Add a Review</h2>
+        <form id="reviewForm">
+          <div class="grid">
+            <label>
+              <span>Book Title*</span>
+              <input type="text" id="title" class="input" required />
+            </label>
+            <label>
+              <span>Author*</span>
+              <input type="text" id="author" class="input" required />
+            </label>
+            <label>
+              <span>Cover Image URL (optional)</span>
+              <input
+                type="url"
+                id="cover"
+                class="input"
+                placeholder="https://…"
+              />
+            </label>
+            <label>
+              <span>Rating*</span>
+              <div class="stars" role="radiogroup" aria-label="Rating out of 5">
+                <!-- Radio inputs for accessibility -->
+                <input type="radio" name="rating" id="r5" value="5" />
+                <label for="r5" title="5 stars">★</label>
+                <input type="radio" name="rating" id="r4" value="4" />
+                <label for="r4" title="4 stars">★</label>
+                <input type="radio" name="rating" id="r3" value="3" />
+                <label for="r3" title="3 stars">★</label>
+                <input type="radio" name="rating" id="r2" value="2" />
+                <label for="r2" title="2 stars">★</label>
+                <input type="radio" name="rating" id="r1" value="1" />
+                <label for="r1" title="1 star">★</label>
+              </div>
+            </label>
+          </div>
+
+          <label>
+            <span>Your Review*</span>
+            <textarea id="text" class="textarea" rows="4" required></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="btn">Save Review</button>
+            <button type="button" id="cancelEdit" class="btn btn-light hidden">
+              Cancel Edit
+            </button>
+          </div>
+          <input type="hidden" id="editId" />
+        </form>
+      </section>
+
+      <!-- Results info -->
+      <section aria-live="polite" class="results-info">
+        <span id="resultsCount">0 reviews</span>
+      </section>
+
+      <!-- Reviews list -->
+      <section id="reviewsList" class="reviews" aria-label="Reviews list">
+        <!-- Cards rendered by JS -->
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <small>Built with ❤️ using HTML, CSS & JS (localStorage)</small>
+    </footer>
+
+    <template id="reviewCardTemplate">
+      <article class="review-card">
+        <div class="cover-wrap">
+          <img class="cover" alt="" />
+        </div>
+        <div class="review-content">
+          <header>
+            <h3 class="book-title"></h3>
+            <p class="book-author"></p>
+            <div class="rating" aria-label="Rating"></div>
+          </header>
+          <p class="review-text"></p>
+          <footer class="review-meta">
+            <time class="date"></time>
+            <div class="actions">
+              <button class="btn btn-light edit">Edit</button>
+              <button class="btn btn-secondary delete">Delete</button>
+            </div>
+          </footer>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
