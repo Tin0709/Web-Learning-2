@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>Tic-Tac-Toe</h1>
+
+      <section class="controls" aria-label="Game controls">
+        <div class="mode">
+          <label>
+            <input id="cpuToggle" type="checkbox" />
+            Play vs CPU
+          </label>
+        </div>
+        <div class="status" id="status" role="status" aria-live="polite">
+          X’s turn
+        </div>
+        <button id="resetBtn" class="btn" type="button">Restart</button>
+      </section>
+
+      <section
+        class="board"
+        id="board"
+        role="grid"
+        aria-label="Tic-Tac-Toe board"
+      >
+        <!-- 9 cells -->
+        <button
+          class="cell"
+          data-index="0"
+          role="gridcell"
+          aria-label="Cell 1"
+          aria-live="off"
+        ></button>
+        <button
+          class="cell"
+          data-index="1"
+          role="gridcell"
+          aria-label="Cell 2"
+        ></button>
+        <button
+          class="cell"
+          data-index="2"
+          role="gridcell"
+          aria-label="Cell 3"
+        ></button>
+        <button
+          class="cell"
+          data-index="3"
+          role="gridcell"
+          aria-label="Cell 4"
+        ></button>
+        <button
+          class="cell"
+          data-index="4"
+          role="gridcell"
+          aria-label="Cell 5"
+        ></button>
+        <button
+          class="cell"
+          data-index="5"
+          role="gridcell"
+          aria-label="Cell 6"
+        ></button>
+        <button
+          class="cell"
+          data-index="6"
+          role="gridcell"
+          aria-label="Cell 7"
+        ></button>
+        <button
+          class="cell"
+          data-index="7"
+          role="gridcell"
+          aria-label="Cell 8"
+        ></button>
+        <button
+          class="cell"
+          data-index="8"
+          role="gridcell"
+          aria-label="Cell 9"
+        ></button>
+      </section>
+
+      <section class="score">
+        <div class="score__card">X wins: <span id="scoreX">0</span></div>
+        <div class="score__card">O wins: <span id="scoreO">0</span></div>
+        <div class="score__card">Draws: <span id="scoreD">0</span></div>
+      </section>
+
+      <footer>
+        <small>Tip: Use arrow keys + Enter to play with the keyboard.</small>
+      </footer>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
