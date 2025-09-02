@@ -1,0 +1,143 @@
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --accent: #6ae3ff;
+  --x: #ff6b6b;
+  --o: #8bdc7a;
+  --text: #e7eef7;
+  --muted: #9fb0c3;
+  --focus: #ffd166;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: radial-gradient(1200px 600px at 50% -200px, #1b2230, var(--bg));
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
+}
+
+.app {
+  max-width: 560px;
+  margin: 32px auto;
+  padding: 24px;
+  background: var(--panel);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+h1 {
+  margin: 0 0 16px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.mode {
+  color: var(--muted);
+}
+.status {
+  text-align: center;
+}
+
+.btn {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.btn:hover {
+  filter: brightness(1.15);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background: linear-gradient(180deg, #0e121a, #0b0f15);
+  padding: 10px;
+  border-radius: 14px;
+}
+
+.cell {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 0;
+  border-radius: 12px;
+  background: #0f1520;
+  color: var(--text);
+  font-size: clamp(2.4rem, 8vw, 3.4rem);
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  outline: none;
+}
+.cell:hover {
+  transform: translateY(-2px);
+}
+.cell:focus-visible {
+  box-shadow: 0 0 0 3px var(--focus);
+}
+.cell.x {
+  color: var(--x);
+}
+.cell.o {
+  color: var(--o);
+}
+.cell.w {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.score {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.score__card {
+  background: #101520;
+  border: 1px solid #1e2431;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-align: center;
+  color: var(--muted);
+}
+
+footer {
+  margin-top: 12px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Small screens tweaks */
+@media (max-width: 400px) {
+  .controls {
+    grid-template-columns: 1fr 1fr;
+  }
+  .status {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+}
