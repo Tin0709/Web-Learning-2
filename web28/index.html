@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tiny Platformer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hud">
+      <div class="stat">
+        <strong>Coins:</strong> <span id="coins">0</span>/<span id="coinsTotal"
+          >0</span
+        >
+      </div>
+      <div class="stat"><strong>Lives:</strong> <span id="lives">3</span></div>
+      <div class="stat"><strong>Time:</strong> <span id="time">0.0</span>s</div>
+      <div class="stat controls">
+        <button id="btnPause" title="P">Pause</button>
+        <button id="btnRestart" title="R">Restart</button>
+      </div>
+    </header>
+
+    <main class="stage">
+      <canvas
+        id="game"
+        width="960"
+        height="540"
+        aria-label="Platformer game canvas"
+      ></canvas>
+
+      <!-- Touch controls (show on small screens) -->
+      <div class="touch">
+        <button id="left" aria-label="Move left">◀</button>
+        <button id="jump" aria-label="Jump">⭡</button>
+        <button id="right" aria-label="Move right">▶</button>
+      </div>
+    </main>
+
+    <div
+      id="overlay"
+      class="overlay hidden"
+      role="dialog"
+      aria-live="polite"
+    ></div>
+
+    <footer class="tips">
+      <span
+        >Controls: ← → to move, Z / Space to jump, P to pause, R to
+        restart</span
+      >
+    </footer>
+
+    <script src="game.js"></script>
+  </body>
+</html>
