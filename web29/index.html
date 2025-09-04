@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Whack-a-Mole</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <h1>Whack-a-Mole</h1>
+        <div class="controls">
+          <label for="difficulty">Difficulty</label>
+          <select id="difficulty" aria-label="Difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+          <button id="startBtn" class="primary">Start</button>
+          <button id="stopBtn" class="ghost" disabled>Stop</button>
+        </div>
+      </header>
+
+      <section class="stats">
+        <div class="stat">
+          <span class="label">Score</span><span id="score">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Time</span><span id="time">30</span>s
+        </div>
+        <div class="stat">
+          <span class="label">High Score</span><span id="highScore">0</span>
+        </div>
+        <div id="live" class="sr-only" aria-live="polite"></div>
+      </section>
+
+      <section class="board-wrap">
+        <div id="board" class="board" aria-label="Game board" role="grid"></div>
+      </section>
+
+      <section class="howto">
+        <h2>How to Play</h2>
+        <ul>
+          <li>Click or tap the mole as it pops up.</li>
+          <li>
+            Use the keyboard: focus a hole with Tab, press Space/Enter to whack.
+          </li>
+          <li>Game lasts 30 seconds. Try to beat your high score!</li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
