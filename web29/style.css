@@ -1,0 +1,29 @@
+* {
+  box-sizing: border-box;
+}
+:root {
+  --bg: #0f1221;
+  --panel: #181c34;
+  --accent: #6ee7ff;
+  --accent-2: #a78bfa;
+  --text: #f7fbff;
+  --muted: #aab3c5;
+  --good: #22c55e;
+  --bad: #ef4444;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  background: radial-gradient(
+      1200px 800px at 20% 10%,
+      #1b2044 0%,
+      var(--bg) 60%
+    )
+    no-repeat fixed;
+  color: var(--text);
+}
