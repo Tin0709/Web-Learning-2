@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rock · Paper · Scissors</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <h1>Rock · Paper · Scissors</h1>
+        <p class="tagline">First to 5 wins. Bright vibes included ✨</p>
+      </header>
+
+      <section class="scoreboard" aria-live="polite">
+        <div class="score">
+          <span>Player</span>
+          <strong id="playerScore">0</strong>
+        </div>
+        <div class="score">
+          <span>Computer</span>
+          <strong id="cpuScore">0</strong>
+        </div>
+      </section>
+
+      <section class="arena">
+        <div
+          class="pick"
+          id="playerPick"
+          aria-label="Your pick"
+          title="Your pick"
+        >
+          ❔
+        </div>
+        <div class="versus">vs</div>
+        <div
+          class="pick"
+          id="cpuPick"
+          aria-label="Computer pick"
+          title="Computer pick"
+        >
+          ❔
+        </div>
+      </section>
+
+      <p id="roundResult" class="round-result" aria-live="polite">
+        Make a move!
+      </p>
+
+      <section class="controls" aria-label="Choose your move">
+        <button
+          class="btn move"
+          data-move="rock"
+          aria-keyshortcuts="R"
+          title="Rock (R)"
+        >
+          🪨 Rock
+        </button>
+        <button
+          class="btn move"
+          data-move="paper"
+          aria-keyshortcuts="P"
+          title="Paper (P)"
+        >
+          📄 Paper
+        </button>
+        <button
+          class="btn move"
+          data-move="scissors"
+          aria-keyshortcuts="S"
+          title="Scissors (S)"
+        >
+          ✂️ Scissors
+        </button>
+      </section>
+
+      <section class="actions">
+        <button id="resetBtn" class="btn ghost" title="Reset game">
+          Reset
+        </button>
+        <label class="toggle">
+          <input type="checkbox" id="soundToggle" />
+          <span>Sound</span>
+        </label>
+      </section>
+
+      <footer class="footer">
+        <small>Keyboard: R / P / S · Enter = repeat last move</small>
+      </footer>
+    </main>
+
+    <audio
+      id="sfxWin"
+      src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA..."
+      preload="auto"
+    ></audio>
+    <audio
+      id="sfxLose"
+      src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA..."
+      preload="auto"
+    ></audio>
+    <audio
+      id="sfxDraw"
+      src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA..."
+      preload="auto"
+    ></audio>
+    <!-- (Tiny placeholder data-URIs; replace with your own if you like) -->
+
+    <script src="script.js"></script>
+  </body>
+</html>
