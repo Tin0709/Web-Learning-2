@@ -59,6 +59,7 @@ body {
     0 30px 60px rgba(0, 0, 0, 0.4), 0 0 80px -20px var(--glow-1),
     0 0 80px -40px var(--glow-2);
 }
+
 /* ----- Header ----- */
 .header {
   text-align: center;
@@ -99,6 +100,7 @@ h1 {
   font-size: 34px;
   letter-spacing: 1px;
 }
+
 /* ----- Arena ----- */
 .arena {
   display: grid;
@@ -136,6 +138,7 @@ h1 {
   font-weight: 700;
   letter-spacing: 0.4px;
 }
+
 /* ----- Controls ----- */
 .controls {
   display: flex;
@@ -202,4 +205,84 @@ h1 {
 .toggle input {
   width: 20px;
   height: 20px;
+}
+
+/* ----- Feedback states ----- */
+.win {
+  color: var(--win);
+  text-shadow: 0 0 20px rgba(28, 255, 150, 0.4);
+}
+.lose {
+  color: var(--lose);
+  text-shadow: 0 0 20px rgba(255, 77, 77, 0.4);
+}
+.draw {
+  color: var(--draw);
+  text-shadow: 0 0 20px rgba(255, 209, 102, 0.4);
+}
+
+.pick.bump {
+  animation: bump 0.35s ease;
+}
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.shake {
+  animation: shake 0.35s ease;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+  75% {
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.flash {
+  animation: flash 0.5s ease;
+}
+@keyframes flash {
+  0% {
+    filter: brightness(1.4);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+/* ----- Footer ----- */
+.footer {
+  margin-top: 18px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Responsive tweaks */
+@media (max-width: 560px) {
+  .arena {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .versus {
+    justify-self: center;
+  }
 }
