@@ -99,3 +99,40 @@ h1 {
   font-size: 34px;
   letter-spacing: 1px;
 }
+/* ----- Arena ----- */
+.arena {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+  margin: 12px 0;
+}
+.pick {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(48px, 10vw, 84px);
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35) inset;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+.versus {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--glow-1), var(--glow-2));
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.12);
+}
+
+/* Result pill */
+.round-result {
+  text-align: center;
+  margin: 10px 0 6px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
