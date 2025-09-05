@@ -28,6 +28,7 @@ function playSfx(kind) {
     /* autoplay might be blocked; ignore */
   });
 }
+
 // ----- DOM refs -----
 const playerScoreEl = $("#playerScore");
 const cpuScoreEl = $("#cpuScore");
@@ -94,3 +95,50 @@ function round(player) {
     endGame();
   }
 }
+
+function endGame() {
+  const playerWon = playerScore > cpuScore;
+  resultEl.className = `round-result ${playerWon ? "win" : "lose"}`;
+  resultEl.textContent = playerWon
+    ? "🎉 You won the match!"
+    : "💀 Computer wins the match!";
+  // Disable move buttons
+  $$(".btn.move").forEach((b) => (b.disabled = true));
+}
+
+function resetGame() {
+  playerScore = 0;
+  cpuScore = 0;
+  lastPlayerMove = null;
+  playerScoreEl.textContent = "0";
+  cpuScoreEl.textContent = "0";
+  playerPickEl.textContent = "❔";
+  cpuPickEl.textContent = "❔";
+  resultEl.textContent = "Make a move!";
+  resultEl.className = "round-result";
+  $$(".btn.move").forEach((b) => (b.disabled = false));
+}
+
+function capitalize(s) {
+  return s[0].toUpperCase() + s.slice(1);
+}
+
+// ----- Events -----
+$$(".btn.move").forEach((btn) => {
+  btn.addEventListener("click", () => round(btn.dataset.move));
+});
+
+resetBtn.addEventListener("click", resetGame);
+
+soundToggle.addEventListener("change", (e) => {
+  AudioBank.enabled = e.target.checked;
+});
+
+// Keyboard: R/P/S, Enter repeats last move
+window.addEventListener("keydown", (e) => {
+  const k = e.key.toLowerCase();
+  if (k === "r") return round("rock");
+  if (k === "p") return round("paper");
+  if (k === "s") return round("scissors");
+  if (k === "enter" && lastPlayerMove) return round(lastPlayerMove);
+});
