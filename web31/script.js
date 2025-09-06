@@ -294,12 +294,14 @@
     if (dirQueue.length) {
       dir = dirQueue.shift();
     }
-    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+    let head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
 
-    // collide walls?
-    if (head.x < 0 || head.y < 0 || head.x >= GRID || head.y >= GRID) {
-      return gameOver();
-    }
+    // --- wrap around walls ---
+    if (head.x < 0) head.x = GRID - 1;
+    if (head.y < 0) head.y = GRID - 1;
+    if (head.x >= GRID) head.x = 0;
+    if (head.y >= GRID) head.y = 0;
+
     // collide self?
     if (snake.some((s) => s.x === head.x && s.y === head.y)) {
       return gameOver();
@@ -345,7 +347,7 @@
 
     // Apple (with subtle shadow)
     drawRoundedCell(apple.x, apple.y, cell, pad, "#00000022");
-    drawRoundedCell(apple.x, apple.y, cell, pad, "#ef4444");
+    drawRoundedCell(apple.x, apple.y, cell, pad, appleColor);
 
     // Snake
     for (let i = snake.length - 1; i >= 0; i--) {
@@ -353,7 +355,7 @@
       // tail gradient by index
       const t = i / Math.max(1, snake.length - 1);
       const col =
-        i === 0 ? "#34d399" : mixColor("#6ee7b7", "#0ea5e9", t * 0.25);
+        i === 0 ? headColor : mixColor(snakeColor, "#0ea5e9", t * 0.25);
       drawRoundedCell(seg.x, seg.y, cell, pad, col);
     }
   }
@@ -407,7 +409,7 @@
   }
 
   // Initial overlay
-  showOverlay("Snake", "Eat apples, avoid walls and your tail.");
+  showOverlay("Snake", "Eat apples, avoid your tail. (Walls wrap!)");
   btnStart.classList.remove("hidden");
 
   // Display high score initially
