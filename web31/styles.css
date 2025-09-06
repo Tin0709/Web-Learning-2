@@ -115,3 +115,168 @@ body {
   font-weight: 800;
   font-size: 18px;
 }
+#speedSelect {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+#speedSelect:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.stage-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 12px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+#gameCanvas {
+  width: min(92vw, 560px);
+  height: min(92vw, 560px);
+  max-width: 560px;
+  max-height: 560px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.02)),
+    var(--card);
+  border-radius: 14px;
+  display: block;
+  image-rendering: pixelated;
+}
+
+/* Grid overlay via background */
+.stage-card::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 12px;
+  background-image: linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: calc(100% / 21) calc(100% / 21);
+  pointer-events: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius);
+}
+.overlay.hidden {
+  display: none;
+}
+.overlay-content {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  max-width: 520px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.overlay-cta {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.primary,
+.secondary,
+.ghost,
+.pad {
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--accent);
+  color: #073b2c;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.05s ease, filter 0.2s ease;
+}
+.secondary {
+  background: var(--accent-2);
+  color: white;
+}
+.ghost {
+  background: transparent;
+  color: var(--text);
+}
+.pad {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+
+.primary:active,
+.secondary:active,
+.ghost:active,
+.pad:active {
+  transform: translateY(1px) scale(0.98);
+}
+.primary:focus-visible,
+.secondary:focus-visible,
+.ghost:focus-visible,
+.pad:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.dpad {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 8px;
+}
+.dpad .mid {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.foot {
+  text-align: center;
+  color: var(--muted);
+  padding: 12px 0 24px;
+}
+
+.flash {
+  animation: flash 200ms ease-in-out 3;
+}
