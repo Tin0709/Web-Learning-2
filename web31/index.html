@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake — Clean UI/UX</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1 class="app-title" aria-label="Snake Game">🐍 Snake</h1>
+      <div class="toggles">
+        <button
+          id="themeToggle"
+          class="icon-btn"
+          aria-pressed="false"
+          aria-label="Toggle theme"
+        >
+          <span class="icon">🌙</span>
+        </button>
+        <button
+          id="soundToggle"
+          class="icon-btn"
+          aria-pressed="true"
+          aria-label="Toggle sound"
+        >
+          <span class="icon">🔊</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hud">
+        <div class="stat">
+          <span class="label">Score</span>
+          <span id="score" class="value">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">High</span>
+          <span id="highScore" class="value">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Speed</span>
+          <select id="speedSelect" aria-label="Game speed">
+            <option value="8">Chill</option>
+            <option value="12" selected>Normal</option>
+            <option value="16">Fast</option>
+            <option value="22">Turbo</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="stage-card">
+        <canvas
+          id="gameCanvas"
+          width="480"
+          height="480"
+          aria-label="Snake game board"
+        ></canvas>
+
+        <div
+          class="overlay hidden"
+          id="overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="overlayTitle"
+        >
+          <div class="overlay-content">
+            <h2 id="overlayTitle">Snake</h2>
+            <p id="overlayMessage">Eat apples, avoid walls and your tail.</p>
+            <div class="overlay-cta">
+              <button id="btnStart" class="primary">Start</button>
+              <button id="btnResume" class="secondary hidden">Resume</button>
+              <button id="btnRestart" class="secondary hidden">Restart</button>
+            </div>
+            <div class="hint">
+              <p>
+                <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> to move •
+                <kbd>Space</kbd> to pause • <kbd>Enter</kbd> to start
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls">
+        <div class="dpad" aria-label="On-screen directional pad">
+          <button class="pad up" data-dir="up" aria-label="Up">▲</button>
+          <div class="mid">
+            <button class="pad left" data-dir="left" aria-label="Left">
+              ◀
+            </button>
+            <button class="pad right" data-dir="right" aria-label="Right">
+              ▶
+            </button>
+          </div>
+          <button class="pad down" data-dir="down" aria-label="Down">▼</button>
+        </div>
+        <div class="actions">
+          <button id="pauseBtn" class="ghost">Pause</button>
+          <button id="restartBtn" class="ghost">Restart</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <small
+        >Built with HTML • CSS • JS — no libs. Accessible, responsive, and
+        touch-friendly.</small
+      >
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
