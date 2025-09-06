@@ -64,6 +64,7 @@ body {
   display: flex;
   gap: 8px;
 }
+
 .icon-btn {
   background: var(--card);
   color: var(--text);
@@ -115,6 +116,7 @@ body {
   font-weight: 800;
   font-size: 18px;
 }
+
 #speedSelect {
   background: transparent;
   color: var(--text);
@@ -279,4 +281,21 @@ body {
 
 .flash {
   animation: flash 200ms ease-in-out 3;
+}
+@keyframes flash {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(2);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+@media (min-width: 860px) {
+  .wrap {
+    grid-template-columns: 1fr;
+  }
 }
