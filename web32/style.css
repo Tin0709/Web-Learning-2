@@ -38,6 +38,7 @@ main {
   justify-content: center;
   padding: 16px;
 }
+
 /* Parallax layers (pure CSS) */
 .bg {
   position: fixed;
@@ -124,4 +125,118 @@ main {
   border-radius: 10px;
   background: var(--glass);
   box-shadow: var(--shadow);
+}
+
+/* Canvas */
+#game {
+  width: min(96vw, 1000px);
+  height: calc(min(96vw, 1000px) * 9 / 16);
+  max-height: 78vh;
+  border-radius: 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(0, 0, 0, 0.18)
+  );
+  box-shadow: var(--shadow);
+}
+
+/* Buttons */
+.btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: var(--glass);
+  color: var(--fg);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.08s ease, background 0.2s ease, opacity 0.2s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+.btn.ghost {
+  background: transparent;
+  box-shadow: none;
+}
+.btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+}
+.btn.circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  font-size: 22px;
+}
+.btn.circle.big {
+  width: 84px;
+  height: 84px;
+}
+
+/* Overlays */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: radial-gradient(
+    1200px 700px at 50% 30%,
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.75)
+  );
+  backdrop-filter: blur(3px);
+}
+.overlay.visible {
+  display: flex;
+}
+.modal {
+  width: min(92vw, 520px);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+.modal h1,
+.modal h2 {
+  margin: 6px 0 10px;
+}
+.modal p {
+  color: var(--muted);
+}
+.modal .row {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.tips {
+  color: var(--fg);
+  opacity: 0.9;
+  line-height: 1.55;
+}
+
+/* On-screen controls */
+.controls {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+@media (min-width: 900px) {
+  .controls {
+    display: none;
+  }
 }
