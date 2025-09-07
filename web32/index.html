@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Endless Jumper</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Parallax background -->
+    <div class="bg">
+      <div class="layer layer-1"></div>
+      <div class="layer layer-2"></div>
+      <div class="layer layer-3"></div>
+    </div>
+
+    <!-- Top HUD -->
+    <header class="hud">
+      <div class="hud-left">
+        <button id="btnPause" class="btn ghost" title="Pause/Resume">⏸</button>
+        <button id="btnSound" class="btn ghost" title="Sound On/Off">🔊</button>
+      </div>
+      <div class="hud-center">
+        <div id="score" class="score">0</div>
+      </div>
+      <div class="hud-right">
+        <button id="btnTheme" class="btn ghost" title="Toggle Theme">🌓</button>
+      </div>
+    </header>
+
+    <!-- Game canvas -->
+    <main>
+      <canvas
+        id="game"
+        width="960"
+        height="540"
+        aria-label="Endless Jumper game area"
+      ></canvas>
+    </main>
+
+    <!-- On-screen controls for mobile -->
+    <div class="controls">
+      <button id="left" class="btn circle" aria-label="Move left">◀</button>
+      <button id="jump" class="btn circle big" aria-label="Jump">⟰</button>
+      <button id="right" class="btn circle" aria-label="Move right">▶</button>
+    </div>
+
+    <!-- Modals -->
+    <div id="overlay" class="overlay visible">
+      <div class="modal">
+        <h1>Endless Jumper</h1>
+        <p>Run and jump across platforms. Don’t fall!</p>
+        <ul class="tips">
+          <li><b>Move:</b> ← → or <b>A</b> / <b>D</b></li>
+          <li><b>Jump:</b> Space / W / ↑ (double-jump enabled)</li>
+          <li><b>Pause:</b> P or the ⏸ button</li>
+          <li><b>Mobile:</b> On-screen buttons</li>
+        </ul>
+        <div class="row">
+          <button id="btnPlay" class="btn primary">Play</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="gameover" class="overlay">
+      <div class="modal">
+        <h2>Game Over</h2>
+        <p>Score: <b id="finalScore">0</b></p>
+        <p>Best: <b id="bestScore">0</b></p>
+        <div class="row">
+          <button id="btnRestart" class="btn primary">Restart</button>
+          <button id="btnHome" class="btn">Home</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tiny inline sounds (WebAudio) are generated in script; no files needed -->
+    <script src="script.js"></script>
+  </body>
+</html>
