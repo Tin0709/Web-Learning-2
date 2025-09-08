@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trivia Quiz</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app__header">
+        <h1>Trivia Quiz</h1>
+        <div class="meta">
+          <div class="meta__item">
+            <strong>Question:</strong> <span id="qIndex">1</span>/<span
+              id="qTotal"
+              >10</span
+            >
+          </div>
+          <div class="meta__item">
+            <strong>Score:</strong> <span id="score">0</span>
+          </div>
+          <div class="meta__item">
+            <strong>Time:</strong> <span id="timer">15</span>s
+          </div>
+        </div>
+        <div class="progress">
+          <div id="progressBar" class="progress__bar"></div>
+        </div>
+      </header>
+
+      <section class="card" aria-live="polite">
+        <h2 id="question" class="question">Loading…</h2>
+        <div
+          id="choices"
+          class="choices"
+          role="group"
+          aria-label="Answer choices"
+        ></div>
+        <p
+          id="feedback"
+          class="feedback"
+          aria-live="polite"
+          aria-atomic="true"
+        ></p>
+      </section>
+
+      <footer class="controls">
+        <button id="nextBtn" class="btn" disabled>Next ▶</button>
+        <button id="restartBtn" class="btn btn--ghost">Restart ↺</button>
+      </footer>
+
+      <details class="help">
+        <summary>Controls & Tips</summary>
+        <ul>
+          <li>Click an answer or press keys <kbd>1</kbd>–<kbd>4</kbd>.</li>
+          <li>Each question has 15 seconds.</li>
+          <li>Score: +1 for each correct answer.</li>
+        </ul>
+      </details>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
