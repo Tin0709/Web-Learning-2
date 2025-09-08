@@ -36,3 +36,59 @@ body {
   place-items: center;
   padding: 24px;
 }
+.app {
+  width: min(900px, 92vw);
+  display: grid;
+  gap: 16px;
+}
+
+.app__header {
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(8px);
+  padding: 16px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: clamp(22px, 3.2vw, 30px);
+  letter-spacing: 0.3px;
+}
+
+.meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.progress {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.progress__bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.3s ease;
+}
+
+.card {
+  background: rgba(17, 24, 39, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  padding: clamp(14px, 2.5vw, 22px);
+  box-shadow: var(--shadow);
+}
+
+.question {
+  margin: 0 0 12px;
+  font-size: clamp(18px, 2.8vw, 24px);
+  line-height: 1.3;
+}
