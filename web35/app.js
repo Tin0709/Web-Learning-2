@@ -76,3 +76,19 @@ function removeHistoryItem(id) {
   const list = loadHistory().filter((x) => x.id !== id);
   localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
 }
+/* ---------- API Calls ---------- */
+async function shortenUrl(longUrl) {
+  const endpoint = `https://is.gd/create.php?format=json&url=${encodeURIComponent(
+    longUrl
+  )}`;
+  const res = await fetch(endpoint, { method: "GET" });
+  if (!res.ok) throw new Error(`Network error (${res.status})`);
+  const data = await res.json();
+  if (data.errormessage) {
+    throw new Error(data.errormessage);
+  }
+  return {
+    short: data.shorturl,
+    long: data.longurl || longUrl,
+  };
+}
