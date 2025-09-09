@@ -76,6 +76,7 @@ function removeHistoryItem(id) {
   const list = loadHistory().filter((x) => x.id !== id);
   localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
 }
+
 /* ---------- API Calls ---------- */
 async function shortenUrl(longUrl) {
   const endpoint = `https://is.gd/create.php?format=json&url=${encodeURIComponent(
@@ -92,6 +93,7 @@ async function shortenUrl(longUrl) {
     long: data.longurl || longUrl,
   };
 }
+
 /* ---------- UI Rendering ---------- */
 function renderResult(short, long) {
   shortLinkEl.href = short;
@@ -181,3 +183,79 @@ async function copyToClipboard(text, btnEl) {
     alert("Copy failed. Please copy manually:\n" + text);
   }
 }
+
+/* ---------- Theme ---------- */
+function applyTheme(theme) {
+  // theme: 'light' | 'dark' | 'auto'
+  document.documentElement.dataset.theme = theme;
+  // Optional: you could also add a class to body and style with it
+}
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY) || "auto";
+  applyTheme(saved);
+}
+function toggleTheme() {
+  const current = document.documentElement.dataset.theme || "auto";
+  const next =
+    current === "auto" ? "dark" : current === "dark" ? "light" : "auto";
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+  themeToggle.title = `Theme: ${next}`;
+}
+
+/* ---------- Events ---------- */
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  showError("");
+
+  const longUrl = longUrlInput.value.trim();
+  if (!isValidUrl(longUrl)) {
+    showError("Please enter a valid URL (include http:// or https://).");
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const { short, long } = await shortenUrl(longUrl);
+    renderResult(short, long);
+    // buttons
+    copyBtn.onclick = () => copyToClipboard(short, copyBtn);
+    openBtn.onclick = () => window.open(short, "_blank", "noopener");
+    shareBtn.onclick = async () => {
+      try {
+        await navigator.share({ title: "Short link", url: short, text: long });
+      } catch {}
+    };
+
+    // Save to history
+    saveHistoryItem({
+      id: crypto.randomUUID(),
+      short,
+      long,
+      created: nowISO(),
+    });
+    renderHistory();
+  } catch (err) {
+    showError(err.message || "Failed to shorten the URL.");
+  } finally {
+    setLoading(false);
+  }
+});
+
+clearHistoryBtn.addEventListener("click", () => {
+  if (confirm("Clear all saved links?")) {
+    localStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+  }
+});
+
+themeToggle.addEventListener("click", toggleTheme);
+
+/* ---------- Init ---------- */
+initTheme();
+renderHistory();
+
+// Improve UX: submit with Enter anywhere
+longUrlInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") form.requestSubmit();
+});
