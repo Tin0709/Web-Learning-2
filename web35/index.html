@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta
+      name="description"
+      content="A simple, fast URL shortener using the is.gd API."
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>URL Shortener</h1>
+      <button
+        id="themeToggle"
+        class="icon-btn"
+        aria-label="Toggle theme"
+        title="Toggle theme"
+      >
+        🌓
+      </button>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <form id="shortenForm" autocomplete="off" novalidate>
+          <label for="longUrl" class="label">Paste a long URL</label>
+          <div class="input-row">
+            <input
+              id="longUrl"
+              name="longUrl"
+              type="url"
+              placeholder="https://example.com/very/long/link"
+              required
+            />
+            <button id="shortenBtn" class="primary-btn" type="submit">
+              Shorten
+            </button>
+          </div>
+          <p id="hint" class="hint">
+            Tip: Include <code>https://</code> or <code>http://</code>.
+          </p>
+          <p id="errorMsg" class="error" role="alert" hidden></p>
+        </form>
+
+        <div id="result" class="result" hidden>
+          <h2>Short link</h2>
+          <div class="result-row">
+            <a id="shortLink" href="#" target="_blank" rel="noopener">—</a>
+            <div class="actions">
+              <button id="copyBtn" class="icon-btn" title="Copy">📋</button>
+              <button id="shareBtn" class="icon-btn" title="Share" hidden>
+                📤
+              </button>
+              <button id="openBtn" class="icon-btn" title="Open in new tab">
+                🔗
+              </button>
+            </div>
+          </div>
+          <details class="qr-wrap">
+            <summary>Show QR Code</summary>
+            <img id="qrImg" alt="QR code for the short link" />
+          </details>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-header">
+          <h2>Your History</h2>
+          <button id="clearHistoryBtn" class="text-btn">Clear all</button>
+        </div>
+        <ul id="historyList" class="history-list" aria-live="polite"></ul>
+        <p id="emptyHistory" class="muted">
+          No links yet. Shorten something to see it here.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Shortening powered by
+        <a href="https://is.gd" target="_blank" rel="noopener">is.gd</a>. | QR
+        by
+        <a href="https://goqr.me/api/" target="_blank" rel="noopener"
+          >QRServer</a
+        >
+      </p>
+    </footer>
+
+    <template id="historyItemTemplate">
+      <li class="history-item">
+        <div class="left">
+          <a class="short" target="_blank" rel="noopener"></a>
+          <div class="long" title=""></div>
+          <div class="meta"></div>
+        </div>
+        <div class="right">
+          <button class="icon-btn copy" title="Copy short link">📋</button>
+          <button class="icon-btn share" title="Share" hidden>📤</button>
+          <button class="icon-btn qr" title="Show QR">🧾</button>
+          <button class="icon-btn delete" title="Remove from history">
+            🗑️
+          </button>
+        </div>
+      </li>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
