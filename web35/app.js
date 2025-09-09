@@ -92,3 +92,92 @@ async function shortenUrl(longUrl) {
     long: data.longurl || longUrl,
   };
 }
+/* ---------- UI Rendering ---------- */
+function renderResult(short, long) {
+  shortLinkEl.href = short;
+  shortLinkEl.textContent = short;
+
+  // Show share if supported
+  const canShare = !!navigator.share;
+  shareBtn.hidden = !canShare;
+
+  // Set QR image
+  const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(
+    short
+  )}`;
+  qrImg.src = qrURL;
+
+  resultWrap.hidden = false;
+}
+
+function renderHistory() {
+  const items = loadHistory();
+  historyList.innerHTML = "";
+  if (items.length === 0) {
+    emptyHistory.hidden = false;
+    return;
+  }
+  emptyHistory.hidden = true;
+
+  const tpl = $("#historyItemTemplate");
+  items.forEach((item) => {
+    const li = tpl.content.cloneNode(true);
+    const root = li.querySelector(".history-item");
+
+    const shortA = root.querySelector(".short");
+    const longDiv = root.querySelector(".long");
+    const metaDiv = root.querySelector(".meta");
+    const copy = root.querySelector(".copy");
+    const share = root.querySelector(".share");
+    const del = root.querySelector(".delete");
+    const qr = root.querySelector(".qr");
+
+    shortA.href = item.short;
+    shortA.textContent = item.short;
+
+    longDiv.textContent = item.long;
+    longDiv.title = item.long;
+
+    metaDiv.textContent = `Saved ${timeAgo(item.created)}`;
+
+    // Buttons
+    copy.addEventListener("click", () => copyToClipboard(item.short, copy));
+    if (navigator.share) {
+      share.hidden = false;
+      share.addEventListener("click", async () => {
+        try {
+          await navigator.share({
+            title: "Short link",
+            url: item.short,
+            text: item.long,
+          });
+        } catch {}
+      });
+    }
+
+    del.addEventListener("click", () => {
+      removeHistoryItem(item.id);
+      renderHistory();
+    });
+
+    qr.addEventListener("click", () => {
+      const url = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(
+        item.short
+      )}`;
+      window.open(url, "_blank", "noopener");
+    });
+
+    historyList.appendChild(li);
+  });
+}
+
+async function copyToClipboard(text, btnEl) {
+  try {
+    await navigator.clipboard.writeText(text);
+    const prev = btnEl.textContent;
+    btnEl.textContent = "✅";
+    setTimeout(() => (btnEl.textContent = prev), 900);
+  } catch {
+    alert("Copy failed. Please copy manually:\n" + text);
+  }
+}
