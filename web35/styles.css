@@ -144,3 +144,124 @@ input[type="url"]:focus {
   border-radius: 10px;
   cursor: pointer;
 }
+.icon-btn:hover,
+.text-btn:hover {
+  background: color-mix(in oklab, var(--primary) 12%, transparent);
+}
+.icon-btn:active {
+  transform: translateY(1px);
+}
+
+.hint {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.error {
+  margin: 10px 0 0;
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.result {
+  margin-top: 14px;
+}
+.result h2 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+.result-row a {
+  font-weight: 700;
+  word-break: break-all;
+}
+.result .actions {
+  display: flex;
+  gap: 8px;
+}
+
+.qr-wrap {
+  margin-top: 10px;
+}
+.qr-wrap summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+.qr-wrap img {
+  margin-top: 8px;
+  width: 164px;
+  height: 164px;
+  border: 1px solid var(--border);
+  padding: 8px;
+  border-radius: 12px;
+  background: var(--input);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.text-btn {
+  color: var(--muted);
+  padding: 6px 10px;
+}
+.text-btn:hover {
+  color: var(--text);
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.history-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--card) 92%, var(--bg));
+}
+.history-item .left {
+  min-width: 0;
+}
+.history-item .short {
+  font-weight: 700;
+  display: block;
+  word-break: break-all;
+}
+.history-item .long {
+  color: var(--muted);
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 540px;
+}
+.history-item .meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.history-item .right {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.muted {
+  color: var(--muted);
+  text-align: center;
+  margin: 8px 0 0;
+}
