@@ -1,0 +1,46 @@
+:root {
+  --bg: #0b0d12;
+  --card: #121621;
+  --text: #e7ebf3;
+  --muted: #9aa6c2;
+  --primary: #6aa5ff;
+  --primary-pressed: #4f8df0;
+  --danger: #ff6b6b;
+  --success: #3ddc97;
+  --border: #232a3a;
+  --input: #0f1320;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f6f7fb;
+    --card: #ffffff;
+    --text: #101828;
+    --muted: #667085;
+    --primary: #2563eb;
+    --primary-pressed: #1d4ed8;
+    --danger: #e11d48;
+    --success: #059669;
+    --border: #e5e7eb;
+    --input: #ffffff;
+    --shadow: 0 8px 24px rgba(16, 24, 40, 0.08);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
