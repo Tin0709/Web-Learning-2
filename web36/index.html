@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Match Game</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>🧠 Memory Match</h1>
+      <div class="controls">
+        <label for="size">Grid:</label>
+        <select id="size" aria-label="Choose grid size">
+          <option value="4">4 × 4</option>
+          <option value="6">6 × 6</option>
+        </select>
+
+        <button id="newGame" class="btn" aria-label="Start a new game">
+          New Game
+        </button>
+        <button id="restart" class="btn" aria-label="Restart current game">
+          Restart
+        </button>
+      </div>
+      <div class="stats" aria-live="polite">
+        <div><strong>Moves:</strong> <span id="moves">0</span></div>
+        <div><strong>Time:</strong> <span id="time">00:00</span></div>
+        <div><strong>Best:</strong> <span id="best">—</span></div>
+      </div>
+    </header>
+
+    <main>
+      <section
+        class="board"
+        id="board"
+        aria-label="Memory game board"
+      ></section>
+    </main>
+
+    <footer class="footer">
+      <p>Tip: You can use arrow keys + Enter/Space to flip cards. Have fun!</p>
+    </footer>
+
+    <template id="card-template">
+      <button class="card" aria-label="Hidden card" aria-pressed="false">
+        <span class="card__inner">
+          <span class="card__front">?</span>
+          <span class="card__back" aria-hidden="true"></span>
+        </span>
+      </button>
+    </template>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
