@@ -87,3 +87,137 @@ h1 {
 .btn:active {
   transform: translateY(1px) scale(0.99);
 }
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.6rem;
+  box-shadow: var(--shadow);
+  color: var(--muted);
+}
+.stats strong {
+  color: var(--text);
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem 2rem;
+}
+.board {
+  width: min(92vw, 900px);
+  display: grid;
+  gap: clamp(0.6rem, 1.2vw, 1rem);
+  margin-top: 0.5rem;
+}
+
+.footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 0 1rem 1.2rem;
+}
+
+/* Card styles */
+.card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: 0;
+  width: 100%;
+  background: transparent;
+  perspective: 900px;
+  cursor: pointer;
+  outline: none;
+}
+.card:focus-visible {
+  box-shadow: 0 0 0 3px var(--focus);
+  border-radius: 0.6rem;
+}
+.card__inner {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.card.flipped .card__inner,
+.card.matched .card__inner {
+  transform: rotateY(180deg);
+}
+.card__front,
+.card__back {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 0.6rem;
+  backface-visibility: hidden;
+  box-shadow: var(--shadow);
+}
+.card__front {
+  background: linear-gradient(180deg, #22264a, #181b36 60%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  color: var(--muted);
+}
+.card__back {
+  transform: rotateY(180deg);
+  background: radial-gradient(200px 260px at 70% 20%, #2a2f67, var(--card));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+}
+
+.card.matched .card__back {
+  outline: 2px solid var(--win);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3), var(--shadow);
+}
+
+/* Responsive grid sizing set in JS by CSS variables */
+.board.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.board.grid-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+/* Win banner */
+.win-banner {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  animation: fadeIn 0.2s ease forwards;
+}
+.win-card {
+  background: linear-gradient(180deg, #1e223f, #141834);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.9rem;
+  padding: 1.2rem 1.2rem 1rem;
+  text-align: center;
+  max-width: 420px;
+  width: 92%;
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+.win-card h2 {
+  margin: 0.2rem 0 0.6rem 0;
+}
+.win-card p {
+  margin: 0.25rem 0;
+  color: var(--muted);
+}
+.win-card .btn {
+  margin-top: 0.7rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
