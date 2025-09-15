@@ -38,6 +38,7 @@ body {
   width: min(1100px, 92%);
   margin: 0 auto;
 }
+
 /* Header / Nav */
 .header {
   position: sticky;
@@ -222,4 +223,33 @@ textarea:focus {
   color: var(--fg);
   text-decoration: none;
   opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .hamburger {
+    display: block;
+  }
+  .nav-links {
+    position: absolute;
+    right: 4%;
+    top: 64px;
+    width: 250px;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 0.8rem;
+    padding: 0.8rem;
+    display: grid;
+    gap: 0.4rem;
+    transform-origin: top right;
+    transform: scale(0.9);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.2s ease;
+  }
+  .nav-links[data-open="true"] {
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
