@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Responsive Landing Page</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header" id="top">
+      <div class="container nav">
+        <a class="logo" href="#top">Brand<span>.</span></a>
+        <button class="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-links" data-open="false">
+          <a href="#features">Features</a>
+          <a href="#about">About</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact" class="btn">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <h1>Ship beautiful sites, fast.</h1>
+          <p>
+            Clean, responsive, and modern starter you can customize in minutes.
+          </p>
+          <div class="cta">
+            <a href="#features" class="btn">Explore Features</a>
+            <a href="#pricing" class="btn btn-outline">See Pricing</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <div class="container">
+          <h2>Features</h2>
+          <div class="grid">
+            <div class="card">
+              <h3>Responsive</h3>
+              <p>Looks great on phones, tablets, and desktops.</p>
+            </div>
+            <div class="card">
+              <h3>Lightweight</h3>
+              <p>No dependencies, just HTML, CSS, and JavaScript.</p>
+            </div>
+            <div class="card">
+              <h3>Accessible</h3>
+              <p>Semantic markup and keyboard-friendly navigation.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section alt">
+        <div class="container">
+          <h2>About</h2>
+          <p>
+            This template is a minimal baseline for landing pages. Customize
+            colors, fonts, and layout to match your brand.
+          </p>
+        </div>
+      </section>
+
+      <section id="pricing" class="section">
+        <div class="container">
+          <h2>Pricing</h2>
+          <div class="pricing">
+            <div class="price-card">
+              <h3>Starter</h3>
+              <p class="price">$0</p>
+              <ul>
+                <li>Basic components</li>
+                <li>Email support</li>
+                <li>Community access</li>
+              </ul>
+              <button>Get Started</button>
+            </div>
+            <div class="price-card featured">
+              <h3>Pro</h3>
+              <p class="price">$12</p>
+              <ul>
+                <li>Everything in Starter</li>
+                <li>Advanced sections</li>
+                <li>Priority support</li>
+              </ul>
+              <button>Buy Pro</button>
+            </div>
+            <div class="price-card">
+              <h3>Team</h3>
+              <p class="price">$29</p>
+              <ul>
+                <li>Everything in Pro</li>
+                <li>Team features</li>
+                <li>Dedicated support</li>
+              </ul>
+              <button>Contact Sales</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="section alt">
+        <div class="container">
+          <h2>Contact</h2>
+          <form class="contact-form" novalidate>
+            <label>
+              Name
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" required />
+            </label>
+            <label>
+              Message
+              <textarea name="message" rows="5" required></textarea>
+            </label>
+            <button type="submit">Send</button>
+            <p class="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>© <span id="year"></span> Brand. All rights reserved.</p>
+        <a href="#top" class="back-to-top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
