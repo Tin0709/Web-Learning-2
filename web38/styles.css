@@ -193,3 +193,22 @@ a:hover {
 .skeleton.line.short {
   width: 55%;
 }
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive niceties */
+@media (max-width: 420px) {
+  .controls {
+    gap: 10px;
+  }
+  .btn {
+    flex: 1;
+  }
+}
