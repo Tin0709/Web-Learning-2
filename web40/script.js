@@ -30,3 +30,22 @@ function renderBooks() {
       booksList.appendChild(li);
     });
 }
+
+// Add book
+bookForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const title = document.getElementById("title").value.trim();
+  const author = document.getElementById("author").value.trim();
+
+  if (title && author) {
+    books.push({ title, author, votes: 0 });
+    renderBooks();
+    bookForm.reset();
+  }
+});
+
+// Vote function
+function vote(index, change) {
+  books[index].votes += change;
+  renderBooks();
+}
