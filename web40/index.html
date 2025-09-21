@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Club Platform</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>📚 Book Club</h1>
+      <p>Share and vote on books with fellow readers!</p>
+    </header>
+
+    <main>
+      <!-- Add Book Form -->
+      <section id="add-book">
+        <h2>Add a New Book</h2>
+        <form id="bookForm">
+          <input type="text" id="title" placeholder="Book Title" required />
+          <input type="text" id="author" placeholder="Author" required />
+          <button type="submit">Add Book</button>
+        </form>
+      </section>
+
+      <!-- Book List -->
+      <section id="book-list">
+        <h2>Book Collection</h2>
+        <ul id="books"></ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>Made with ❤️ for Book Lovers</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
