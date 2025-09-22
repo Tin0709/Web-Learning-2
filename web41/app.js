@@ -199,3 +199,26 @@ function renderCard(columnId, card) {
 function truncate(s, n) {
   return s.length > n ? s.slice(0, n - 1) + "…" : s;
 }
+
+/* ---------- Column operations ---------- */
+
+async function addColumn() {
+  const name = await promptText({
+    title: "New column name",
+    placeholder: "e.g. Backlog, In Review",
+  });
+  if (!name) return;
+  state.columns.push({ id: uid("col"), title: name, cards: [] });
+  save();
+  render();
+}
+
+async function renameColumn(columnId) {
+  const col = state.columns.find((c) => c.id === columnId);
+  if (!col) return;
+  const name = await promptText({ title: "Rename column", value: col.title });
+  if (!name) return;
+  col.title = name;
+  save();
+  render();
+}
