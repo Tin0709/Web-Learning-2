@@ -59,3 +59,31 @@ const confirmDialog = $("#confirmDialog");
 const confirmTitle = $("#confirmTitle");
 const confirmText = $("#confirmText");
 const confirmForm = $("#confirmForm");
+function promptText({ title, value = "", placeholder = "", select = true }) {
+  promptTitle.textContent = title;
+  promptInput.value = value;
+  promptInput.placeholder = placeholder;
+  promptDialog.showModal();
+  if (select) {
+    requestAnimationFrame(() => promptInput.select());
+  }
+  return new Promise((resolve) => {
+    const onClose = (e) => {
+      promptDialog.close();
+      promptForm.removeEventListener("close", onClose);
+    };
+    promptForm.addEventListener("close", onClose);
+    promptForm.onsubmit = (e) => {
+      e.preventDefault();
+    };
+    promptDialog.addEventListener(
+      "close",
+      () => {
+        resolve(
+          promptDialog.returnValue === "ok" ? promptInput.value.trim() : null
+        );
+      },
+      { once: true }
+    );
+  });
+}
