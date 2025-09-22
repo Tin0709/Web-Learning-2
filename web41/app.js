@@ -47,3 +47,15 @@ function load() {
     }
   }
 }
+
+const board = $("#board");
+const columnTpl = $("#columnTemplate");
+const cardTpl = $("#cardTemplate");
+const promptDialog = $("#promptDialog");
+const promptTitle = $("#promptTitle");
+const promptInput = $("#promptInput");
+const promptForm = $("#promptForm");
+const confirmDialog = $("#confirmDialog");
+const confirmTitle = $("#confirmTitle");
+const confirmText = $("#confirmText");
+const confirmForm = $("#confirmForm");
