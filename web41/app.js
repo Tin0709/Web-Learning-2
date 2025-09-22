@@ -245,3 +245,24 @@ async function addCard(columnId) {
   save();
   render();
 }
+async function editCard(cardId, columnId) {
+  const col = state.columns.find((c) => c.id === columnId);
+  if (!col) return;
+  const card = col.cards.find((k) => k.id === cardId);
+  if (!card) return;
+  const text = await promptText({ title: "Edit card", value: card.text });
+  if (!text) return;
+  card.text = text;
+  save();
+  render();
+}
+
+function deleteCard(columnId, cardId) {
+  const col = state.columns.find((c) => c.id === columnId);
+  if (!col) return;
+  const idx = col.cards.findIndex((k) => k.id === cardId);
+  if (idx === -1) return;
+  col.cards.splice(idx, 1);
+  save();
+  render();
+}
