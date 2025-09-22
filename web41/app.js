@@ -13,3 +13,37 @@ function uid(prefix = "id") {
 function save() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
+function load() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) {
+    state.columns = [
+      {
+        id: uid("col"),
+        title: "Backlog",
+        cards: [
+          { id: uid("card"), text: "Welcome! Click any title to edit." },
+          { id: uid("card"), text: "Drag cards between columns ✨" },
+        ],
+      },
+      {
+        id: uid("col"),
+        title: "In Progress",
+        cards: [{ id: uid("card"), text: "Build Trello-style board" }],
+      },
+      {
+        id: uid("col"),
+        title: "Done",
+        cards: [
+          { id: uid("card"), text: "Persistent data in localStorage ✅" },
+        ],
+      },
+    ];
+    save();
+  } else {
+    try {
+      Object.assign(state, JSON.parse(raw));
+    } catch {
+      state.columns = [];
+    }
+  }
+}
