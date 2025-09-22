@@ -87,3 +87,20 @@ function promptText({ title, value = "", placeholder = "", select = true }) {
     );
   });
 }
+function confirmAction({
+  title = "Are you sure?",
+  text = "This cannot be undone.",
+}) {
+  confirmTitle.textContent = title;
+  confirmText.textContent = text;
+  confirmDialog.showModal();
+  return new Promise((resolve) => {
+    confirmDialog.addEventListener(
+      "close",
+      () => {
+        resolve(confirmDialog.returnValue === "ok");
+      },
+      { once: true }
+    );
+  });
+}
