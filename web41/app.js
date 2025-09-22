@@ -222,3 +222,26 @@ async function renameColumn(columnId) {
   save();
   render();
 }
+
+async function deleteColumn(columnId) {
+  const idx = state.columns.findIndex((c) => c.id === columnId);
+  if (idx === -1) return;
+  state.columns.splice(idx, 1);
+  save();
+  render();
+}
+
+/* ---------- Card operations ---------- */
+
+async function addCard(columnId) {
+  const text = await promptText({
+    title: "New card",
+    placeholder: "What needs to be done?",
+  });
+  if (!text) return;
+  const col = state.columns.find((c) => c.id === columnId);
+  if (!col) return;
+  col.cards.push({ id: uid("card"), text });
+  save();
+  render();
+}
