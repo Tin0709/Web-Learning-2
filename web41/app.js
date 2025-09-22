@@ -160,3 +160,42 @@ function renderColumn(col) {
 
   return node;
 }
+function renderCard(columnId, card) {
+  const node = cardTpl.content.firstElementChild.cloneNode(true);
+  node.dataset.id = card.id;
+  node.dataset.columnId = columnId;
+
+  const textEl = $(".card-text", node);
+  textEl.textContent = card.text;
+  textEl.addEventListener("click", () => editCard(card.id, columnId));
+  textEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      editCard(card.id, columnId);
+    }
+  });
+
+  $(".delete-card", node).addEventListener("click", async () => {
+    const ok = await confirmAction({
+      title: "Delete card?",
+      text: `Remove “${truncate(card.text, 60)}”?`,
+    });
+    if (ok) {
+      deleteCard(columnId, card.id);
+    }
+  });
+
+  node.addEventListener("dragstart", (e) => {
+    node.classList.add("dragging");
+    e.dataTransfer.setData("text/card-id", card.id);
+    e.dataTransfer.setData("text/from-column-id", columnId);
+    e.dataTransfer.effectAllowed = "move";
+  });
+  node.addEventListener("dragend", () => node.classList.remove("dragging"));
+
+  return node;
+}
+
+function truncate(s, n) {
+  return s.length > n ? s.slice(0, n - 1) + "…" : s;
+}
