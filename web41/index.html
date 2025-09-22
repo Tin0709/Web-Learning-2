@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Task Board — Trello Clone</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Task Board</h1>
+      <div class="header-actions">
+        <button id="addColumnBtn" class="btn primary">+ Add Column</button>
+        <button id="clearBoardBtn" class="btn danger" title="Reset the board">
+          Reset
+        </button>
+      </div>
+    </header>
+
+    <main class="board" id="board" aria-live="polite"></main>
+
+    <!-- Dialogs -->
+    <dialog id="promptDialog">
+      <form method="dialog" id="promptForm">
+        <h3 id="promptTitle">Title</h3>
+        <input id="promptInput" type="text" required maxlength="200" />
+        <menu>
+          <button value="cancel" class="btn">Cancel</button>
+          <button value="ok" class="btn primary">Save</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <dialog id="confirmDialog">
+      <form method="dialog" id="confirmForm">
+        <h3 id="confirmTitle">Are you sure?</h3>
+        <p id="confirmText">This action cannot be undone.</p>
+        <menu>
+          <button value="cancel" class="btn">Cancel</button>
+          <button value="ok" class="btn danger">Delete</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <template id="columnTemplate">
+      <section class="column" draggable="true">
+        <header class="column-header">
+          <h2 class="column-title" title="Click to rename" tabindex="0"></h2>
+          <div class="column-actions">
+            <button
+              class="icon-btn add-card"
+              title="Add card"
+              aria-label="Add card"
+            >
+              ＋
+            </button>
+            <button
+              class="icon-btn delete-column"
+              title="Delete column"
+              aria-label="Delete column"
+            >
+              🗑
+            </button>
+          </div>
+        </header>
+        <div class="card-list" data-dropzone="true"></div>
+        <footer class="column-footer">
+          <button class="btn link add-card-inline">+ Add a card</button>
+        </footer>
+      </section>
+    </template>
+
+    <template id="cardTemplate">
+      <article class="card" draggable="true">
+        <div class="card-text" title="Click to edit" tabindex="0"></div>
+        <button
+          class="icon-btn delete-card"
+          title="Delete card"
+          aria-label="Delete card"
+        >
+          ✕
+        </button>
+      </article>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
