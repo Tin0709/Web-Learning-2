@@ -104,3 +104,59 @@ function confirmAction({
     );
   });
 }
+/* ---------- Rendering ---------- */
+
+function render() {
+  board.innerHTML = "";
+  state.columns.forEach((col) => board.appendChild(renderColumn(col)));
+  enableColumnDnD();
+}
+
+function renderColumn(col) {
+  const node = columnTpl.content.firstElementChild.cloneNode(true);
+  node.dataset.id = col.id;
+
+  const titleEl = $(".column-title", node);
+  titleEl.textContent = col.title;
+  titleEl.addEventListener("click", () => renameColumn(col.id));
+  titleEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      renameColumn(col.id);
+    }
+  });
+
+  $(".add-card", node).addEventListener("click", () => addCard(col.id));
+  $(".add-card-inline", node).addEventListener("click", () => addCard(col.id));
+  $(".delete-column", node).addEventListener("click", async () => {
+    const ok = await confirmAction({
+      title: "Delete column?",
+      text: `Remove “${col.title}” and its ${col.cards.length} card(s)?`,
+    });
+    if (ok) {
+      deleteColumn(col.id);
+    }
+  });
+
+  const list = $(".card-list", node);
+  list.dataset.columnId = col.id;
+
+  col.cards.forEach((card) => list.appendChild(renderCard(col.id, card)));
+
+  // Allow dropping into empty space
+  list.addEventListener("dragover", handleDragOver);
+  list.addEventListener("drop", handleDrop);
+  list.addEventListener("dragleave", (e) => list.classList.remove("drag-over"));
+
+  // Column drag handle
+  node.addEventListener("dragstart", (e) => {
+    if (e.target === node) {
+      node.classList.add("dragging");
+      e.dataTransfer.setData("text/column-id", col.id);
+      e.dataTransfer.effectAllowed = "move";
+    }
+  });
+  node.addEventListener("dragend", () => node.classList.remove("dragging"));
+
+  return node;
+}
