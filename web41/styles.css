@@ -33,6 +33,25 @@ body {
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
     "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px clamp(16px, 4vw, 32px);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 12, 28, 0.9),
+    rgba(10, 12, 28, 0.5) 60%,
+    transparent
+  );
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 h1 {
   font-size: clamp(20px, 2.6vw, 28px);
   margin: 0;
@@ -95,6 +114,7 @@ h1 {
   color: var(--text);
   background: rgba(255, 255, 255, 0.06);
 }
+
 .board {
   padding: 20px clamp(12px, 3vw, 24px) 60px;
   display: grid;
@@ -135,4 +155,85 @@ h1 {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   background: rgba(122, 162, 255, 0.1);
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 48px;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease, outline 0.2s ease;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 8px;
+  background: linear-gradient(180deg, #222855, #1b2150);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+.card:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.card-text {
+  line-height: 1.35;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.delete-card {
+  opacity: 0.7;
+}
+.delete-card:hover {
+  opacity: 1;
+}
+
+.column-footer {
+  display: flex;
+}
+
+[data-dropzone].drag-over {
+  outline: 2px dashed var(--accent);
+  background: rgba(122, 162, 255, 0.08);
+}
+
+.card.dragging {
+  opacity: 0.6;
+  transform: rotate(0.5deg) scale(0.98);
+}
+.column.dragging {
+  opacity: 0.75;
+}
+
+dialog {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 16px;
+  background: linear-gradient(180deg, #151935, #12162d);
+  color: var(--text);
+}
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #0f1330;
+  color: var(--text);
+  margin: 10px 0 16px;
+}
+
+@media (max-width: 700px) {
+  .board {
+    grid-auto-columns: 88vw;
+  }
 }
