@@ -1,3 +1,7 @@
+/* Task Board — Trello Clone (Vanilla JS)
+   Features: drag & drop, add/edit/delete cards, add/rename/delete columns, localStorage.
+*/
+
 const STORAGE_KEY = "kanban-data-v1";
 
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
@@ -6,6 +10,7 @@ const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 const state = {
   columns: [],
 };
+
 function uid(prefix = "id") {
   return `${prefix}_${Math.random().toString(36).slice(2, 9)}`;
 }
@@ -59,6 +64,7 @@ const confirmDialog = $("#confirmDialog");
 const confirmTitle = $("#confirmTitle");
 const confirmText = $("#confirmText");
 const confirmForm = $("#confirmForm");
+
 function promptText({ title, value = "", placeholder = "", select = true }) {
   promptTitle.textContent = title;
   promptInput.value = value;
@@ -87,6 +93,7 @@ function promptText({ title, value = "", placeholder = "", select = true }) {
     );
   });
 }
+
 function confirmAction({
   title = "Are you sure?",
   text = "This cannot be undone.",
@@ -104,6 +111,7 @@ function confirmAction({
     );
   });
 }
+
 /* ---------- Rendering ---------- */
 
 function render() {
@@ -160,6 +168,7 @@ function renderColumn(col) {
 
   return node;
 }
+
 function renderCard(columnId, card) {
   const node = cardTpl.content.firstElementChild.cloneNode(true);
   node.dataset.id = card.id;
@@ -245,6 +254,7 @@ async function addCard(columnId) {
   save();
   render();
 }
+
 async function editCard(cardId, columnId) {
   const col = state.columns.find((c) => c.id === columnId);
   if (!col) return;
@@ -266,6 +276,7 @@ function deleteCard(columnId, cardId) {
   save();
   render();
 }
+
 /* ---------- Drag & Drop (cards) ---------- */
 
 function handleDragOver(e) {
@@ -310,6 +321,7 @@ function handleDrop(e) {
 
   // Column dragging (if dropped into board area, handled separately)
 }
+
 function getCardAfterCursor(listEl, y) {
   const cardEls = [...listEl.querySelectorAll(".card:not(.dragging)")];
   return cardEls.reduce(
@@ -325,6 +337,7 @@ function getCardAfterCursor(listEl, y) {
     { offset: Number.NEGATIVE_INFINITY, element: null }
   ).element;
 }
+
 /* ---------- Drag & Drop (columns reorder) ---------- */
 function enableColumnDnD() {
   // Board drop behavior to reorder columns
@@ -369,3 +382,20 @@ function getColumnAfterCursor(container, x) {
     { offset: Number.NEGATIVE_INFINITY, element: null }
   ).element;
 }
+
+/* ---------- Init & Global buttons ---------- */
+
+$("#addColumnBtn").addEventListener("click", addColumn);
+$("#clearBoardBtn").addEventListener("click", async () => {
+  const ok = await confirmAction({
+    title: "Reset board?",
+    text: "This clears all columns and cards.",
+  });
+  if (!ok) return;
+  localStorage.removeItem(STORAGE_KEY);
+  load();
+  render();
+});
+
+load();
+render();
