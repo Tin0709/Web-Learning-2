@@ -325,3 +325,47 @@ function getCardAfterCursor(listEl, y) {
     { offset: Number.NEGATIVE_INFINITY, element: null }
   ).element;
 }
+/* ---------- Drag & Drop (columns reorder) ---------- */
+function enableColumnDnD() {
+  // Board drop behavior to reorder columns
+  board.addEventListener("dragover", (e) => {
+    const colId = e.dataTransfer.getData("text/column-id");
+    if (!colId) return;
+    e.preventDefault();
+    const after = getColumnAfterCursor(board, e.clientX);
+    const dragging = $(`.column[data-id="${colId}"]`);
+    if (after == null) {
+      board.appendChild(dragging);
+    } else {
+      board.insertBefore(dragging, after);
+    }
+  });
+
+  board.addEventListener("drop", (e) => {
+    const colId = e.dataTransfer.getData("text/column-id");
+    if (!colId) return;
+    // Persist new order
+    const newOrder = $$(".column", board).map((el) => el.dataset.id);
+    state.columns.sort(
+      (a, b) => newOrder.indexOf(a.id) - newOrder.indexOf(b.id)
+    );
+    save();
+    render();
+  });
+}
+
+function getColumnAfterCursor(container, x) {
+  const els = [...container.querySelectorAll(".column:not(.dragging)")];
+  return els.reduce(
+    (closest, el) => {
+      const box = el.getBoundingClientRect();
+      const offset = x - (box.left + box.width / 2);
+      if (offset < 0 && offset > closest.offset) {
+        return { offset, element: el };
+      } else {
+        return closest;
+      }
+    },
+    { offset: Number.NEGATIVE_INFINITY, element: null }
+  ).element;
+}
