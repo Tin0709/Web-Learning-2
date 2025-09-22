@@ -266,3 +266,47 @@ function deleteCard(columnId, cardId) {
   save();
   render();
 }
+/* ---------- Drag & Drop (cards) ---------- */
+
+function handleDragOver(e) {
+  e.preventDefault();
+  const list = e.currentTarget;
+  list.classList.add("drag-over");
+  e.dataTransfer.dropEffect = "move";
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  const list = e.currentTarget;
+  list.classList.remove("drag-over");
+
+  const cardId = e.dataTransfer.getData("text/card-id");
+  const fromColId = e.dataTransfer.getData("text/from-column-id");
+  const toColId = list.dataset.columnId;
+
+  // Card dragging
+  if (cardId) {
+    const fromCol = state.columns.find((c) => c.id === fromColId);
+    const toCol = state.columns.find((c) => c.id === toColId);
+    if (!fromCol || !toCol) return;
+
+    const cardIdx = fromCol.cards.findIndex((c) => c.id === cardId);
+    if (cardIdx === -1) return;
+    const [card] = fromCol.cards.splice(cardIdx, 1);
+
+    // Determine position using element after cursor
+    const afterEl = getCardAfterCursor(list, e.clientY);
+    if (!afterEl) {
+      toCol.cards.push(card);
+    } else {
+      const afterId = afterEl.dataset.id;
+      const insertIdx = toCol.cards.findIndex((c) => c.id === afterId);
+      toCol.cards.splice(insertIdx, 0, card);
+    }
+    save();
+    render();
+    return;
+  }
+
+  // Column dragging (if dropped into board area, handled separately)
+}
