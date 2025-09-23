@@ -114,3 +114,96 @@ h1 {
 .btn.subtle {
   background: #141927;
 }
+.board {
+  margin-top: 18px;
+  border: 1px solid var(--border);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.05)
+  );
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.week-header {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+}
+.week-header::before {
+  content: "Habit";
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.habit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.habit {
+  border-bottom: 1px solid var(--border);
+}
+.habit:last-child {
+  border-bottom: none;
+}
+
+.habit-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr auto;
+  gap: 10px;
+  padding: 12px 14px;
+  align-items: center;
+}
+.habit-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.habit-title {
+  margin: 0;
+  outline: none;
+  border-radius: 6px;
+  padding: 2px 4px;
+}
+.habit-title:focus {
+  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.18);
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+.streak strong {
+  color: var(--accent-2);
+  font-weight: 700;
+}
+
+.progress-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.progress-bar {
+  --h: 8px;
+  width: 120px;
+  height: var(--h);
+  background: #0f1320;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-bar > span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), #9ec5fe);
+}
