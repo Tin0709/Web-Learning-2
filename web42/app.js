@@ -67,3 +67,99 @@ function renderWeekHeader() {
     weekHeader.appendChild(div);
   });
 }
+function computeStreak(habit) {
+  // Count consecutive days up to today() that are true
+  let streak = 0;
+  let cursor = new Date(today());
+  while (true) {
+    const key = toDateKey(cursor);
+    if (habit.log && habit.log[key]) {
+      streak++;
+      cursor.setDate(cursor.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+function weeklyProgress(habit) {
+  const dates = last7().map(toDateKey);
+  let count = 0;
+  dates.forEach((k) => {
+    if (habit.log && habit.log[k]) count++;
+  });
+  return count;
+}
+
+function render() {
+  renderWeekHeader();
+  habitList.innerHTML = "";
+  const dates = last7();
+  state.habits.forEach((habit) => {
+    const tpl = $("#habitItemTemplate");
+    const node = tpl.content.firstElementChild.cloneNode(true);
+
+    const titleEl = $(".habit-title", node);
+    titleEl.textContent = habit.name;
+    titleEl.addEventListener("blur", (e) => {
+      const newName = e.target.textContent.trim().slice(0, 60) || "Untitled";
+      habit.name = newName;
+      save();
+      render(); // re-render to ensure consistency
+    });
+    titleEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        e.currentTarget.blur();
+      }
+    });
+
+    const grid = $(".grid", node);
+    grid.innerHTML = "";
+    dates.forEach((d, idx) => {
+      const key = toDateKey(d);
+      const btn = document.createElement("button");
+      btn.className = "day";
+      btn.type = "button";
+      btn.setAttribute("aria-pressed", !!(habit.log && habit.log[key]));
+      btn.title = d.toLocaleDateString();
+      btn.textContent = shortLabel(d)[0]; // single letter (M, T, W...)
+      if (idx === dates.length - 1) btn.classList.add("today");
+      if (habit.log && habit.log[key]) btn.classList.add("done");
+
+      btn.addEventListener("click", () => {
+        if (!habit.log) habit.log = {};
+        habit.log[key] = !habit.log[key];
+        save();
+        updateRow(node, habit); // fast update
+      });
+
+      grid.appendChild(btn);
+    });
+
+    // actions
+    $(".delete-btn", node).addEventListener("click", () => {
+      const ok = confirm(
+        `Delete habit “${habit.name}”? This cannot be undone.`
+      );
+      if (!ok) return;
+      state.habits = state.habits.filter((h) => h.id !== habit.id);
+      save();
+      render();
+    });
+
+    $(".today-btn", node).addEventListener("click", () => {
+      const key = toDateKey(today());
+      if (!habit.log) habit.log = {};
+      habit.log[key] = !habit.log[key];
+      save();
+      updateRow(node, habit);
+    });
+
+    // initial meta & progress
+    updateRow(node, habit);
+
+    habitList.appendChild(node);
+  });
+}
