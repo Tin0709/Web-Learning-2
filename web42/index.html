@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Habit Tracker</h1>
+      <p class="subtitle">
+        Track the last 7 days, stay consistent, and build streaks.
+      </p>
+    </header>
+
+    <main class="container">
+      <section class="add-habit">
+        <h2 class="sr-only">Add a new habit</h2>
+        <form id="habitForm" autocomplete="off" aria-label="Add habit form">
+          <input
+            id="habitName"
+            type="text"
+            placeholder="e.g. 🏃 Run 2km, 📚 Read 10 pages"
+            aria-label="Habit name"
+            required
+            minlength="1"
+            maxlength="60"
+          />
+          <button type="submit" class="btn primary">Add Habit</button>
+        </form>
+      </section>
+
+      <section class="board" aria-live="polite">
+        <header class="week-header" id="weekHeader" aria-hidden="true"></header>
+        <ul id="habitList" class="habit-list"></ul>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <button id="exportBtn" class="btn" title="Download a backup of your data">
+        Export
+      </button>
+      <label
+        class="import-label btn"
+        for="importInput"
+        title="Restore from a backup JSON file"
+        >Import</label
+      >
+      <input id="importInput" type="file" accept="application/json" hidden />
+      <button id="clearAllBtn" class="btn danger" title="Delete all habits">
+        Clear All
+      </button>
+    </footer>
+
+    <template id="habitItemTemplate">
+      <li class="habit">
+        <div class="habit-row">
+          <div class="habit-info">
+            <h3
+              class="habit-title"
+              contenteditable="true"
+              spellcheck="false"
+              aria-label="Edit habit name"
+            ></h3>
+            <div class="meta">
+              <span class="streak" aria-label="Current streak"
+                >🔥 <strong>0</strong> day streak</span
+              >
+              <div class="progress-wrap" aria-label="Weekly progress">
+                <div class="progress-bar"><span style="width: 0%"></span></div>
+                <span class="progress-text">0/7</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid" role="group" aria-label="Last 7 days">
+            <!-- Day cells injected here -->
+          </div>
+
+          <div class="actions">
+            <button class="btn subtle today-btn" title="Toggle today">
+              Today
+            </button>
+            <button class="btn danger delete-btn" title="Delete habit">
+              Delete
+            </button>
+          </div>
+        </div>
+      </li>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
