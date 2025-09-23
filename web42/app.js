@@ -51,3 +51,19 @@ function load() {
 function save() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
+/* ---------- Rendering ---------- */
+function renderWeekHeader() {
+  weekHeader.innerHTML = "";
+  const dates = last7();
+  // first column label handled in CSS ::before
+  dates.forEach((d, idx) => {
+    const div = document.createElement("div");
+    div.className = "week-col";
+    div.title = d.toLocaleDateString();
+    const isToday = idx === dates.length - 1;
+    div.innerHTML = `${shortLabel(d)} <span style="opacity:.7">${dayNum(
+      d
+    )}</span>${isToday ? " • Today" : ""}`;
+    weekHeader.appendChild(div);
+  });
+}
