@@ -1,3 +1,7 @@
+/* =========================================================
+   Habit Tracker (7-day rolling) — Vanilla JS + localStorage
+   ========================================================= */
+
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
 
@@ -10,6 +14,7 @@ const importInput = $("#importInput");
 const clearAllBtn = $("#clearAllBtn");
 
 const STORAGE_KEY = "habit-tracker.v1";
+
 /* ---------- Date helpers ---------- */
 const toDateKey = (d) => {
   // local date key YYYY-MM-DD
@@ -33,6 +38,7 @@ const last7 = () => {
 const shortLabel = (d) =>
   d.toLocaleDateString(undefined, { weekday: "short" }).slice(0, 3);
 const dayNum = (d) => d.getDate();
+
 /* ---------- State ---------- */
 let state = load();
 
@@ -51,6 +57,7 @@ function load() {
 function save() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
+
 /* ---------- Rendering ---------- */
 function renderWeekHeader() {
   weekHeader.innerHTML = "";
@@ -67,6 +74,7 @@ function renderWeekHeader() {
     weekHeader.appendChild(div);
   });
 }
+
 function computeStreak(habit) {
   // Count consecutive days up to today() that are true
   let streak = 0;
@@ -163,3 +171,93 @@ function render() {
     habitList.appendChild(node);
   });
 }
+
+function updateRow(node, habit) {
+  // Update streak, progress, and day button styles for this habit row
+  const streak = computeStreak(habit);
+  $(".streak strong", node).textContent = streak.toString();
+  $(".streak", node).setAttribute(
+    "aria-label",
+    `Current streak: ${streak} days`
+  );
+
+  const weekly = weeklyProgress(habit);
+  const pct = Math.round((weekly / 7) * 100);
+  $(".progress-bar > span", node).style.width = pct + "%";
+  $(".progress-text", node).textContent = `${weekly}/7`;
+
+  // Update day buttons without full re-render
+  const dates = last7();
+  $$(".day", node).forEach((btn, i) => {
+    const key = toDateKey(dates[i]);
+    const done = !!(habit.log && habit.log[key]);
+    btn.classList.toggle("done", done);
+    btn.setAttribute("aria-pressed", done);
+  });
+}
+
+/* ---------- Add habit ---------- */
+habitForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = habitNameInput.value.trim();
+  if (!name) return;
+  const habit = {
+    id: crypto.randomUUID
+      ? crypto.randomUUID()
+      : String(Date.now() + Math.random()),
+    name,
+    createdAt: Date.now(),
+    log: {}, // { "YYYY-MM-DD": true }
+  };
+  state.habits.unshift(habit);
+  save();
+  habitNameInput.value = "";
+  render();
+});
+
+/* ---------- Export / Import / Clear ---------- */
+exportBtn.addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const dateStr = toDateKey(new Date()).replaceAll("-", "");
+  a.download = `habit-tracker-backup-${dateStr}.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+importInput.addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!data || typeof data !== "object" || !Array.isArray(data.habits)) {
+      alert("Invalid backup file.");
+      return;
+    }
+    state = data;
+    save();
+    render();
+  } catch (err) {
+    console.error(err);
+    alert("Failed to import backup.");
+  } finally {
+    importInput.value = "";
+  }
+});
+
+clearAllBtn.addEventListener("click", () => {
+  const ok = confirm("Delete ALL habits and data? This cannot be undone.");
+  if (!ok) return;
+  state = { habits: [] };
+  save();
+  render();
+});
+
+/* ---------- Init ---------- */
+renderWeekHeader();
+render();
