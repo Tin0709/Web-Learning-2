@@ -40,3 +40,77 @@ body {
   padding: 28px 20px 8px;
   text-align: center;
 }
+h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  letter-spacing: 0.3px;
+}
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.container {
+  max-width: 980px;
+  margin: 20px auto;
+  padding: 0 16px;
+}
+
+.add-habit {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.08)
+  );
+  border: 1px solid var(--border);
+  padding: 14px;
+  border-radius: var(--radius);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow);
+}
+#habitForm {
+  display: flex;
+  gap: 10px;
+}
+#habitName {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: #0f1320;
+  color: var(--text);
+  outline: none;
+}
+#habitName:focus {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.18);
+}
+
+.btn {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: #141927;
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.15s transform ease, 0.2s background ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  background: #182033;
+}
+.btn:active {
+  transform: translateY(0);
+}
+.btn.primary {
+  background: linear-gradient(180deg, #1e2a4a, #14203c);
+  border-color: #2b3651;
+}
+.btn.danger {
+  background: linear-gradient(180deg, #3a1111, #260b0b);
+  border-color: #3a1b1b;
+}
+.btn.subtle {
+  background: #141927;
+}
