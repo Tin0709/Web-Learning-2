@@ -33,3 +33,21 @@ const last7 = () => {
 const shortLabel = (d) =>
   d.toLocaleDateString(undefined, { weekday: "short" }).slice(0, 3);
 const dayNum = (d) => d.getDate();
+/* ---------- State ---------- */
+let state = load();
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return { habits: [] };
+    const parsed = JSON.parse(raw);
+    if (!parsed.habits) parsed.habits = [];
+    return parsed;
+  } catch (e) {
+    console.warn("Failed to load state", e);
+    return { habits: [] };
+  }
+}
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
