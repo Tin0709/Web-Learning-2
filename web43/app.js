@@ -298,3 +298,43 @@ async function searchCityAndUpdate(q) {
     setStatus(err.message || "Search failed", "error");
   }
 }
+async function useMyLocation() {
+  if (!navigator.geolocation) {
+    setStatus("Geolocation not supported by your browser.", "error");
+    return;
+  }
+  setStatus("Getting your location...");
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const { latitude: lat, longitude: lon } = pos.coords;
+      try {
+        // Reverse lookup timezone & nearest place from Open-Meteo geocoding (nearest place via reverse endpoint)
+        const rev = await fetch(
+          `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en&format=json`
+        );
+        const j = await rev.json();
+        const best = j.results && j.results[0];
+        const place = {
+          name: best
+            ? best.name + (best.admin1 ? `, ${best.admin1}` : "")
+            : "Current Location",
+          country: best ? best.country : "",
+          lat,
+          lon,
+          timezone:
+            best?.timezone ||
+            Intl.DateTimeFormat().resolvedOptions().timeZone ||
+            "UTC",
+        };
+        await updateWeatherForPlace(place);
+      } catch (err) {
+        console.error(err);
+        setStatus("Failed to resolve your location.", "error");
+      }
+    },
+    (err) => {
+      setStatus(err.message || "Location permission denied.", "error");
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
