@@ -210,3 +210,60 @@ function renderCurrent(place, wx) {
   pressureEl.textContent = `${Math.round(c.pressure_msl)} hPa`;
   uvEl.textContent = `${c.uv_index ?? "-"}`;
 }
+function renderHourly(place, wx) {
+  const tz = place.timezone;
+  const hours = wx.hourly.time.slice(0, 12);
+  const temps = wx.hourly.temperature_2m.slice(0, 12);
+  const codes = wx.hourly.weather_code.slice(0, 12);
+  const isDayArr = wx.hourly.is_day || new Array(hours.length).fill(1);
+
+  hourlyEl.innerHTML = "";
+  hours.forEach((iso, i) => {
+    const tC = temps[i];
+    const val =
+      state.units === "imperial"
+        ? Math.round((tC * 9) / 5 + 32)
+        : Math.round(tC);
+    const isNight = isDayArr[i] === 0;
+    const div = document.createElement("div");
+    div.className = "hour";
+    div.innerHTML = `
+        <div class="time">${fmtTime(iso, tz)}</div>
+        <div class="ic" style="font-size:20px">${weatherIcon(
+          codes[i],
+          isNight
+        )}</div>
+        <div class="t">${val}°${state.units === "imperial" ? "F" : "C"}</div>
+      `;
+    hourlyEl.appendChild(div);
+  });
+}
+
+function renderDaily(place, wx) {
+  const tz = place.timezone;
+  const days = wx.daily.time.slice(0, 5);
+  const maxs = wx.daily.temperature_2m_max.slice(0, 5);
+  const mins = wx.daily.temperature_2m_min.slice(0, 5);
+  const codes = wx.daily.weather_code.slice(0, 5);
+
+  dailyEl.innerHTML = "";
+  days.forEach((d, i) => {
+    const max =
+      state.units === "imperial"
+        ? Math.round((maxs[i] * 9) / 5 + 32)
+        : Math.round(maxs[i]);
+    const min =
+      state.units === "imperial"
+        ? Math.round((mins[i] * 9) / 5 + 32)
+        : Math.round(mins[i]);
+    const div = document.createElement("div");
+    div.className = "day";
+    div.innerHTML = `
+        <div class="date">${fmtDay(d, tz)}</div>
+        <div class="ic" style="font-size:22px">${weatherIcon(codes[i])}</div>
+        <div class="sum">${codeToText(codes[i])}</div>
+        <div><span class="hi">${max}°</span> / <span class="lo">${min}°</span></div>
+      `;
+    dailyEl.appendChild(div);
+  });
+}
