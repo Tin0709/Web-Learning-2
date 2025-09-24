@@ -74,3 +74,44 @@ const codeToText = (code) => {
   };
   return dict[code] || "—";
 };
+
+const fmtTime = (iso, tz) =>
+  new Date(iso + (iso.endsWith("Z") ? "" : "Z")).toLocaleString([], {
+    timeZone: tz,
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+const fmtDay = (iso, tz) =>
+  new Date(iso).toLocaleDateString([], {
+    timeZone: tz,
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+
+const kphToMph = (kph) => kph * 0.621371;
+
+// ===== State =====
+const state = {
+  units: "metric", // 'metric' (°C, km/h) or 'imperial' (°F, mph)
+  place: null, // { name, country, lat, lon, timezone }
+};
+
+// ===== DOM Refs =====
+const placeEl = $("#place");
+const updatedEl = $("#updated");
+const tempEl = $("#temp");
+const tempUnitEl = $("#temp-unit");
+const feelsEl = $("#feels-like");
+const iconEl = $("#icon");
+const summaryEl = $("#summary");
+const humidityEl = $("#humidity");
+const windEl = $("#wind");
+const pressureEl = $("#pressure");
+const uvEl = $("#uv");
+const hourlyEl = $("#hourly");
+const dailyEl = $("#daily");
+
+const unitToggle = $("#unit-toggle");
+const themeBtn = $("#theme-btn");
