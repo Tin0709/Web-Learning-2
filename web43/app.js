@@ -171,3 +171,42 @@ async function getWeather(lat, lon, timezone) {
   if (!res.ok) throw new Error("Weather fetch failed");
   return res.json();
 }
+// ===== Rendering =====
+function renderCurrent(place, wx) {
+  const c = wx.current;
+  const isNight = c.is_day === 0;
+  iconEl.textContent = weatherIcon(
+    c.weather_code ?? wx.daily.weather_code[0],
+    isNight
+  );
+  placeEl.textContent = `${place.name}, ${place.country}`;
+  updatedEl.textContent = `Updated: ${new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  })}`;
+
+  const toF = (x) => (x * 9) / 5 + 32;
+  const tempC = c.temperature_2m;
+  const feelsC = c.apparent_temperature;
+  const speed =
+    state.units === "imperial" ? kphToMph(c.wind_speed_10m) : c.wind_speed_10m;
+
+  tempEl.textContent = Math.round(
+    state.units === "imperial" ? toF(tempC) : tempC
+  );
+  tempUnitEl.textContent = state.units === "imperial" ? "°F" : "°C";
+  $(".unit").textContent = state.units === "imperial" ? "°F" : "°C";
+  feelsEl.textContent = Math.round(
+    state.units === "imperial" ? toF(feelsC) : feelsC
+  );
+
+  summaryEl.textContent = codeToText(
+    c.weather_code ?? wx.daily.weather_code[0]
+  );
+  humidityEl.textContent = `${c.relative_humidity_2m}%`;
+  windEl.textContent = `${Math.round(speed)} ${
+    state.units === "imperial" ? "mph" : "km/h"
+  }`;
+  pressureEl.textContent = `${Math.round(c.pressure_msl)} hPa`;
+  uvEl.textContent = `${c.uv_index ?? "-"}`;
+}
