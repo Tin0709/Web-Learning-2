@@ -115,3 +115,59 @@ const dailyEl = $("#daily");
 
 const unitToggle = $("#unit-toggle");
 const themeBtn = $("#theme-btn");
+
+// ===== API Calls (Open-Meteo, no key needed) =====
+async function geocodeCity(query) {
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+    query
+  )}&count=1&language=en&format=json`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Geocoding failed");
+  const data = await res.json();
+  if (!data.results || data.results.length === 0)
+    throw new Error("No matching city found");
+  const r = data.results[0];
+  return {
+    name: r.name + (r.admin1 ? `, ${r.admin1}` : ""),
+    country: r.country,
+    lat: r.latitude,
+    lon: r.longitude,
+    timezone: r.timezone || "UTC",
+  };
+}
+
+async function getWeather(lat, lon, timezone) {
+  // Request current, hourly (next 24h), and daily (next 7 days)
+  const params = new URLSearchParams({
+    latitude: lat,
+    longitude: lon,
+    current: [
+      "temperature_2m",
+      "relative_humidity_2m",
+      "apparent_temperature",
+      "pressure_msl",
+      "wind_speed_10m",
+      "is_day",
+      "uv_index",
+    ].join(","),
+    hourly: [
+      "temperature_2m",
+      "weather_code",
+      "apparent_temperature",
+      "relative_humidity_2m",
+      "uv_index",
+      "wind_speed_10m",
+    ].join(","),
+    daily: [
+      "weather_code",
+      "temperature_2m_max",
+      "temperature_2m_min",
+      "uv_index_max",
+    ].join(","),
+    timezone,
+  });
+  const url = `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Weather fetch failed");
+  return res.json();
+}
