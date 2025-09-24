@@ -338,3 +338,46 @@ async function useMyLocation() {
     { enableHighAccuracy: true, timeout: 10000 }
   );
 }
+// ===== Events =====
+document.addEventListener("DOMContentLoaded", () => {
+  // Restore theme
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") document.body.classList.add("light");
+
+  // Unit toggle persistence
+  const savedUnits = localStorage.getItem("units");
+  if (savedUnits === "imperial") {
+    state.units = "imperial";
+    $("#unit-toggle").checked = true;
+  }
+
+  // Default: try location, fallback to a popular city
+  useMyLocation();
+  setTimeout(() => {
+    if (!state.place) searchCityAndUpdate("London");
+  }, 2500);
+});
+
+$("#search-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const q = $("#search-input").value.trim();
+  if (!q) return;
+  searchCityAndUpdate(q);
+});
+
+$("#loc-btn").addEventListener("click", () => useMyLocation());
+
+unitToggle.addEventListener("change", () => {
+  state.units = unitToggle.checked ? "imperial" : "metric";
+  localStorage.setItem("units", state.units);
+  // Re-render with converted units if we already have data: just trigger a fresh fetch to keep things simple
+  if (state.place) updateWeatherForPlace(state.place);
+});
+
+themeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("light");
+  localStorage.setItem(
+    "theme",
+    document.body.classList.contains("light") ? "light" : "dark"
+  );
+});
