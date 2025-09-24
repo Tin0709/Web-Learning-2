@@ -41,6 +41,7 @@ const weatherIcon = (code, isNight = false) => {
   }
   return map[code] || "🌡️";
 };
+
 const codeToText = (code) => {
   const dict = {
     0: "Clear sky",
@@ -171,6 +172,7 @@ async function getWeather(lat, lon, timezone) {
   if (!res.ok) throw new Error("Weather fetch failed");
   return res.json();
 }
+
 // ===== Rendering =====
 function renderCurrent(place, wx) {
   const c = wx.current;
@@ -210,6 +212,7 @@ function renderCurrent(place, wx) {
   pressureEl.textContent = `${Math.round(c.pressure_msl)} hPa`;
   uvEl.textContent = `${c.uv_index ?? "-"}`;
 }
+
 function renderHourly(place, wx) {
   const tz = place.timezone;
   const hours = wx.hourly.time.slice(0, 12);
@@ -228,13 +231,13 @@ function renderHourly(place, wx) {
     const div = document.createElement("div");
     div.className = "hour";
     div.innerHTML = `
-        <div class="time">${fmtTime(iso, tz)}</div>
-        <div class="ic" style="font-size:20px">${weatherIcon(
-          codes[i],
-          isNight
-        )}</div>
-        <div class="t">${val}°${state.units === "imperial" ? "F" : "C"}</div>
-      `;
+      <div class="time">${fmtTime(iso, tz)}</div>
+      <div class="ic" style="font-size:20px">${weatherIcon(
+        codes[i],
+        isNight
+      )}</div>
+      <div class="t">${val}°${state.units === "imperial" ? "F" : "C"}</div>
+    `;
     hourlyEl.appendChild(div);
   });
 }
@@ -259,11 +262,11 @@ function renderDaily(place, wx) {
     const div = document.createElement("div");
     div.className = "day";
     div.innerHTML = `
-        <div class="date">${fmtDay(d, tz)}</div>
-        <div class="ic" style="font-size:22px">${weatherIcon(codes[i])}</div>
-        <div class="sum">${codeToText(codes[i])}</div>
-        <div><span class="hi">${max}°</span> / <span class="lo">${min}°</span></div>
-      `;
+      <div class="date">${fmtDay(d, tz)}</div>
+      <div class="ic" style="font-size:22px">${weatherIcon(codes[i])}</div>
+      <div class="sum">${codeToText(codes[i])}</div>
+      <div><span class="hi">${max}°</span> / <span class="lo">${min}°</span></div>
+    `;
     dailyEl.appendChild(div);
   });
 }
@@ -298,6 +301,7 @@ async function searchCityAndUpdate(q) {
     setStatus(err.message || "Search failed", "error");
   }
 }
+
 async function useMyLocation() {
   if (!navigator.geolocation) {
     setStatus("Geolocation not supported by your browser.", "error");
@@ -338,6 +342,7 @@ async function useMyLocation() {
     { enableHighAccuracy: true, timeout: 10000 }
   );
 }
+
 // ===== Events =====
 document.addEventListener("DOMContentLoaded", () => {
   // Restore theme
