@@ -267,3 +267,34 @@ function renderDaily(place, wx) {
     dailyEl.appendChild(div);
   });
 }
+
+function setStatus(msg, type = "info") {
+  statusEl.textContent = msg;
+  statusEl.style.color = type === "error" ? "var(--bad)" : "var(--muted)";
+}
+
+// ===== Actions =====
+async function updateWeatherForPlace(place) {
+  try {
+    setStatus("Loading weather...");
+    const wx = await getWeather(place.lat, place.lon, place.timezone);
+    state.place = place;
+    renderCurrent(place, wx);
+    renderHourly(place, wx);
+    renderDaily(place, wx);
+    setStatus(`Showing weather for ${place.name}, ${place.country}`);
+  } catch (err) {
+    console.error(err);
+    setStatus(err.message || "Failed to load weather", "error");
+  }
+}
+
+async function searchCityAndUpdate(q) {
+  try {
+    const place = await geocodeCity(q);
+    await updateWeatherForPlace(place);
+  } catch (err) {
+    console.error(err);
+    setStatus(err.message || "Search failed", "error");
+  }
+}
