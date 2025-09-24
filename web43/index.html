@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://api.open-meteo.com" />
+    <link rel="preconnect" href="https://geocoding-api.open-meteo.com" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">☀️</span>
+        <h1>Weather Dashboard</h1>
+      </div>
+
+      <div class="controls">
+        <form id="search-form" class="search">
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search city (e.g., Tokyo)"
+            aria-label="Search city"
+          />
+          <button type="submit" class="btn">Search</button>
+        </form>
+        <button id="loc-btn" class="btn ghost" title="Use my location">
+          📍 My location
+        </button>
+
+        <div class="toggle">
+          <input type="checkbox" id="unit-toggle" />
+          <label for="unit-toggle" class="switch">
+            <span class="c">°C</span>
+            <span class="f">°F</span>
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section
+        id="status"
+        class="status"
+        role="status"
+        aria-live="polite"
+      ></section>
+
+      <section id="current" class="card current">
+        <div class="current-header">
+          <div>
+            <h2 id="place">—</h2>
+            <p id="updated">—</p>
+          </div>
+          <div class="current-temp">
+            <span id="temp">—</span>
+            <span id="temp-unit">°C</span>
+          </div>
+        </div>
+
+        <div class="current-body">
+          <div class="current-main">
+            <div id="icon" class="icon">⛅</div>
+            <div>
+              <p id="summary">—</p>
+              <p class="feelslike">
+                <strong>Feels like:</strong> <span id="feels-like">—</span
+                ><span class="unit">°C</span>
+              </p>
+            </div>
+          </div>
+          <div class="current-grid">
+            <div><span>Humidity</span><strong id="humidity">—%</strong></div>
+            <div><span>Wind</span><strong id="wind">— km/h</strong></div>
+            <div><span>Pressure</span><strong id="pressure">— hPa</strong></div>
+            <div><span>UV Index</span><strong id="uv">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Next 12 hours</h3>
+        <div id="hourly" class="hourly"></div>
+      </section>
+
+      <section class="card">
+        <h3>5-day forecast</h3>
+        <div id="daily" class="daily"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Data: Open-Meteo (no API key required)</span>
+      <span>•</span>
+      <button id="theme-btn" class="btn tiny">Toggle theme</button>
+    </footer>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
