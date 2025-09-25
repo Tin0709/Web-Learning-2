@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Language Learning App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Language Learning</h1>
+      <nav class="tabs" role="tablist" aria-label="Main">
+        <button
+          class="tab is-active"
+          data-tab="study"
+          role="tab"
+          aria-selected="true"
+        >
+          Flashcards
+        </button>
+        <button class="tab" data-tab="quiz" role="tab" aria-selected="false">
+          Quiz
+        </button>
+        <button class="tab" data-tab="add" role="tab" aria-selected="false">
+          Add Words
+        </button>
+        <button
+          class="tab"
+          data-tab="settings"
+          role="tab"
+          aria-selected="false"
+        >
+          Settings
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Sidebar / Deck & Stats -->
+      <aside class="sidebar">
+        <div class="panel">
+          <label for="deckSelect">Deck</label>
+          <select id="deckSelect" aria-label="Choose deck"></select>
+          <button id="newDeckBtn" class="btn btn-ghost">+ New deck</button>
+        </div>
+
+        <div class="panel">
+          <h3>Today</h3>
+          <div class="stat-row">
+            <span>Due cards</span><strong id="dueCount">0</strong>
+          </div>
+          <div class="stat-row">
+            <span>Learned</span><strong id="learnedCount">0</strong>
+          </div>
+          <div class="stat-row">
+            <span>Total</span><strong id="totalCount">0</strong>
+          </div>
+          <div class="progress-wrap" aria-label="Progress">
+            <div id="progressBar" class="progress"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Content -->
+      <section class="content">
+        <!-- Study Tab -->
+        <section
+          id="tab-study"
+          class="tab-panel is-active"
+          role="tabpanel"
+          aria-labelledby="Flashcards"
+        >
+          <div class="card-area">
+            <div
+              id="flashcard"
+              class="flashcard"
+              tabindex="0"
+              aria-live="polite"
+              aria-label="Flashcard. Press space to flip."
+            >
+              <div class="front face"></div>
+              <div class="back face"></div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button id="showAnswerBtn" class="btn">Show</button>
+            <div class="review-controls hidden" id="reviewControls">
+              <button
+                id="againBtn"
+                class="btn btn-warn"
+                title="Did not remember (move down)"
+              >
+                Again
+              </button>
+              <button
+                id="goodBtn"
+                class="btn btn-ok"
+                title="Remembered (move up)"
+              >
+                Good
+              </button>
+            </div>
+            <button id="skipBtn" class="btn btn-ghost">Skip</button>
+          </div>
+
+          <p class="hint">
+            Shortcuts: <kbd>Space</kbd> flip • <kbd>1</kbd> again •
+            <kbd>2</kbd> good • <kbd>→</kbd> skip
+          </p>
+        </section>
+
+        <!-- Quiz Tab -->
+        <section
+          id="tab-quiz"
+          class="tab-panel"
+          role="tabpanel"
+          aria-labelledby="Quiz"
+        >
+          <div class="quiz">
+            <div class="quiz-q" id="quizQuestion">
+              Press Start to begin a quick quiz.
+            </div>
+            <div class="quiz-opts" id="quizOptions"></div>
+            <div class="quiz-controls">
+              <button id="startQuizBtn" class="btn">Start Quiz (10)</button>
+              <span id="quizScore" class="muted"></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Add Words Tab -->
+        <section
+          id="tab-add"
+          class="tab-panel"
+          role="tabpanel"
+          aria-labelledby="Add Words"
+        >
+          <form id="addForm" class="form">
+            <div class="grid">
+              <label>
+                Term (Learning)
+                <input type="text" id="termInput" required placeholder="hola" />
+              </label>
+              <label>
+                Translation (Known)
+                <input type="text" id="defInput" required placeholder="hello" />
+              </label>
+              <label>
+                Part of speech (optional)
+                <input type="text" id="posInput" placeholder="interjection" />
+              </label>
+            </div>
+            <button class="btn" type="submit">Add to Deck</button>
+          </form>
+
+          <h3>Words in Deck</h3>
+          <div id="wordsTable" class="table"></div>
+        </section>
+
+        <!-- Settings Tab -->
+        <section
+          id="tab-settings"
+          class="tab-panel"
+          role="tabpanel"
+          aria-labelledby="Settings"
+        >
+          <div class="panel">
+            <label>
+              Daily new card limit
+              <input
+                type="number"
+                id="dailyNewInput"
+                min="0"
+                max="100"
+                step="1"
+              />
+            </label>
+            <label>
+              Quiz choices
+              <input
+                type="number"
+                id="quizChoicesInput"
+                min="2"
+                max="6"
+                step="1"
+              />
+            </label>
+            <button id="resetProgressBtn" class="btn btn-warn">
+              Reset Progress (this deck)
+            </button>
+          </div>
+          <p class="muted">
+            Spaced repetition uses a simple Leitner system with intervals of 0,
+            1, 2, 4, 7 days per box. “Good” moves a card up; “Again” moves it
+            down.
+          </p>
+        </section>
+      </section>
+    </main>
+
+    <!-- Simple modal for creating a deck -->
+    <dialog id="deckModal">
+      <form method="dialog" class="modal">
+        <h3>Create new deck</h3>
+        <label>
+          Deck name
+          <input
+            id="newDeckName"
+            type="text"
+            required
+            placeholder="Spanish Basics"
+          />
+        </label>
+        <menu>
+          <button value="cancel" class="btn btn-ghost">Cancel</button>
+          <button id="createDeckConfirm" value="confirm" class="btn">
+            Create
+          </button>
+        </menu>
+      </form>
+    </dialog>
+
+    <footer class="app-footer">
+      <small
+        >Built with HTML • CSS • JS — your data stays in your browser.</small
+      >
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
