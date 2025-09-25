@@ -1,0 +1,27 @@
+:root {
+  --bg: #0f1220;
+  --panel: #171a2d;
+  --muted: #9aa1b2;
+  --text: #e9ecf1;
+  --accent: #6ea8fe;
+  --ok: #50c878;
+  --warn: #ff6b6b;
+  --ring: 0 0 0 2px rgba(110, 168, 254, 0.35);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+    "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--text);
+  background: radial-gradient(1200px 700px at 20% -20%, #1b2045 0, #0f1220 60%)
+    fixed;
+}
