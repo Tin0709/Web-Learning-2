@@ -370,3 +370,27 @@ function bindTabs() {
     });
   });
 }
+
+function renderSettings() {
+  const deck = getDeck();
+  dailyNewInput.value =
+    deck.settings.dailyNewLimit ?? DEFAULT_SETTINGS.dailyNewLimit;
+  quizChoicesInput.value =
+    deck.settings.quizChoices ?? DEFAULT_SETTINGS.quizChoices;
+}
+
+function renderAll() {
+  populateDeckSelect();
+  const deck = getDeck();
+  formatStats(deck);
+  buildStudyQueue();
+  nextCard();
+  renderWordsTable();
+}
+
+function initDecks() {
+  // if no decks (shouldn’t happen), seed defaults
+  if (!state.decks || state.decks.length === 0) {
+    state.decks = DEFAULT_DECKS;
+  }
+}
