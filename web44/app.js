@@ -394,3 +394,35 @@ function initDecks() {
     state.decks = DEFAULT_DECKS;
   }
 }
+
+// ---------- Listeners
+deckSelect.addEventListener("change", (e) => setDeck(e.target.value));
+newDeckBtn.addEventListener("click", () => {
+  newDeckName.value = "";
+  deckModal.showModal();
+});
+createDeckConfirm.addEventListener("click", () => {
+  const name = newDeckName.value.trim();
+  if (!name) return;
+  const deck = {
+    id: crypto.randomUUID(),
+    name,
+    createdAt: now(),
+    settings: { ...DEFAULT_SETTINGS },
+    cards: [],
+  };
+  state.decks.push(deck);
+  currentDeckId = deck.id;
+  save();
+  renderAll();
+});
+
+showAnswerBtn.addEventListener("click", () => {
+  if (!currentCard) return;
+  showingBack = !showingBack;
+  updateCardUI();
+  reviewControls.classList.toggle("hidden", !showingBack);
+});
+againBtn.addEventListener("click", () => mark("again"));
+goodBtn.addEventListener("click", () => mark("good"));
+skipBtn.addEventListener("click", () => nextCard());
