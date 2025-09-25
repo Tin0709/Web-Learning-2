@@ -337,3 +337,36 @@ function renderQuizItem() {
     quizOptions.appendChild(btn);
   });
 }
+
+// ---------- Utilities
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ---------- Event wiring
+function bindTabs() {
+  tabs.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      tabs.forEach((b) => b.classList.remove("is-active"));
+      panels.forEach((p) => p.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      $(`#tab-${btn.dataset.tab}`).classList.add("is-active");
+      // Recompute sizing stats when switching
+      if (btn.dataset.tab === "study") {
+        buildStudyQueue();
+        nextCard();
+      }
+      if (btn.dataset.tab === "add") {
+        renderWordsTable();
+      }
+      if (btn.dataset.tab === "settings") {
+        renderSettings();
+      }
+    });
+  });
+}
