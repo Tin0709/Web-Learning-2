@@ -217,3 +217,69 @@ main {
   align-items: center;
   gap: 0.8rem;
 }
+.form .grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+input,
+select {
+  background: #161a33;
+  color: var(--text);
+  border: 1px solid #2b3157;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.6rem;
+}
+.table {
+  margin-top: 0.6rem;
+  border: 1px solid #2b3157;
+  border-radius: 0.6rem;
+  overflow: hidden;
+}
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr auto;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  border-top: 1px solid #2b3157;
+}
+.table-row:first-child {
+  border-top: 0;
+}
+.table-row div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.table-row button {
+  justify-self: end;
+}
+
+.modal {
+  background: var(--panel);
+  border: 1px solid #2b3157;
+  border-radius: 0.8rem;
+  padding: 1rem;
+  width: min(420px, 92vw);
+}
+menu {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+.app-footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 1rem;
+}
+
+.muted {
+  color: var(--muted);
+}
