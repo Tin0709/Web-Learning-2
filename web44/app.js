@@ -117,3 +117,95 @@ const resetProgressBtn = $("#resetProgressBtn");
 const deckModal = $("#deckModal");
 const newDeckName = $("#newDeckName");
 const createDeckConfirm = $("#createDeckConfirm");
+
+// ---------- Helpers
+const getDeck = () => state.decks.find((d) => d.id === currentDeckId);
+const setDeck = (id) => {
+  currentDeckId = id;
+  save();
+  renderAll();
+};
+const save = () => store.write(state);
+
+function formatStats(deck) {
+  const today = new Date();
+  const startOfDay = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  ).getTime();
+
+  const due = deck.cards.filter((c) => c.next <= now()).length;
+  const learned = deck.cards.filter((c) => c.box >= 3).length;
+  const total = deck.cards.length;
+
+  // Progress: learned/total
+  progressBar.style.width = total
+    ? ((learned / Math.max(total, 1)) * 100).toFixed(1) + "%"
+    : "0%";
+
+  dueCount.textContent = due;
+  learnedCount.textContent = learned;
+  totalCount.textContent = total;
+}
+
+function populateDeckSelect() {
+  deckSelect.innerHTML = "";
+  state.decks.forEach((d) => {
+    const opt = document.createElement("option");
+    opt.value = d.id;
+    opt.textContent = d.name;
+    if (d.id === currentDeckId) opt.selected = true;
+    deckSelect.appendChild(opt);
+  });
+}
+
+function renderWordsTable() {
+  const deck = getDeck();
+  if (deck.cards.length === 0) {
+    wordsTable.innerHTML = `<div class="table-row"><div>No words yet. Add some above!</div></div>`;
+    return;
+  }
+  wordsTable.innerHTML = "";
+  deck.cards
+    .slice()
+    .sort((a, b) => a.term.localeCompare(b.term))
+    .forEach((card) => {
+      const row = document.createElement("div");
+      row.className = "table-row";
+      row.innerHTML = `
+        <div title="${escapeHtml(card.term)}">${escapeHtml(card.term)}</div>
+        <div title="${escapeHtml(card.def)}">${escapeHtml(card.def)}</div>
+        <div>${escapeHtml(card.pos || "")}</div>
+        <div>
+          <button class="btn btn-ghost" data-action="del" data-id="${
+            card.id
+          }" title="Delete">✕</button>
+        </div>
+      `;
+      wordsTable.appendChild(row);
+    });
+
+  wordsTable.onclick = (e) => {
+    const btn = e.target.closest("button[data-action='del']");
+    if (!btn) return;
+    const id = btn.getAttribute("data-id");
+    const deck = getDeck();
+    const idx = deck.cards.findIndex((c) => c.id === id);
+    if (idx > -1) {
+      deck.cards.splice(idx, 1);
+      save();
+      renderAll();
+    }
+  };
+}
+
+function escapeHtml(s) {
+  return String(s).replace(
+    /[&<>"']/g,
+    (ch) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[
+        ch
+      ])
+  );
+}
