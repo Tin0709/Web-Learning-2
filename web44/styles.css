@@ -123,3 +123,97 @@ main {
   perspective: 1000px;
   position: relative;
 }
+.flashcard .face {
+  position: absolute;
+  inset: 0;
+  padding: 1.2rem;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #232a53, #1b2146);
+  border: 1px solid #2b3157;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: clamp(22px, 3.8vw, 42px);
+  transition: transform 0.5s ease, opacity 0.3s ease;
+  box-shadow: var(--shadow);
+}
+.flashcard .back {
+  transform: rotateY(180deg);
+}
+.flashcard.show .front {
+  transform: rotateY(180deg);
+  opacity: 0;
+}
+.flashcard.show .back {
+  transform: rotateY(0deg);
+  opacity: 1;
+}
+
+.controls {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.4rem;
+}
+.btn {
+  background: #243067;
+  border: 1px solid #31408a;
+  color: var(--text);
+  padding: 0.55rem 0.9rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn:hover {
+  filter: brightness(1.07);
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px dashed #39416d;
+}
+.btn-ok {
+  background: #1f3d2d;
+  border-color: #2c7a59;
+}
+.btn-warn {
+  background: #3e1f23;
+  border-color: #7a2c36;
+}
+
+.hidden {
+  display: none !important;
+}
+.hint {
+  text-align: center;
+  color: var(--muted);
+  margin: 0.6rem 0;
+}
+
+.quiz {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.quiz-q {
+  padding: 1rem;
+  border-radius: 0.7rem;
+  background: var(--panel);
+  border: 1px solid #2b3157;
+  box-shadow: var(--shadow);
+  font-size: 1.2rem;
+}
+.quiz-opts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin: 0.8rem 0;
+}
+.quiz-opts button {
+  text-align: left;
+}
+.quiz-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
