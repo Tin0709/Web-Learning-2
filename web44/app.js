@@ -209,3 +209,48 @@ function escapeHtml(s) {
       ])
   );
 }
+// ---------- Study logic
+let studyQueue = [];
+let currentCard = null;
+let showingBack = false;
+
+function buildStudyQueue() {
+  const deck = getDeck();
+  const due = deck.cards.filter((c) => c.next <= now());
+  // Allow some new cards per day (box 0 & next=0)
+  const newCards = deck.cards.filter((c) => c.box === 0 && c.next === 0);
+  const limit = deck.settings.dailyNewLimit ?? DEFAULT_SETTINGS.dailyNewLimit;
+  const addNew = Math.min(limit, newCards.length);
+  studyQueue = shuffle([...due, ...newCards.slice(0, addNew)]);
+}
+
+function nextCard() {
+  currentCard = studyQueue.shift() || null;
+  showingBack = false;
+  updateCardUI();
+}
+
+function updateCardUI() {
+  const empty = !currentCard;
+  flashcardEl.classList.toggle("disabled", empty);
+  showAnswerBtn.disabled = empty;
+  againBtn.disabled = empty;
+  goodBtn.disabled = empty;
+  skipBtn.disabled = empty;
+
+  reviewControls.classList.toggle("hidden", empty || !showingBack);
+
+  if (empty) {
+    frontEl.textContent = "No cards due. 🎉";
+    backEl.textContent = "Come back later or add more words.";
+    flashcardEl.classList.remove("show");
+    return;
+  }
+
+  frontEl.textContent = currentCard.term;
+  backEl.textContent = `${currentCard.def}${
+    currentCard.pos ? ` · ${currentCard.pos}` : ""
+  }`;
+
+  flashcardEl.classList.toggle("show", showingBack);
+}
