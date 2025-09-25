@@ -25,6 +25,7 @@ body {
   background: radial-gradient(1200px 700px at 20% -20%, #1b2045 0, #0f1220 60%)
     fixed;
 }
+
 .app-header {
   display: flex;
   align-items: center;
@@ -217,6 +218,7 @@ main {
   align-items: center;
   gap: 0.8rem;
 }
+
 .form .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -282,4 +284,16 @@ menu {
 
 .muted {
   color: var(--muted);
+}
+
+@media (max-width: 960px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+  .form .grid {
+    grid-template-columns: 1fr;
+  }
+  .quiz-opts {
+    grid-template-columns: 1fr;
+  }
 }
