@@ -254,3 +254,23 @@ function updateCardUI() {
 
   flashcardEl.classList.toggle("show", showingBack);
 }
+function mark(quality) {
+  // "again" | "good"
+  if (!currentCard) return;
+  const deck = getDeck();
+  const card = deck.cards.find((c) => c.id === currentCard.id);
+  if (!card) return;
+
+  if (quality === "good") {
+    card.box = Math.min(card.box + 1, INTERVALS.length - 1);
+  } else {
+    card.box = Math.max(card.box - 1, 0);
+  }
+  card.last = now();
+  card.next = now() + INTERVALS[card.box];
+
+  // Optional: reinsert at end if still due
+  save();
+  formatStats(deck);
+  nextCard();
+}
