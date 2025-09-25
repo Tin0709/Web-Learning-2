@@ -1,3 +1,11 @@
+/* ---------------------------
+   Language Learning App (Vanilla JS)
+   - Decks with Leitner boxes (0,1,2,4,7 days)
+   - Flashcards (flip with space, 1/2 = again/good)
+   - Multiple choice quiz
+   - Add words, localStorage persistence
+----------------------------*/
+
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 const now = () => Date.now();
@@ -36,6 +44,7 @@ const DEFAULT_DECKS = [
 
 // Leitner intervals per box index:
 const INTERVALS = [0, 1, 2, 4, 7].map((d) => d * day);
+
 function makeCard(term, def, pos = "") {
   return {
     id: crypto.randomUUID(),
@@ -79,6 +88,7 @@ const store = {
 
 let state = store.read();
 let currentDeckId = state.decks[0].id;
+
 // ---------- UI Elements
 const deckSelect = $("#deckSelect");
 const newDeckBtn = $("#newDeckBtn");
@@ -209,6 +219,7 @@ function escapeHtml(s) {
       ])
   );
 }
+
 // ---------- Study logic
 let studyQueue = [];
 let currentCard = null;
@@ -254,6 +265,7 @@ function updateCardUI() {
 
   flashcardEl.classList.toggle("show", showingBack);
 }
+
 function mark(quality) {
   // "again" | "good"
   if (!currentCard) return;
@@ -274,6 +286,7 @@ function mark(quality) {
   formatStats(deck);
   nextCard();
 }
+
 // ---------- Quiz logic
 let quizPool = [];
 let quizIndex = 0;
@@ -426,6 +439,7 @@ showAnswerBtn.addEventListener("click", () => {
 againBtn.addEventListener("click", () => mark("again"));
 goodBtn.addEventListener("click", () => mark("good"));
 skipBtn.addEventListener("click", () => nextCard());
+
 // Keyboard shortcuts
 document.addEventListener("keydown", (e) => {
   if (!$("#tab-study").classList.contains("is-active")) return;
@@ -464,3 +478,35 @@ addForm.addEventListener("submit", (e) => {
   renderAll();
   tabs.find((b) => b.dataset.tab === "add").click(); // stay on tab
 });
+
+// Settings
+dailyNewInput.addEventListener("change", (e) => {
+  const v = Math.max(0, Math.min(100, parseInt(e.target.value || 0, 10)));
+  getDeck().settings.dailyNewLimit = v;
+  save();
+  renderAll();
+});
+quizChoicesInput.addEventListener("change", (e) => {
+  const v = Math.max(2, Math.min(6, parseInt(e.target.value || 4, 10)));
+  getDeck().settings.quizChoices = v;
+  save();
+});
+resetProgressBtn.addEventListener("click", () => {
+  if (!confirm("Reset progress (boxes & scheduling) for this deck?")) return;
+  const deck = getDeck();
+  deck.cards.forEach((c) => {
+    c.box = 0;
+    c.last = 0;
+    c.next = 0;
+  });
+  save();
+  renderAll();
+});
+
+// ---------- Boot
+(function boot() {
+  initDecks();
+  populateDeckSelect();
+  bindTabs();
+  renderAll();
+})();
