@@ -426,3 +426,41 @@ showAnswerBtn.addEventListener("click", () => {
 againBtn.addEventListener("click", () => mark("again"));
 goodBtn.addEventListener("click", () => mark("good"));
 skipBtn.addEventListener("click", () => nextCard());
+// Keyboard shortcuts
+document.addEventListener("keydown", (e) => {
+  if (!$("#tab-study").classList.contains("is-active")) return;
+  if (e.code === "Space") {
+    e.preventDefault();
+    showAnswerBtn.click();
+  }
+  if (e.key === "1") {
+    againBtn.click();
+  }
+  if (e.key === "2") {
+    goodBtn.click();
+  }
+  if (e.key === "ArrowRight") {
+    skipBtn.click();
+  }
+});
+
+// Quiz
+startQuizBtn.addEventListener("click", startQuiz);
+
+// Add words
+addForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const term = termInput.value.trim();
+  const def = defInput.value.trim();
+  const pos = posInput.value.trim();
+  if (!term || !def) return;
+
+  const deck = getDeck();
+  deck.cards.push(makeCard(term, def, pos));
+  termInput.value = "";
+  defInput.value = "";
+  posInput.value = "";
+  save();
+  renderAll();
+  tabs.find((b) => b.dataset.tab === "add").click(); // stay on tab
+});
