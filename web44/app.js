@@ -274,3 +274,66 @@ function mark(quality) {
   formatStats(deck);
   nextCard();
 }
+// ---------- Quiz logic
+let quizPool = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizSize = 10;
+
+function startQuiz() {
+  const deck = getDeck();
+  const all = deck.cards.slice();
+  if (all.length < 2) {
+    quizQuestion.textContent = "Add at least 2 words to take a quiz.";
+    quizOptions.innerHTML = "";
+    return;
+  }
+  quizSize = Math.min(10, all.length);
+  quizPool = shuffle(all).slice(0, quizSize);
+  quizIndex = 0;
+  quizScore = 0;
+  quizScoreEl.textContent = "";
+  renderQuizItem();
+}
+
+function renderQuizItem() {
+  const deck = getDeck();
+  const choicesN = Math.max(
+    2,
+    Math.min(6, deck.settings.quizChoices ?? DEFAULT_SETTINGS.quizChoices)
+  );
+  const card = quizPool[quizIndex];
+  if (!card) {
+    quizQuestion.textContent = `Done! Score: ${quizScore} / ${quizPool.length}`;
+    quizOptions.innerHTML = "";
+    quizScoreEl.textContent = "";
+    return;
+  }
+  quizQuestion.textContent = `What is “${card.term}”?`;
+  const distractors = shuffle(
+    getDeck().cards.filter((c) => c.id !== card.id)
+  ).slice(0, choicesN - 1);
+  const options = shuffle([card, ...distractors]);
+
+  quizOptions.innerHTML = "";
+  options.forEach((opt) => {
+    const btn = document.createElement("button");
+    btn.className = "btn";
+    btn.textContent = opt.def;
+    btn.onclick = () => {
+      const correct = opt.id === card.id;
+      if (correct) {
+        quizScore++;
+        btn.classList.add("btn-ok");
+      } else {
+        btn.classList.add("btn-warn");
+      }
+      quizScoreEl.textContent = `Score: ${quizScore} / ${quizIndex + 1}`;
+      setTimeout(() => {
+        quizIndex++;
+        renderQuizItem();
+      }, 450);
+    };
+    quizOptions.appendChild(btn);
+  });
+}
