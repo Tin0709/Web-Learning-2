@@ -79,3 +79,41 @@ const store = {
 
 let state = store.read();
 let currentDeckId = state.decks[0].id;
+// ---------- UI Elements
+const deckSelect = $("#deckSelect");
+const newDeckBtn = $("#newDeckBtn");
+const dueCount = $("#dueCount");
+const learnedCount = $("#learnedCount");
+const totalCount = $("#totalCount");
+const progressBar = $("#progressBar");
+
+const tabs = $$(".tab");
+const panels = $$(".tab-panel");
+
+const flashcardEl = $("#flashcard");
+const frontEl = $(".front", flashcardEl);
+const backEl = $(".back", flashcardEl);
+const showAnswerBtn = $("#showAnswerBtn");
+const reviewControls = $("#reviewControls");
+const againBtn = $("#againBtn");
+const goodBtn = $("#goodBtn");
+const skipBtn = $("#skipBtn");
+
+const quizQuestion = $("#quizQuestion");
+const quizOptions = $("#quizOptions");
+const startQuizBtn = $("#startQuizBtn");
+const quizScoreEl = $("#quizScore");
+
+const addForm = $("#addForm");
+const termInput = $("#termInput");
+const defInput = $("#defInput");
+const posInput = $("#posInput");
+const wordsTable = $("#wordsTable");
+
+const dailyNewInput = $("#dailyNewInput");
+const quizChoicesInput = $("#quizChoicesInput");
+const resetProgressBtn = $("#resetProgressBtn");
+
+const deckModal = $("#deckModal");
+const newDeckName = $("#newDeckName");
+const createDeckConfirm = $("#createDeckConfirm");
