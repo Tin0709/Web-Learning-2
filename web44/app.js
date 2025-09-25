@@ -36,3 +36,46 @@ const DEFAULT_DECKS = [
 
 // Leitner intervals per box index:
 const INTERVALS = [0, 1, 2, 4, 7].map((d) => d * day);
+function makeCard(term, def, pos = "") {
+  return {
+    id: crypto.randomUUID(),
+    term,
+    def,
+    pos,
+    box: 0,
+    createdAt: now(),
+    last: 0,
+    next: 0,
+  };
+}
+
+const store = {
+  key: "langlearn_v1",
+  read() {
+    try {
+      const raw = localStorage.getItem(this.key);
+      if (!raw) return { decks: DEFAULT_DECKS };
+      const data = JSON.parse(raw);
+      // Basic migrations / defaults
+      data.decks.forEach((d) => {
+        d.settings = { ...DEFAULT_SETTINGS, ...(d.settings || {}) };
+        d.cards.forEach((c) => {
+          c.box ??= 0;
+          c.last ??= 0;
+          c.next ??= 0;
+          c.pos ??= "";
+        });
+      });
+      return data;
+    } catch (e) {
+      console.warn("Failed to parse storage; resetting.", e);
+      return { decks: DEFAULT_DECKS };
+    }
+  },
+  write(data) {
+    localStorage.setItem(this.key, JSON.stringify(data));
+  },
+};
+
+let state = store.read();
+let currentDeckId = state.decks[0].id;
