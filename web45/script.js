@@ -16,6 +16,7 @@ const THEME_KEY = "sleek-chat:theme";
   if (saved === "light")
     document.documentElement.setAttribute("data-theme", "light");
 })();
+
 // Autosize textarea
 function autoGrow(el) {
   el.style.height = "auto";
@@ -51,6 +52,7 @@ function loadMessages() {
     console.warn("Failed to parse saved messages", e);
   }
 }
+
 // Add message DOM
 function addMessage(role, text, timeStr = null, save = true) {
   const tpl = document.getElementById("msg-template");
@@ -82,6 +84,7 @@ function formatTime(d) {
 function scrollToBottom() {
   messagesEl.scrollTop = messagesEl.scrollHeight + 1000;
 }
+
 // Bot logic
 function botReply(userText) {
   const t = userText.trim().toLowerCase();
@@ -153,6 +156,7 @@ function sendMessage() {
     showTyping(false);
   }, Math.min(1200 + Math.random() * 800, 2200));
 }
+
 // Keybindings
 inputEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey) {
@@ -180,4 +184,11 @@ clearChatBtn.addEventListener("click", () => {
   localStorage.removeItem(MSGS_KEY);
   messagesEl.innerHTML = "";
   addMessage("bot", "Chat cleared. Fresh start! ✨");
+});
+
+// Init
+window.addEventListener("DOMContentLoaded", () => {
+  loadMessages();
+  autoGrow(inputEl);
+  scrollToBottom();
 });
