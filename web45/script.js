@@ -153,3 +153,31 @@ function sendMessage() {
     showTyping(false);
   }, Math.min(1200 + Math.random() * 800, 2200));
 }
+// Keybindings
+inputEl.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+sendBtn.addEventListener("click", sendMessage);
+
+// Theme toggle
+themeToggle.addEventListener("click", () => {
+  const isLight =
+    document.documentElement.getAttribute("data-theme") === "light";
+  document.documentElement.setAttribute(
+    "data-theme",
+    isLight ? "dark" : "light"
+  );
+  localStorage.setItem(THEME_KEY, isLight ? "dark" : "light");
+});
+
+// Clear chat
+clearChatBtn.addEventListener("click", () => {
+  if (!confirm("Clear all messages?")) return;
+  localStorage.removeItem(MSGS_KEY);
+  messagesEl.innerHTML = "";
+  addMessage("bot", "Chat cleared. Fresh start! ✨");
+});
