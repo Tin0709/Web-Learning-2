@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleek Chat</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app__header">
+        <div class="chat__meta">
+          <div class="chat__avatar">🤖</div>
+          <div>
+            <h1 class="chat__title">Sleek Chat</h1>
+            <p class="chat__subtitle">You • Bot</p>
+          </div>
+        </div>
+        <div class="header__actions">
+          <button
+            id="themeToggle"
+            class="icon-btn"
+            title="Toggle theme"
+            aria-label="Toggle theme"
+          >
+            🌓
+          </button>
+          <button
+            id="clearChat"
+            class="icon-btn danger"
+            title="Clear chat"
+            aria-label="Clear chat"
+          >
+            🗑️
+          </button>
+        </div>
+      </header>
+
+      <main
+        id="messages"
+        class="app__messages"
+        aria-live="polite"
+        aria-label="Chat messages"
+      ></main>
+
+      <div id="typing" class="typing hidden" aria-hidden="true">
+        <span class="dot"></span><span class="dot"></span
+        ><span class="dot"></span>
+        <span class="typing__text">Bot is typing…</span>
+      </div>
+
+      <footer class="app__inputbar">
+        <textarea
+          id="input"
+          class="input"
+          rows="1"
+          placeholder="Type a message… (Enter to send, Shift+Enter for newline)"
+          aria-label="Type a message"
+        ></textarea>
+        <button id="sendBtn" class="send-btn" aria-label="Send message">
+          Send ➤
+        </button>
+      </footer>
+    </div>
+
+    <template id="msg-template">
+      <div class="msg">
+        <div class="msg__avatar"></div>
+        <div class="msg__bubble">
+          <div class="msg__text"></div>
+          <div class="msg__time"></div>
+        </div>
+      </div>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>
