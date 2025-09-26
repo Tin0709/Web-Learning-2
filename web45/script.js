@@ -51,3 +51,34 @@ function loadMessages() {
     console.warn("Failed to parse saved messages", e);
   }
 }
+// Add message DOM
+function addMessage(role, text, timeStr = null, save = true) {
+  const tpl = document.getElementById("msg-template");
+  const node = tpl.content.firstElementChild.cloneNode(true);
+  node.classList.add(role);
+  node.classList.add(role === "me" ? "me" : "bot");
+
+  const avatar = node.querySelector(".msg__avatar");
+  avatar.textContent = role === "me" ? "🧑" : "🤖";
+
+  node.querySelector(".msg__text").textContent = text;
+  node.querySelector(".msg__time").textContent =
+    timeStr || formatTime(new Date());
+
+  messagesEl.appendChild(node);
+  scrollToBottom();
+  if (save) saveMessages();
+}
+
+// Utilities
+function formatTime(d) {
+  // HH:MM • dd Mon
+  const h = d.getHours().toString().padStart(2, "0");
+  const m = d.getMinutes().toString().padStart(2, "0");
+  const day = d.getDate().toString().padStart(2, "0");
+  const mon = d.toLocaleString(undefined, { month: "short" });
+  return `${h}:${m} • ${day} ${mon}`;
+}
+function scrollToBottom() {
+  messagesEl.scrollTop = messagesEl.scrollHeight + 1000;
+}
