@@ -82,3 +82,74 @@ function formatTime(d) {
 function scrollToBottom() {
   messagesEl.scrollTop = messagesEl.scrollHeight + 1000;
 }
+// Bot logic
+function botReply(userText) {
+  const t = userText.trim().toLowerCase();
+
+  // simple intents
+  const now = new Date();
+  if (/^hi$|^hey$|^hello$|howdy|yo/.test(t)) {
+    return "Hello! How can I help today?";
+  }
+  if (/(what'?s|what is) the time|current time|tell me the time/.test(t)) {
+    return `It's ${now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}.`;
+  }
+  if (/date|day.*today/.test(t)) {
+    return `Today is ${now.toLocaleDateString([], {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })}.`;
+  }
+  if (/joke|make me laugh|funny/.test(t)) {
+    const jokes = [
+      "Why did the developer go broke? Because they used up all their cache.",
+      "I told my computer I needed a break, and it said 'No problem — I’ll go to sleep.'",
+      "There are 10 kinds of people: those who understand binary and those who don’t.",
+    ];
+    return jokes[Math.floor(Math.random() * jokes.length)];
+  }
+  if (/help|what can you do|\?/.test(t)) {
+    return "Try: 'time', 'date', 'tell a joke', or just chat with me. I also echo your message!";
+  }
+
+  // default echo
+  const caps =
+    userText.length > 120 ? userText.slice(0, 117) + "..." : userText;
+  return `You said: “${caps}”`;
+}
+
+// Typing indicator controls
+let typingTimer = null;
+function showTyping(show) {
+  if (show) {
+    typingEl.classList.remove("hidden");
+    typingEl.setAttribute("aria-hidden", "false");
+  } else {
+    typingEl.classList.add("hidden");
+    typingEl.setAttribute("aria-hidden", "true");
+  }
+}
+
+// Send handling
+function sendMessage() {
+  const text = inputEl.value.trim();
+  if (!text) return;
+
+  addMessage("me", text);
+  inputEl.value = "";
+  autoGrow(inputEl);
+
+  // Simulate bot typing
+  showTyping(true);
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(() => {
+    const reply = botReply(text);
+    addMessage("bot", reply);
+    showTyping(false);
+  }, Math.min(1200 + Math.random() * 800, 2200));
+}
