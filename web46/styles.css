@@ -1,0 +1,28 @@
+:root {
+  --bg: #0b0e14;
+  --card: #121826;
+  --muted: #9aa4b2;
+  --text: #e6edf3;
+  --accent: #4f8cff;
+  --accent-2: #ffd166;
+  --chip: #1f2937;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: radial-gradient(
+      1000px 600px at 10% -10%,
+      #142034,
+      transparent 60%
+    ),
+    var(--bg);
+  color: var(--text);
+  font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
