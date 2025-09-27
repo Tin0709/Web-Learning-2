@@ -145,3 +145,119 @@ body {
   border-radius: 10px;
   font-weight: 600;
 }
+.icon-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.icon-btn[data-active="true"] {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+}
+
+.pagination {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.pagination button {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+#pageInfo {
+  color: var(--muted);
+}
+
+.footer {
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+}
+
+dialog {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0)
+    ),
+    var(--card);
+  color: var(--text);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  width: min(900px, 92vw);
+  max-height: 85vh;
+  overflow: auto;
+  padding: 0;
+}
+dialog::backdrop {
+  background: rgba(3, 6, 12, 0.6);
+  backdrop-filter: blur(2px);
+}
+.close {
+  position: sticky;
+  top: 10px;
+  left: calc(100% - 44px);
+  z-index: 2;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 6px 9px;
+  cursor: pointer;
+  margin: 10px;
+}
+#modalContent {
+  padding: 18px;
+}
+.details {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 180px 1fr;
+}
+.details .poster {
+  border-radius: 12px;
+  overflow: hidden;
+}
+.overview {
+  color: #cfd6df;
+}
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+.trailer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-weight: 700;
+}
+.trailer:hover {
+  text-decoration: underline;
+}
+.info-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.stat {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 10px 12px;
+  border-radius: 10px;
+}
