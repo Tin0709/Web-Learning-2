@@ -77,3 +77,71 @@ body {
   color: var(--text);
   border-color: var(--text);
 }
+.grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  padding: 18px;
+}
+
+.card {
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0)
+    ),
+    var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.poster {
+  aspect-ratio: 2/3;
+  width: 100%;
+  background: #0f172a;
+  object-fit: cover;
+  display: block;
+}
+.card-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  margin: 0;
+}
+.meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 0.83rem;
+}
+.tag {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+}
+.btn {
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  cursor: pointer;
+  background: var(--accent);
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+}
