@@ -159,3 +159,11 @@ function render(items) {
     });
   });
 }
+/* ---------- Pagination ---------- */
+function setPagination(page, total) {
+  state.page = page;
+  state.totalPages = total;
+  pageInfoEl.textContent = `Page ${page} of ${Math.min(total, 500)}`;
+  prevBtn.disabled = page <= 1;
+  nextBtn.disabled = page >= total || page >= 500; // TMDB caps at 500
+}
