@@ -205,3 +205,61 @@ async function loadDiscover(page = 1) {
   render(state.items);
   setPagination(data.page, data.total_pages);
 }
+/* ---------- Details modal ---------- */
+async function openDetails(id, mediaType) {
+  const type = mediaType === "tv" ? "tv" : "movie";
+  const data = await getJSON(
+    withKey(`/${type}/${id}`, {
+      append_to_response: "videos,credits",
+    })
+  );
+
+  const title = mediaTitle(data);
+  const year = datePart(data);
+  const rating = data.vote_average ? data.vote_average.toFixed(1) : "—";
+  const genres = (data.genres || [])
+    .map((g) => `<span class="tag">${g.name}</span>`)
+    .join("");
+  const trailer = (data.videos?.results || []).find(
+    (v) => v.type === "Trailer" && v.site === "YouTube"
+  );
+  const runtime =
+    type === "movie"
+      ? formatRuntime(data.runtime)
+      : data.episode_run_time && data.episode_run_time[0]
+      ? `${data.episode_run_time[0]}m (per ep)`
+      : "—";
+  const cast = (data.credits?.cast || [])
+    .slice(0, 6)
+    .map((c) => c.name)
+    .join(", ");
+
+  modalContent.innerHTML = `
+      <div class="details">
+        <img class="poster" src="${posterUrl(
+          data.poster_path
+        )}" alt="${title} poster" />
+        <div>
+          <h2 style="margin:0 0 6px 0">${title} ${year ? `(${year})` : ""}</h2>
+          <div class="chips">${genres}</div>
+          <p class="overview">${data.overview || "No overview available."}</p>
+          <div class="info-grid">
+            <div class="stat"><strong>Type:</strong> ${type.toUpperCase()}</div>
+            <div class="stat"><strong>Rating:</strong> ★ ${rating}</div>
+            <div class="stat"><strong>Runtime:</strong> ${runtime}</div>
+            ${
+              cast
+                ? `<div class="stat"><strong>Cast:</strong> ${cast}</div>`
+                : ""
+            }
+          </div>
+          ${
+            trailer
+              ? `<p><a class="trailer" href="https://www.youtube.com/watch?v=${trailer.key}" target="_blank" rel="noreferrer">▶ Watch Trailer</a></p>`
+              : ""
+          }
+        </div>
+      </div>
+    `;
+  if (!detailsModal.open) detailsModal.showModal();
+}
