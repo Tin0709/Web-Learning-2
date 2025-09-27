@@ -44,3 +44,32 @@ let state = {
 };
 
 const WATCHLIST_KEY = "tmdb_watchlist_v1";
+/* ---------- Utilities ---------- */
+function withKey(url, params = {}) {
+  const usp = new URLSearchParams({ api_key: TMDB_API_KEY, ...params });
+  return `${BASE}${url}?${usp.toString()}`;
+}
+async function getJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Network error");
+  return res.json();
+}
+const debounce = (fn, ms = 400) => {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), ms);
+  };
+};
+const mediaTitle = (it) =>
+  it.title || it.name || it.original_title || it.original_name || "Untitled";
+const datePart = (it) =>
+  (it.release_date || it.first_air_date || "").slice(0, 4);
+const posterUrl = (path) => (path ? `${IMG}${path}` : PLACEHOLDER);
+
+function formatRuntime(mins) {
+  if (!mins) return "—";
+  const h = Math.floor(mins / 60),
+    m = mins % 60;
+  return `${h}h ${m}m`;
+}
