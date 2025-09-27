@@ -107,3 +107,55 @@ function toggleWatchlist(item) {
     });
   saveWatchlist(list);
 }
+
+/* ---------- Render cards ---------- */
+function render(items) {
+  resultsEl.innerHTML = items
+    .map((it) => {
+      const title = mediaTitle(it);
+      const year = datePart(it);
+      const rating = it.vote_average ? it.vote_average.toFixed(1) : "—";
+      const mt = it.media_type || state.type;
+      const wlActive = inWatchlist(it);
+
+      return `
+        <article class="card" data-id="${it.id}" data-type="${mt}">
+          <img class="poster" src="${posterUrl(
+            it.poster_path
+          )}" alt="${title} poster" loading="lazy" />
+          <div class="card-body">
+            <h3 class="title" title="${title}">${title}</h3>
+            <div class="meta">
+              <span class="tag">${mt.toUpperCase()}</span>
+              <span>${year || ""}</span>
+              <span>★ ${rating}</span>
+            </div>
+            <div class="actions">
+              <button class="icon-btn watch-btn" data-active="${wlActive}" title="Toggle watchlist">⭐</button>
+              <button class="btn details-btn">Details</button>
+            </div>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+
+  // wire up buttons
+  resultsEl.querySelectorAll(".details-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const card = e.target.closest(".card");
+      openDetails(+card.dataset.id, card.dataset.type);
+    });
+  });
+  resultsEl.querySelectorAll(".watch-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const card = e.target.closest(".card");
+      const item = state.items.find((x) => x.id === +card.dataset.id);
+      toggleWatchlist({ ...item, media_type: card.dataset.type });
+      btn.setAttribute(
+        "data-active",
+        btn.getAttribute("data-active") !== "true"
+      );
+    });
+  });
+}
