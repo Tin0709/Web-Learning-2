@@ -73,3 +73,37 @@ function formatRuntime(mins) {
     m = mins % 60;
   return `${h}h ${m}m`;
 }
+
+/* ---------- Watchlist ---------- */
+function getWatchlist() {
+  try {
+    return JSON.parse(localStorage.getItem(WATCHLIST_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+function saveWatchlist(list) {
+  localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list));
+}
+function inWatchlist(item) {
+  const list = getWatchlist();
+  return list.some(
+    (x) => x.id === item.id && x.media_type === (item.media_type || state.type)
+  );
+}
+function toggleWatchlist(item) {
+  const media_type = item.media_type || state.type;
+  let list = getWatchlist();
+  const idx = list.findIndex(
+    (x) => x.id === item.id && x.media_type === media_type
+  );
+  if (idx >= 0) list.splice(idx, 1);
+  else
+    list.unshift({
+      id: item.id,
+      title: mediaTitle(item),
+      poster_path: item.poster_path,
+      media_type,
+    });
+  saveWatchlist(list);
+}
