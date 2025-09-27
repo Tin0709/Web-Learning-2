@@ -310,3 +310,88 @@ function openWatchlist() {
 
   if (!watchlistModal.open) watchlistModal.showModal();
 }
+/* ---------- Events ---------- */
+prevBtn.addEventListener("click", () => {
+  if (state.page > 1) {
+    const p = state.page - 1;
+    if (state.mode === "trending") loadTrending(p);
+    else if (state.mode === "search") loadSearch(state.query, p);
+    else loadDiscover(p);
+  }
+});
+nextBtn.addEventListener("click", () => {
+  if (state.page < state.totalPages && state.page < 500) {
+    const p = state.page + 1;
+    if (state.mode === "trending") loadTrending(p);
+    else if (state.mode === "search") loadSearch(state.query, p);
+    else loadDiscover(p);
+  }
+});
+
+searchInput.addEventListener(
+  "input",
+  debounce(() => {
+    const q = searchInput.value.trim();
+    state.query = q;
+    if (q.length === 0) {
+      // If empty, show discover/trending again
+      if (state.type === "multi") loadTrending(1);
+      else loadDiscover(1);
+    } else {
+      loadSearch(q, 1);
+    }
+  }, 400)
+);
+
+typeSelect.addEventListener("change", () => {
+  state.type = typeSelect.value;
+  // Adjust default sort for TV vs Movie
+  if (state.type === "tv" && sortSelect.value === "primary_release_date.desc") {
+    sortSelect.value = "first_air_date.desc";
+  }
+  if (state.type === "movie" && sortSelect.value === "first_air_date.desc") {
+    sortSelect.value = "primary_release_date.desc";
+  }
+  if (state.query) loadSearch(state.query, 1);
+  else loadDiscover(1);
+});
+
+sortSelect.addEventListener("change", () => {
+  state.sort = sortSelect.value;
+  if (state.query) loadSearch(state.query, 1);
+  else loadDiscover(1);
+});
+
+yearInput.addEventListener("change", () => {
+  const y = yearInput.value.trim();
+  state.year = y;
+  if (state.query) loadSearch(state.query, 1);
+  else loadDiscover(1);
+});
+
+clearBtn.addEventListener("click", () => {
+  searchInput.value = "";
+  state.query = "";
+  yearInput.value = "";
+  state.year = "";
+  sortSelect.value = "popularity.desc";
+  if (state.type === "multi") loadTrending(1);
+  else loadDiscover(1);
+});
+
+watchlistBtn.addEventListener("click", openWatchlist);
+closeWatchlistBtn.addEventListener("click", () => watchlistModal.close());
+
+closeModalBtn.addEventListener("click", () => detailsModal.close());
+detailsModal.addEventListener("click", (e) => {
+  // click outside content closes dialog
+  const rect = detailsModal.getBoundingClientRect();
+  if (
+    e.clientX < rect.left ||
+    e.clientX > rect.right ||
+    e.clientY < rect.top ||
+    e.clientY > rect.bottom
+  ) {
+    detailsModal.close();
+  }
+});
