@@ -263,3 +263,50 @@ async function openDetails(id, mediaType) {
     `;
   if (!detailsModal.open) detailsModal.showModal();
 }
+
+/* ---------- Watchlist modal ---------- */
+function openWatchlist() {
+  const list = getWatchlist();
+  watchlistGrid.innerHTML = list.length
+    ? list
+        .map(
+          (it) => `
+          <article class="card" data-id="${it.id}" data-type="${it.media_type}">
+            <img class="poster" src="${posterUrl(it.poster_path)}" alt="${
+            it.title
+          } poster" />
+            <div class="card-body">
+              <h3 class="title">${it.title}</h3>
+              <div class="actions">
+                <button class="icon-btn remove-btn" title="Remove">🗑</button>
+                <button class="btn open-btn">Details</button>
+              </div>
+            </div>
+          </article>
+        `
+        )
+        .join("")
+    : `<p style="color:#cfd6df; padding:0 18px 18px">Your watchlist is empty. Add items with the ⭐ button.</p>`;
+
+  watchlistGrid.querySelectorAll(".remove-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const card = e.target.closest(".card");
+      const id = +card.dataset.id,
+        media_type = card.dataset.type;
+      const listNow = getWatchlist().filter(
+        (x) => !(x.id === id && x.media_type === media_type)
+      );
+      saveWatchlist(listNow);
+      openWatchlist(); // re-render
+    });
+  });
+  watchlistGrid.querySelectorAll(".open-btn").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      const card = e.target.closest(".card");
+      await openDetails(+card.dataset.id, card.dataset.type);
+      watchlistModal.close();
+    });
+  });
+
+  if (!watchlistModal.open) watchlistModal.showModal();
+}
