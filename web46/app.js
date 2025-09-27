@@ -14,6 +14,7 @@ const PLACEHOLDER =
   encodeURIComponent(
     `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='600'><rect width='100%' height='100%' fill='#0f172a'/><text x='50%' y='50%' fill='#9aa4b2' font-size='20' font-family='sans-serif' text-anchor='middle'>No Image</text></svg>`
   );
+
 const qs = (s) => document.querySelector(s);
 const resultsEl = qs("#results");
 const pageInfoEl = qs("#pageInfo");
@@ -44,6 +45,7 @@ let state = {
 };
 
 const WATCHLIST_KEY = "tmdb_watchlist_v1";
+
 /* ---------- Utilities ---------- */
 function withKey(url, params = {}) {
   const usp = new URLSearchParams({ api_key: TMDB_API_KEY, ...params });
@@ -119,24 +121,24 @@ function render(items) {
       const wlActive = inWatchlist(it);
 
       return `
-        <article class="card" data-id="${it.id}" data-type="${mt}">
-          <img class="poster" src="${posterUrl(
-            it.poster_path
-          )}" alt="${title} poster" loading="lazy" />
-          <div class="card-body">
-            <h3 class="title" title="${title}">${title}</h3>
-            <div class="meta">
-              <span class="tag">${mt.toUpperCase()}</span>
-              <span>${year || ""}</span>
-              <span>★ ${rating}</span>
-            </div>
-            <div class="actions">
-              <button class="icon-btn watch-btn" data-active="${wlActive}" title="Toggle watchlist">⭐</button>
-              <button class="btn details-btn">Details</button>
-            </div>
+      <article class="card" data-id="${it.id}" data-type="${mt}">
+        <img class="poster" src="${posterUrl(
+          it.poster_path
+        )}" alt="${title} poster" loading="lazy" />
+        <div class="card-body">
+          <h3 class="title" title="${title}">${title}</h3>
+          <div class="meta">
+            <span class="tag">${mt.toUpperCase()}</span>
+            <span>${year || ""}</span>
+            <span>★ ${rating}</span>
           </div>
-        </article>
-      `;
+          <div class="actions">
+            <button class="icon-btn watch-btn" data-active="${wlActive}" title="Toggle watchlist">⭐</button>
+            <button class="btn details-btn">Details</button>
+          </div>
+        </div>
+      </article>
+    `;
     })
     .join("");
 
@@ -159,6 +161,7 @@ function render(items) {
     });
   });
 }
+
 /* ---------- Pagination ---------- */
 function setPagination(page, total) {
   state.page = page;
@@ -205,6 +208,7 @@ async function loadDiscover(page = 1) {
   render(state.items);
   setPagination(data.page, data.total_pages);
 }
+
 /* ---------- Details modal ---------- */
 async function openDetails(id, mediaType) {
   const type = mediaType === "tv" ? "tv" : "movie";
@@ -235,32 +239,30 @@ async function openDetails(id, mediaType) {
     .join(", ");
 
   modalContent.innerHTML = `
-      <div class="details">
-        <img class="poster" src="${posterUrl(
-          data.poster_path
-        )}" alt="${title} poster" />
-        <div>
-          <h2 style="margin:0 0 6px 0">${title} ${year ? `(${year})` : ""}</h2>
-          <div class="chips">${genres}</div>
-          <p class="overview">${data.overview || "No overview available."}</p>
-          <div class="info-grid">
-            <div class="stat"><strong>Type:</strong> ${type.toUpperCase()}</div>
-            <div class="stat"><strong>Rating:</strong> ★ ${rating}</div>
-            <div class="stat"><strong>Runtime:</strong> ${runtime}</div>
-            ${
-              cast
-                ? `<div class="stat"><strong>Cast:</strong> ${cast}</div>`
-                : ""
-            }
-          </div>
+    <div class="details">
+      <img class="poster" src="${posterUrl(
+        data.poster_path
+      )}" alt="${title} poster" />
+      <div>
+        <h2 style="margin:0 0 6px 0">${title} ${year ? `(${year})` : ""}</h2>
+        <div class="chips">${genres}</div>
+        <p class="overview">${data.overview || "No overview available."}</p>
+        <div class="info-grid">
+          <div class="stat"><strong>Type:</strong> ${type.toUpperCase()}</div>
+          <div class="stat"><strong>Rating:</strong> ★ ${rating}</div>
+          <div class="stat"><strong>Runtime:</strong> ${runtime}</div>
           ${
-            trailer
-              ? `<p><a class="trailer" href="https://www.youtube.com/watch?v=${trailer.key}" target="_blank" rel="noreferrer">▶ Watch Trailer</a></p>`
-              : ""
+            cast ? `<div class="stat"><strong>Cast:</strong> ${cast}</div>` : ""
           }
         </div>
+        ${
+          trailer
+            ? `<p><a class="trailer" href="https://www.youtube.com/watch?v=${trailer.key}" target="_blank" rel="noreferrer">▶ Watch Trailer</a></p>`
+            : ""
+        }
       </div>
-    `;
+    </div>
+  `;
   if (!detailsModal.open) detailsModal.showModal();
 }
 
@@ -271,19 +273,19 @@ function openWatchlist() {
     ? list
         .map(
           (it) => `
-          <article class="card" data-id="${it.id}" data-type="${it.media_type}">
-            <img class="poster" src="${posterUrl(it.poster_path)}" alt="${
+        <article class="card" data-id="${it.id}" data-type="${it.media_type}">
+          <img class="poster" src="${posterUrl(it.poster_path)}" alt="${
             it.title
           } poster" />
-            <div class="card-body">
-              <h3 class="title">${it.title}</h3>
-              <div class="actions">
-                <button class="icon-btn remove-btn" title="Remove">🗑</button>
-                <button class="btn open-btn">Details</button>
-              </div>
+          <div class="card-body">
+            <h3 class="title">${it.title}</h3>
+            <div class="actions">
+              <button class="icon-btn remove-btn" title="Remove">🗑</button>
+              <button class="btn open-btn">Details</button>
             </div>
-          </article>
-        `
+          </div>
+        </article>
+      `
         )
         .join("")
     : `<p style="color:#cfd6df; padding:0 18px 18px">Your watchlist is empty. Add items with the ⭐ button.</p>`;
@@ -310,6 +312,7 @@ function openWatchlist() {
 
   if (!watchlistModal.open) watchlistModal.showModal();
 }
+
 /* ---------- Events ---------- */
 prevBtn.addEventListener("click", () => {
   if (state.page > 1) {
@@ -395,3 +398,14 @@ detailsModal.addEventListener("click", (e) => {
     detailsModal.close();
   }
 });
+
+/* ---------- Init ---------- */
+(function init() {
+  if (!TMDB_API_KEY || TMDB_API_KEY === "YOUR_TMDB_API_KEY_HERE") {
+    alert("Please set your TMDB API Key in app.js (TMDB_API_KEY).");
+  }
+  loadTrending(1).catch((err) => {
+    console.error(err);
+    resultsEl.innerHTML = `<p style="padding:18px;color:#cfd6df">Could not load data. Check your API key or network.</p>`;
+  });
+})();
