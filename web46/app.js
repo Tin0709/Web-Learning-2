@@ -167,3 +167,41 @@ function setPagination(page, total) {
   prevBtn.disabled = page <= 1;
   nextBtn.disabled = page >= total || page >= 500; // TMDB caps at 500
 }
+
+/* ---------- Fetch flows ---------- */
+async function loadTrending(page = 1) {
+  state.mode = "trending";
+  const url = withKey(`/trending/all/day`, { page });
+  const data = await getJSON(url);
+  state.items = data.results || [];
+  render(state.items);
+  setPagination(data.page, data.total_pages);
+}
+
+async function loadSearch(query, page = 1) {
+  state.mode = "search";
+  const type = state.type;
+  const endpoint = type === "multi" ? "/search/multi" : `/search/${type}`;
+  const params = { query, page, include_adult: false };
+  const data = await getJSON(withKey(endpoint, params));
+  const filtered = (data.results || []).filter(
+    (r) => r.media_type !== "person"
+  );
+  state.items = filtered;
+  render(state.items);
+  setPagination(data.page, data.total_pages);
+}
+
+async function loadDiscover(page = 1) {
+  state.mode = "discover";
+  const type = state.type === "multi" ? "movie" : state.type; // TMDB needs a concrete type
+  const params = { page, sort_by: state.sort };
+  if (state.year) {
+    if (type === "movie") params.primary_release_year = state.year;
+    if (type === "tv") params.first_air_date_year = state.year;
+  }
+  const data = await getJSON(withKey(`/discover/${type}`, params));
+  state.items = data.results.map((r) => ({ ...r, media_type: type }));
+  render(state.items);
+  setPagination(data.page, data.total_pages);
+}
