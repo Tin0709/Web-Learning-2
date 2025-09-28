@@ -257,3 +257,76 @@ function renderAll() {
   // Breakdown
   renderBreakdown(rows);
 }
+
+function renderTable(rows) {
+  txTbody.innerHTML = "";
+  if (rows.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="6" style="text-align:center; color: var(--muted); padding:18px;">No transactions found.</td>`;
+    txTbody.appendChild(tr);
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  for (const r of rows) {
+    const tr = document.createElement("tr");
+
+    const typeBadge = `<span class="badge ${r.type}">${
+      r.type === "income" ? "Income" : "Expense"
+    }</span>`;
+    tr.innerHTML = `
+      <td>${r.date}</td>
+      <td>${typeBadge}</td>
+      <td>${escapeHtml(r.category)}</td>
+      <td>${escapeHtml(r.description || "")}</td>
+      <td class="num">${fmtMoney(r.amount)}</td>
+      <td class="row-actions">
+        <button class="btn" data-edit="${r.id}">Edit</button>
+        <button class="btn danger" data-del="${r.id}">Delete</button>
+      </td>
+    `;
+    frag.appendChild(tr);
+  }
+  txTbody.appendChild(frag);
+
+  // Hook up row buttons
+  $$("#txTbody [data-edit]").forEach((btn) =>
+    btn.addEventListener("click", () => editTx(btn.dataset.edit))
+  );
+  $$("#txTbody [data-del]").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.del;
+      const t = transactions.find((x) => x.id === id);
+      if (
+        t &&
+        confirm(
+          `Delete "${t.category}${
+            t.description ? " — " + t.description : ""
+          }" for ${fmtMoney(t.amount)}?`
+        )
+      ) {
+        removeTx(id);
+      }
+    })
+  );
+}
+
+function updateCategoryOptions(data) {
+  const cats = Array.from(
+    new Set(data.map((x) => x.category.trim()).filter(Boolean))
+  ).sort((a, b) => a.localeCompare(b));
+  // datalist for input suggestions
+  datalist.innerHTML = cats
+    .map((c) => `<option value="${escapeHtml(c)}"></option>`)
+    .join("");
+  // filter select
+  const current = filterCategoryEl.value;
+  filterCategoryEl.innerHTML =
+    `<option value="">All</option>` +
+    cats
+      .map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`)
+      .join("");
+  // try to keep selection if it still exists
+  if ([...filterCategoryEl.options].some((o) => o.value === current))
+    filterCategoryEl.value = current;
+}
