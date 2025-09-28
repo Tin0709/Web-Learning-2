@@ -330,3 +330,162 @@ function updateCategoryOptions(data) {
   if ([...filterCategoryEl.options].some((o) => o.value === current))
     filterCategoryEl.value = current;
 }
+
+function renderBreakdown(rows) {
+  breakdownEl.innerHTML = "";
+  // Only expenses count towards breakdown
+  const byCat = {};
+  for (const r of rows) {
+    if (r.type !== "expense") continue;
+    byCat[r.category] = (byCat[r.category] || 0) + r.amount;
+  }
+  const entries = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
+  const total = entries.reduce((s, [, v]) => s + v, 0);
+
+  if (entries.length === 0) {
+    breakdownEl.innerHTML = `<div style="color: var(--muted);">No expense data for current filter.</div>`;
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  for (const [cat, val] of entries) {
+    const pct = total > 0 ? (val / total) * 100 : 0;
+    const row = document.createElement("div");
+    row.className = "bar";
+    row.innerHTML = `
+      <div>${escapeHtml(cat)}</div>
+      <div class="track"><div class="fill" style="width:${pct.toFixed(
+        2
+      )}%"></div></div>
+      <div class="num">${fmtMoney(val)} (${pct.toFixed(1)}%)</div>
+    `;
+    frag.appendChild(row);
+  }
+  breakdownEl.appendChild(frag);
+}
+
+function exportCSV() {
+  const rows = applyFilters(transactions);
+  const headers = ["Date", "Type", "Category", "Description", "Amount"];
+  const lines = [headers.join(",")];
+
+  for (const r of rows) {
+    // Escape CSV fields (wrap in quotes; double quotes within fields)
+    const fields = [
+      r.date,
+      r.type,
+      r.category,
+      r.description || "",
+      r.amount,
+    ].map(csvEscape);
+    lines.push(fields.join(","));
+  }
+
+  const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `budget_${(filterMonthEl.value || "all").replace("-", "")}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function csvEscape(s) {
+  s = String(s ?? "");
+  if (/[",\n]/.test(s)) s = `"${s.replace(/"/g, '""')}"`;
+  return s;
+}
+
+function clearAllConfirm() {
+  if (transactions.length === 0) return;
+  if (
+    confirm(
+      "This will delete ALL transactions. This action cannot be undone.\n\nContinue?"
+    )
+  ) {
+    transactions = [];
+    save();
+    renderAll();
+  }
+}
+
+function escapeHtml(str = "") {
+  return str.replace(
+    /[&<>"']/g,
+    (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[
+        c
+      ])
+  );
+}
+
+// Seed example data on first run to show the UI
+(function seedIfEmpty() {
+  if (transactions.length) return;
+  const today = new Date();
+  const ym = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}`;
+  const prev = `${today.getFullYear()}-${String(today.getMonth()).padStart(
+    2,
+    "0"
+  )}`;
+
+  const sample = [
+    {
+      date: `${ym}-03`,
+      type: "income",
+      category: "Salary",
+      description: "Monthly salary",
+      amount: 2200,
+    },
+    {
+      date: `${ym}-05`,
+      type: "expense",
+      category: "Rent",
+      description: "Apartment",
+      amount: 800,
+    },
+    {
+      date: `${ym}-07`,
+      type: "expense",
+      category: "Groceries",
+      description: "Supermarket",
+      amount: 120.45,
+    },
+    {
+      date: `${ym}-09`,
+      type: "expense",
+      category: "Transport",
+      description: "Subway pass",
+      amount: 45,
+    },
+    {
+      date: `${ym}-12`,
+      type: "expense",
+      category: "Dining",
+      description: "Dinner out",
+      amount: 36.7,
+    },
+    {
+      date: `${prev}-28`,
+      type: "income",
+      category: "Freelance",
+      description: "Design work",
+      amount: 300,
+    },
+    {
+      date: `${prev}-25`,
+      type: "expense",
+      category: "Utilities",
+      description: "Electricity",
+      amount: 60.2,
+    },
+  ];
+  transactions = sample.map((t) => ({ id: String(Math.random()), ...t }));
+  save();
+  renderAll();
+})();
