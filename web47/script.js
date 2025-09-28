@@ -31,3 +31,50 @@ function guessCurrency() {
   }
 }
 const fmtMoney = (n) => currency.format(n);
+
+/** State */
+const STORAGE_KEY = "budget_planner_tx_v1";
+let transactions = load();
+let editId = null;
+
+/** DOM refs */
+const incomeTotalEl = $("#incomeTotal");
+const expenseTotalEl = $("#expenseTotal");
+const balanceTotalEl = $("#balanceTotal");
+
+const formTitleEl = $("#formTitle");
+const txForm = $("#txForm");
+const dateEl = $("#date");
+const typeEl = $("#type");
+const categoryEl = $("#category");
+const descEl = $("#description");
+const amountEl = $("#amount");
+const cancelEditBtn = $("#cancelEditBtn");
+
+const txTbody = $("#txTbody");
+const pageTotalEl = $("#pageTotal");
+
+const filterMonthEl = $("#filterMonth");
+const filterCategoryEl = $("#filterCategory");
+const filterTextEl = $("#filterText");
+const sortByEl = $("#sortBy");
+
+const datalist = $("#categoryList");
+const breakdownEl = $("#breakdown");
+
+const exportCsvBtn = $("#exportCsvBtn");
+const clearAllBtn = $("#clearAllBtn");
+
+/** Init */
+setDefaultDates();
+renderAll();
+
+/** Event Listeners */
+txForm.addEventListener("submit", handleSave);
+cancelEditBtn.addEventListener("click", cancelEdit);
+filterMonthEl.addEventListener("input", renderAll);
+filterCategoryEl.addEventListener("change", renderAll);
+filterTextEl.addEventListener("input", renderAll);
+sortByEl.addEventListener("change", renderAll);
+exportCsvBtn.addEventListener("click", exportCSV);
+clearAllBtn.addEventListener("click", clearAllConfirm);
