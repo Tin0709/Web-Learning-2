@@ -1,0 +1,30 @@
+:root {
+  --bg: #0f1220;
+  --panel: #161a2f;
+  --muted: #a8b3cf;
+  --text: #e7ecff;
+  --primary: #6c8cff;
+  --danger: #ff6b6b;
+  --success: #32d296;
+  --border: #23284a;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  color: var(--text);
+  background: radial-gradient(
+      1200px 700px at 80% -10%,
+      #1a1f41 0%,
+      rgba(26, 31, 65, 0) 70%
+    ),
+    var(--bg);
+}
