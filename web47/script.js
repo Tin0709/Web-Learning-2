@@ -78,3 +78,85 @@ filterTextEl.addEventListener("input", renderAll);
 sortByEl.addEventListener("change", renderAll);
 exportCsvBtn.addEventListener("click", exportCSV);
 clearAllBtn.addEventListener("click", clearAllConfirm);
+
+// ====== Functions ======
+
+function setDefaultDates() {
+  const today = new Date();
+  dateEl.value = toInputDate(today);
+  filterMonthEl.value = `${today.getFullYear()}-${String(
+    today.getMonth() + 1
+  ).padStart(2, "0")}`;
+}
+
+function toInputDate(d) {
+  if (!(d instanceof Date)) d = new Date(d);
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+}
+
+function handleSave(e) {
+  e.preventDefault();
+  const date = dateEl.value;
+  const type = typeEl.value;
+  const category = categoryEl.value.trim();
+  const description = (descEl.value || "").trim();
+  const amount = parseFloat(amountEl.value);
+
+  if (!date || !category || !isFinite(amount)) return;
+
+  if (editId) {
+    const idx = transactions.findIndex((t) => t.id === editId);
+    if (idx > -1) {
+      transactions[idx] = {
+        ...transactions[idx],
+        date,
+        type,
+        category,
+        description,
+        amount,
+      };
+    }
+    editId = null;
+    formTitleEl.textContent = "Add Transaction";
+    cancelEditBtn.hidden = true;
+  } else {
+    transactions.push({
+      id: crypto.randomUUID
+        ? crypto.randomUUID()
+        : String(Date.now() + Math.random()),
+      date,
+      type, // "income" or "expense"
+      category,
+      description,
+      amount,
+    });
+  }
+
+  save();
+  txForm.reset();
+  setDefaultDates();
+  renderAll();
+}
+
+function cancelEdit() {
+  editId = null;
+  txForm.reset();
+  setDefaultDates();
+  formTitleEl.textContent = "Add Transaction";
+  cancelEditBtn.hidden = true;
+}
