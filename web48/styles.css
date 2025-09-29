@@ -32,3 +32,67 @@ body {
     #0f1221 100%
   );
 }
+.app-header,
+.app-footer {
+  text-align: center;
+  padding: 24px 16px;
+}
+.app-header h1 {
+  margin: 0 0 6px;
+  font-size: 32px;
+}
+.app-header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 980px) {
+  .container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.panel {
+  background: linear-gradient(180deg, var(--panel), #13172a);
+  border: 1px solid var(--ring);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+h2 {
+  margin: 6px 0 14px;
+}
+.field {
+  margin-bottom: 16px;
+}
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--ring);
+  background: #0e1224;
+  color: var(--text);
+  outline: none;
+}
+input[type="range"] {
+  width: 100%;
+}
+small {
+  color: var(--muted);
+}
