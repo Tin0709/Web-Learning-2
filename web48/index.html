@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Story Builder</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>✨ Story Builder</h1>
+      <p>Create short, branching stories in seconds.</p>
+    </header>
+
+    <main class="container">
+      <section class="panel input-panel" aria-labelledby="builder-title">
+        <h2 id="builder-title">Build Your Story</h2>
+
+        <form id="story-form" autocomplete="off">
+          <!-- Character -->
+          <div class="field">
+            <label for="character">Protagonist</label>
+            <div class="chips">
+              <button
+                type="button"
+                class="chip"
+                data-fill="character"
+                data-value="a curious librarian"
+              >
+                Librarian
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-fill="character"
+                data-value="an anxious astronaut"
+              >
+                Astronaut
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-fill="character"
+                data-value="a retired detective"
+              >
+                Detective
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-fill="character"
+                data-value="a rebellious engineer"
+              >
+                Engineer
+              </button>
+            </div>
+            <input
+              id="character"
+              name="character"
+              type="text"
+              placeholder="e.g., a sleepy barista"
+            />
+          </div>
+
+          <!-- Setting -->
+          <div class="field">
+            <label for="setting">Setting</label>
+            <div class="chips">
+              <button
+                type="button"
+                class="chip"
+                data-fill="setting"
+                data-value="a foggy coastal town"
+              >
+                Coastal Town
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-fill="setting"
+                data-value="a failing orbital station"
+              >
+                Orbital Station
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-fill="setting"
+                data-value="an underground archive"
+              >
+                Underground Archive
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-fill="setting"
+                data-value="a neon-lit bazaar"
+              >
+                Neon Bazaar
+              </button>
+            </div>
+            <input
+              id="setting"
+              name="setting"
+              type="text"
+              placeholder="e.g., an abandoned theme park"
+            />
+          </div>
+
+          <!-- Goal -->
+          <div class="field">
+            <label for="goal">Goal</label>
+            <div class="chips">
+              <button
+                type="button"
+                class="chip"
+                data-fill="goal"
+                data-value="find a missing key"
+              >
+                Find a Key
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-fill="goal"
+                data-value="reconnect with an old friend"
+              >
+                Reconnect
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-fill="goal"
+                data-value="stop a quiet catastrophe"
+              >
+                Stop a Catastrophe
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-fill="goal"
+                data-value="deliver a message in time"
+              >
+                Deliver a Message
+              </button>
+            </div>
+            <input
+              id="goal"
+              name="goal"
+              type="text"
+              placeholder="e.g., win the midnight contest"
+            />
+          </div>
+
+          <!-- Tone -->
+          <div class="field">
+            <label for="tone">Tone</label>
+            <select id="tone" name="tone">
+              <option value="whimsical" selected>Whimsical</option>
+              <option value="mysterious">Mysterious</option>
+              <option value="hopeful">Hopeful</option>
+              <option value="melancholic">Melancholic</option>
+              <option value="adventurous">Adventurous</option>
+            </select>
+          </div>
+
+          <!-- Twists -->
+          <div class="field">
+            <label>Plot Twists (pick up to 3)</label>
+            <div class="twists-grid" id="twists">
+              <!-- populated by JS for easy editing -->
+            </div>
+          </div>
+
+          <!-- Advanced -->
+          <details class="advanced">
+            <summary>Advanced options</summary>
+            <div class="advanced-grid">
+              <div>
+                <label for="length">Length</label>
+                <input
+                  id="length"
+                  type="range"
+                  min="3"
+                  max="9"
+                  step="1"
+                  value="5"
+                />
+                <small id="length-help"
+                  >Story beats: <span id="length-value">5</span></small
+                >
+              </div>
+
+              <div>
+                <label for="seed">Random Seed (optional)</label>
+                <input
+                  id="seed"
+                  type="number"
+                  placeholder="lock randomness (e.g., 42)"
+                />
+              </div>
+
+              <div>
+                <label for="title">Title (optional)</label>
+                <input
+                  id="title"
+                  type="text"
+                  placeholder="e.g., The Hushed Frequency"
+                />
+              </div>
+            </div>
+          </details>
+
+          <div class="actions">
+            <button id="generate" class="btn primary" type="submit">
+              Generate Story
+            </button>
+            <button
+              id="shuffle"
+              class="btn"
+              type="button"
+              title="Randomize inputs"
+            >
+              Shuffle 🎲
+            </button>
+            <button id="clear" class="btn ghost" type="button">Clear</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel output-panel" aria-labelledby="output-title">
+        <div class="output-header">
+          <h2 id="output-title">Your Story</h2>
+          <div class="output-actions">
+            <button id="copy" class="btn small">Copy</button>
+            <button id="download" class="btn small">Download</button>
+            <button id="save" class="btn small">Save</button>
+            <button id="history" class="btn small">History</button>
+          </div>
+        </div>
+
+        <article id="story-card" class="story-card" hidden>
+          <h3 id="story-title"></h3>
+          <div id="story-meta" class="story-meta"></div>
+          <div id="story-text" class="story-text" aria-live="polite"></div>
+        </article>
+
+        <dialog id="history-dialog" class="dialog">
+          <form method="dialog">
+            <h3>Saved Stories</h3>
+            <div id="history-list" class="history-list"></div>
+            <menu>
+              <button value="cancel" class="btn ghost">Close</button>
+              <button id="export-all" class="btn">Export All</button>
+              <button id="clear-history" class="btn danger">
+                Clear History
+              </button>
+            </menu>
+          </form>
+        </dialog>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Built with ❤️ using HTML, CSS & JS. No frameworks, no servers.</p>
+    </footer>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
