@@ -365,3 +365,38 @@ btnSave.addEventListener("click", () => {
   localStorage.setItem("storybuilder.history", JSON.stringify(data));
   toast("Saved to history");
 });
+
+btnHistory.addEventListener("click", () => {
+  renderHistory();
+  historyDialog.showModal();
+});
+
+btnExportAll.addEventListener("click", (e) => {
+  e.preventDefault();
+  const data = JSON.parse(localStorage.getItem("storybuilder.history") || "[]");
+  if (!data.length) {
+    toast("No stories to export.");
+    return;
+  }
+  const content = data
+    .map(({ title, meta, text, ts }) => {
+      const when = new Date(ts).toLocaleString();
+      return `# ${title}\n(${when})\n${prettyMeta(meta)}\n\n${text}\n\n---\n`;
+    })
+    .join("\n");
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "StoryBuilder_Export.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+btnClearHistory.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (confirm("Clear all saved stories? This cannot be undone.")) {
+    localStorage.removeItem("storybuilder.history");
+    renderHistory();
+  }
+});
