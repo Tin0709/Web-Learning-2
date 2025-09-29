@@ -52,3 +52,80 @@ const TWISTS = [
   "someone remembers a different version of events",
   "the town celebrates a forgotten holiday",
 ];
+function renderTwists() {
+  TWISTS.forEach((t, i) => {
+    const id = `tw-${i}`;
+    const label = document.createElement("label");
+    label.innerHTML = `
+        <input type="checkbox" value="${t}" id="${id}" />
+        <span>${t}</span>
+      `;
+    twistsGrid.appendChild(label);
+  });
+}
+
+// Preset chip click → fill input
+chips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    const target = document.getElementById(chip.dataset.fill);
+    target.value = chip.dataset.value;
+    target.focus();
+  });
+});
+
+// Length UI
+lengthRange.addEventListener("input", () => {
+  lengthValue.textContent = lengthRange.value;
+});
+
+// Shuffle inputs
+btnShuffle.addEventListener("click", () => {
+  const seedsample = Math.floor(Math.random() * 1e6);
+  $("#character").value = pick(Math.random, [
+    "a shy cartographer",
+    "a sarcastic botanist",
+    "a rookie courier",
+    "a retired detective",
+    "a bored guardian",
+  ]);
+  $("#setting").value = pick(Math.random, [
+    "a floating library",
+    "a quiet border town",
+    "a subterranean market",
+    "a failing orbital station",
+    "a rainy canyon city",
+  ]);
+  $("#goal").value = pick(Math.random, [
+    "deliver a message in time",
+    "recover a stolen memory",
+    "repair a broken promise",
+    "prevent a quiet catastrophe",
+    "win the midnight contest",
+  ]);
+  $("#tone").value = pick(Math.random, [
+    "whimsical",
+    "mysterious",
+    "hopeful",
+    "melancholic",
+    "adventurous",
+  ]);
+  $$("#twists input[type=checkbox]").forEach((c) => (c.checked = false));
+  // randomly check a few twists
+  const howMany = 1 + Math.floor(Math.random() * 3);
+  const indices = [...TWISTS.keys()]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, howMany);
+  indices.forEach((i) => ($("#tw-" + i).checked = true));
+  seedInput.value = seedsample;
+  lengthRange.value = String(3 + Math.floor(Math.random() * 7));
+  lengthValue.textContent = lengthRange.value;
+});
+
+// Clear form
+btnClear.addEventListener("click", () => {
+  form.reset();
+  $$("#twists input[type=checkbox]").forEach((c) => (c.checked = false));
+  lengthRange.value = "5";
+  lengthValue.textContent = "5";
+  storyCard.hidden = true;
+});
