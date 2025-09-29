@@ -32,6 +32,7 @@ body {
     #0f1221 100%
   );
 }
+
 .app-header,
 .app-footer {
   text-align: center;
@@ -96,6 +97,7 @@ input[type="range"] {
 small {
   color: var(--muted);
 }
+
 .actions {
   display: flex;
   gap: 10px;
@@ -158,6 +160,7 @@ small {
 .chip:hover {
   background: #2c3257;
 }
+
 .twists-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -240,7 +243,6 @@ small {
   background: #0e1224;
   color: var(--text);
 }
-
 .history-list {
   display: grid;
   gap: 10px;
