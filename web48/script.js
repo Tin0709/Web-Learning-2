@@ -129,3 +129,147 @@ btnClear.addEventListener("click", () => {
   lengthValue.textContent = "5";
   storyCard.hidden = true;
 });
+// Generate story
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const character = $("#character").value.trim() || "a nameless wanderer";
+  const setting = $("#setting").value.trim() || "a place between rainstorms";
+  const goal = $("#goal").value.trim() || "learn what the silence hides";
+  const tone = $("#tone").value;
+  const selectedTwists = $$("#twists input:checked").map((c) => c.value);
+  const beats = parseInt(lengthRange.value, 10);
+  const seed = seedInput.value
+    ? Number(seedInput.value)
+    : Math.floor(Math.random() * 1e9);
+  const rng = mulberry32(seed);
+
+  const story = buildStory({
+    character,
+    setting,
+    goal,
+    tone,
+    twists: selectedTwists,
+    beats,
+    rng,
+  });
+
+  const title =
+    titleInput.value.trim() || makeTitle({ character, setting, tone, rng });
+  renderStory({
+    title,
+    meta: {
+      character,
+      setting,
+      goal,
+      tone,
+      seed,
+      beats,
+      twists: selectedTwists,
+    },
+    story,
+  });
+
+  // Accessibility: move focus to story
+  storyCard.scrollIntoView({ behavior: "smooth", block: "center" });
+});
+
+// Build story text
+function buildStory({ character, setting, goal, tone, twists, beats, rng }) {
+  const tones = {
+    whimsical: {
+      openers: [
+        `On certain days, ${setting} smells like cinnamon and mischief.`,
+        `Everyone insisted ${setting} was ordinary; it only behaved that way out of politeness.`,
+        `${setting} kept its secrets in teacups and ticket stubs.`,
+      ],
+      verbs: ["tiptoes", "wanders", "hums", "pirouettes", "doodles"],
+      feels: ["buoyant", "curious", "tickled", "giddy", "wide-eyed"],
+    },
+    mysterious: {
+      openers: [
+        `Fog stitched itself across ${setting}, threading silence through every alley.`,
+        `Maps avoided ${setting}; the margins were safer.`,
+        `In ${setting}, even the clocks spoke in riddles.`,
+      ],
+      verbs: ["lingers", "sharpens", "withholds", "listens", "circles"],
+      feels: ["uneasy", "drawn", "alert", "haunted", "watchful"],
+    },
+    hopeful: {
+      openers: [
+        `Dawn braided light over ${setting}, patient as a promise.`,
+        `Even the broken tiles of ${setting} glimmered with second chances.`,
+        `Some places hold out their hands—${setting} was one of them.`,
+      ],
+      verbs: ["mends", "gathers", "brightens", "unfolds", "reaches"],
+      feels: ["brave", "steadied", "warmed", "clear-sighted", "ready"],
+    },
+    melancholic: {
+      openers: [
+        `${setting} remembered more than it let on—dust is a kind of memory.`,
+        `Rain rehearsed the same apology over ${setting}.`,
+        `In ${setting}, echoes arrived on time; people didn’t.`,
+      ],
+      verbs: ["settles", "fades", "loosens", "drifts", "thins"],
+      feels: ["hollow", "tired", "soft", "adrift", "tender"],
+    },
+    adventurous: {
+      openers: [
+        `A whistle split the air over ${setting}; trouble answered.`,
+        `Bootsteps and bright plans clattered through ${setting}.`,
+        `Routes crisscrossed ${setting} like scars begging for a story.`,
+      ],
+      verbs: ["charges", "scrambles", "improvises", "barrels", "vaults"],
+      feels: ["thrilled", "reckless", "alive", "undaunted", "hungry"],
+    },
+  };
+
+  const t = tones[tone] || tones.whimsical;
+
+  const beatsArr = [];
+  // Opening
+  beatsArr.push(pick(rng, t.openers));
+
+  // Middle beats
+  for (let i = 0; i < beats - 2; i++) {
+    const verb = pick(rng, t.verbs);
+    const feel = pick(rng, t.feels);
+
+    // occasionally inject a twist
+    const doTwist = twists.length > 0 && rng() < 0.35;
+    const twist = doTwist ? pick(rng, twists) : null;
+
+    const sentenceTemplates = [
+      `${capitalize(
+        character
+      )} ${verb} through clues no one else notices; they feel ${feel}.`,
+      `A rumor folds into a map; ${character} ${verb} toward the goal to ${goal}.`,
+      `A small kindness returns interest; ${character} feels ${feel} and ${verb} onward.`,
+      `The locals shrug, but the shadows ${verb}. ${capitalize(
+        character
+      )} keeps going.`,
+      `A locked door yields to a story traded; ${character} leaves ${setting} a little changed.`,
+    ];
+
+    let line = pick(rng, sentenceTemplates);
+    line = line.replace("the goal", "the goal");
+
+    if (twist) {
+      line += ` Then ${twist}.`;
+    }
+    beatsArr.push(line);
+  }
+
+  // Climax / Resolution
+  const endings = [
+    `At last, ${character} faces the choice no map shows. They choose, and ${setting} exhales.`,
+    `The goal to ${goal} was only a doorway; what matters is who steps through. ${capitalize(
+      character
+    )} does.`,
+    `A quiet click, a bright breath—${character} finds that endings are just well-lit edges.`,
+    `They do not conquer ${setting}; they befriend it. The rest follows.`,
+  ];
+  beatsArr.push(pick(rng, endings));
+
+  // Join with paragraph spacing
+  return beatsArr.join("\n\n");
+}
