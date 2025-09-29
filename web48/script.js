@@ -13,6 +13,7 @@ const pick = (rng, arr) => arr[Math.floor(rng() * arr.length)];
 // DOM
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+
 // Elements
 const form = $("#story-form");
 const chips = $$(".chip");
@@ -52,6 +53,7 @@ const TWISTS = [
   "someone remembers a different version of events",
   "the town celebrates a forgotten holiday",
 ];
+
 function renderTwists() {
   TWISTS.forEach((t, i) => {
     const id = `tw-${i}`;
@@ -129,6 +131,7 @@ btnClear.addEventListener("click", () => {
   lengthValue.textContent = "5";
   storyCard.hidden = true;
 });
+
 // Generate story
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -273,6 +276,7 @@ function buildStory({ character, setting, goal, tone, twists, beats, rng }) {
   // Join with paragraph spacing
   return beatsArr.join("\n\n");
 }
+
 function makeTitle({ character, setting, tone, rng }) {
   const palette = {
     whimsical: [
@@ -400,6 +404,7 @@ btnClearHistory.addEventListener("click", (e) => {
     renderHistory();
   }
 });
+
 // Helpers
 function formatForExport() {
   const title = storyCard.getAttribute("data-title") || "Untitled Story";
@@ -472,3 +477,26 @@ function renderHistory() {
     { once: true }
   ); // rebind each open
 }
+
+// Tiny toast
+function toast(msg) {
+  const el = document.createElement("div");
+  el.textContent = msg;
+  el.style.position = "fixed";
+  el.style.bottom = "18px";
+  el.style.left = "50%";
+  el.style.transform = "translateX(-50%)";
+  el.style.padding = "10px 14px";
+  el.style.background = "#1a1f3f";
+  el.style.border = "1px solid #3a4373";
+  el.style.borderRadius = "10px";
+  el.style.color = "#eaf0ff";
+  el.style.boxShadow = "0 10px 20px rgba(0,0,0,.35)";
+  el.style.zIndex = 9999;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1600);
+}
+
+// Initialize
+renderTwists();
+lengthValue.textContent = lengthRange.value;
