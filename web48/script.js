@@ -400,3 +400,75 @@ btnClearHistory.addEventListener("click", (e) => {
     renderHistory();
   }
 });
+// Helpers
+function formatForExport() {
+  const title = storyCard.getAttribute("data-title") || "Untitled Story";
+  const meta = JSON.parse(storyCard.getAttribute("data-meta") || "{}");
+  const text = storyText.textContent || "";
+  return `# ${title}\n${prettyMeta(meta)}\n\n${text}\n`;
+}
+function prettyMeta(meta) {
+  return `Protagonist: ${meta.character}\nSetting: ${meta.setting}\nGoal: ${
+    meta.goal
+  }\nTone: ${meta.tone}\nBeats: ${meta.beats}\nSeed: ${meta.seed}${
+    meta.twists?.length ? `\nTwists: ${meta.twists.join(", ")}` : ""
+  }`;
+}
+function sanitizeFilename(name) {
+  return name.replace(/[\\/:*?"<>|]+/g, "_").slice(0, 100);
+}
+
+function renderHistory() {
+  const data = JSON.parse(localStorage.getItem("storybuilder.history") || "[]");
+  historyList.innerHTML = "";
+  if (!data.length) {
+    historyList.innerHTML = `<p class="muted">No stories saved yet.</p>`;
+    return;
+  }
+  data.forEach(({ id, title, meta, text, ts }) => {
+    const item = document.createElement("div");
+    item.className = "history-item";
+    const when = new Date(ts).toLocaleString();
+    item.innerHTML = `
+        <h4>${title}</h4>
+        <small>${when} — ${meta.tone} • ${meta.beats} beats</small>
+        <pre>${text}</pre>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn small" data-act="load" data-id="${id}">Load</button>
+          <button class="btn small danger" data-act="delete" data-id="${id}">Delete</button>
+        </div>
+      `;
+    historyList.appendChild(item);
+  });
+
+  historyList.addEventListener(
+    "click",
+    (e) => {
+      const btn = e.target.closest("button[data-act]");
+      if (!btn) return;
+      const act = btn.dataset.act;
+      const id = btn.dataset.id;
+      const dataNow = JSON.parse(
+        localStorage.getItem("storybuilder.history") || "[]"
+      );
+      const idx = dataNow.findIndex((x) => x.id === id);
+      if (idx === -1) return;
+
+      if (act === "delete") {
+        dataNow.splice(idx, 1);
+        localStorage.setItem("storybuilder.history", JSON.stringify(dataNow));
+        renderHistory();
+      }
+      if (act === "load") {
+        const { title, meta, text } = dataNow[idx];
+        storyTitle.textContent = title;
+        storyMeta.textContent = `Protagonist: ${meta.character} • Setting: ${meta.setting} • Goal: ${meta.goal} • Tone: ${meta.tone} • Beats: ${meta.beats} • Seed: ${meta.seed}`;
+        storyText.textContent = text;
+        storyCard.hidden = false;
+        historyDialog.close();
+        toast("Loaded story");
+      }
+    },
+    { once: true }
+  ); // rebind each open
+}
