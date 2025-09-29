@@ -273,3 +273,95 @@ function buildStory({ character, setting, goal, tone, twists, beats, rng }) {
   // Join with paragraph spacing
   return beatsArr.join("\n\n");
 }
+function makeTitle({ character, setting, tone, rng }) {
+  const palette = {
+    whimsical: [
+      "Teacup Orbits",
+      "The Borrowed Map",
+      "Polite Secrets",
+      "Starlight Errands",
+    ],
+    mysterious: [
+      "Margins of Fog",
+      "The Hour That Repeats",
+      "Riddled Clocks",
+      "Threshold Noise",
+    ],
+    hopeful: [
+      "Second Chances",
+      "Dawn’s Ledger",
+      "Lightkeepers",
+      "The Open Hand",
+    ],
+    melancholic: [
+      "The Dust Remembers",
+      "Rain’s Apology",
+      "Quiet Corridors",
+      "Amber Echoes",
+    ],
+    adventurous: [
+      "Routes and Reckoning",
+      "Trouble’s Whistle",
+      "Vaulting Lines",
+      "Run Toward Bright",
+    ],
+  };
+  const base = pick(rng, palette[tone] || palette.whimsical);
+  const who = character.replace(/^a[n]?\s/i, "").trim();
+  const place = setting.split(" ")[0];
+  return `${base}: ${capitalize(who)} of ${capitalize(place)}`;
+}
+
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+// Render story to UI
+function renderStory({ title, meta, story }) {
+  storyTitle.textContent = title;
+  storyMeta.textContent = `Protagonist: ${meta.character} • Setting: ${meta.setting} • Goal: ${meta.goal} • Tone: ${meta.tone} • Beats: ${meta.beats} • Seed: ${meta.seed}`;
+  storyText.textContent = story;
+  storyCard.hidden = false;
+  storyCard.setAttribute("data-title", title);
+  storyCard.setAttribute("data-meta", JSON.stringify(meta));
+}
+
+// Copy / Download / Save / History
+btnCopy.addEventListener("click", async () => {
+  const text = formatForExport();
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("Copied to clipboard");
+  } catch {
+    toast("Copy failed—select and copy manually.");
+  }
+});
+
+btnDownload.addEventListener("click", () => {
+  const blob = new Blob([formatForExport()], {
+    type: "text/plain;charset=utf-8",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const title = storyCard.getAttribute("data-title") || "story";
+  a.href = url;
+  a.download = `${sanitizeFilename(title)}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+btnSave.addEventListener("click", () => {
+  const title = storyCard.getAttribute("data-title") || "Untitled";
+  const meta = JSON.parse(storyCard.getAttribute("data-meta") || "{}");
+  const text = storyText.textContent || "";
+  if (!text) {
+    toast("Generate a story first.");
+    return;
+  }
+
+  const entry = { id: crypto.randomUUID(), ts: Date.now(), title, meta, text };
+  const data = JSON.parse(localStorage.getItem("storybuilder.history") || "[]");
+  data.unshift(entry);
+  localStorage.setItem("storybuilder.history", JSON.stringify(data));
+  toast("Saved to history");
+});
