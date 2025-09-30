@@ -25,3 +25,59 @@ body {
   background: linear-gradient(180deg, #0b0e14 0%, #0c1220 100%);
   color: var(--text);
 }
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: rgba(10, 14, 20, 0.75);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--brand);
+}
+.search {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 860px;
+}
+.search input {
+  background: var(--muted);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  width: 100%;
+}
+.search button {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s transform ease;
+}
+.search button:hover {
+  transform: translateY(-1px);
+}
+.search button:active {
+  transform: translateY(0);
+}
+
+.container {
+  display: grid;
+  gap: 18px;
+  padding: 18px;
+  grid-template-columns: repeat(12, 1fr);
+}
