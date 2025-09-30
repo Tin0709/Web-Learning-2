@@ -180,3 +180,25 @@ function renderDestinationInfo(place, data) {
       </div>
     `;
 }
+
+function renderWeather(weather, startISO) {
+  const daily = weather.daily;
+  const days = daily.time.length;
+  const cards = [];
+  for (let i = 0; i < days; i++) {
+    const date = daily.time[i];
+    const high = daily.temperature_2m_max[i];
+    const low = daily.temperature_2m_min[i];
+    const pop = daily.precipitation_probability_mean?.[i] ?? 0;
+    const tip = weatherTip(daily.weathercode[i], pop);
+    cards.push(`
+        <div class="weather-card">
+          <div class="day">${weekday(date)}</div>
+          <div class="temp">${fmtTemp(high)} / ${fmtTemp(low)}</div>
+          <div class="badge">Precip: ${Math.round(pop)}%</div>
+          <div style="color:var(--sub); font-size:13px">${tip}</div>
+        </div>
+      `);
+  }
+  weatherBox.innerHTML = cards.join("");
+}
