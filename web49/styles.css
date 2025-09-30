@@ -1,0 +1,27 @@
+:root {
+  --bg: #0b0e14;
+  --panel: #111623;
+  --muted: #1a2132;
+  --text: #e6e9ef;
+  --sub: #a7b0c0;
+  --brand: #7bd389;
+  --accent: #7aa2f7;
+  --danger: #ff6b6b;
+  --card: #0f1422;
+  --border: #22304b;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+    sans-serif;
+  background: linear-gradient(180deg, #0b0e14 0%, #0c1220 100%);
+  color: var(--text);
+}
