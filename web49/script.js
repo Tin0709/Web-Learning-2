@@ -161,3 +161,22 @@ function buildItinerary(startISO, days, sights, daily) {
   }
   return items;
 }
+// ------------ UI Renderers ------------
+function renderDestinationInfo(place, data) {
+  destinationInfo.classList.remove("muted");
+  destinationInfo.innerHTML = `
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:700; font-size:18px; margin-bottom:6px">${place}</div>
+            <div class="badge">Lat: ${data.lat.toFixed(
+              4
+            )}, Lon: ${data.lon.toFixed(4)}</div>
+          </div>
+          <div style="text-align:right; max-width:60%">
+            <div style="color:var(--sub)">${data.display}</div>
+          </div>
+        </div>
+      </div>
+    `;
+}
