@@ -25,6 +25,7 @@ body {
   background: linear-gradient(180deg, #0b0e14 0%, #0c1220 100%);
   color: var(--text);
 }
+
 .topbar {
   position: sticky;
   top: 0;
@@ -165,4 +166,67 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 12px;
+}
+.sight {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.sight img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  background: #0b0e14;
+}
+.sight .content {
+  padding: 10px;
+}
+.sight h3 {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+}
+.sight p {
+  margin: 0;
+  color: var(--sub);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.sight a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.itinerary {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+.itin-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+.itin-card h4 {
+  margin: 0 0 8px 0;
+}
+.itin-item {
+  margin: 4px 0;
+  color: var(--sub);
+}
+
+.footer {
+  padding: 20px;
+  text-align: center;
+  color: var(--sub);
+  border-top: 1px solid var(--border);
+  margin-top: 10px;
+}
+.error {
+  color: var(--danger);
 }
