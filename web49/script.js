@@ -240,3 +240,45 @@ function renderItinerary(items) {
     )
     .join("");
 }
+// ------------ Orchestration ------------
+async function planTrip() {
+  const place = destinationInput.value.trim();
+  const startISO = startDateInput.value || todayISO();
+  const endISO = endDateInput.value || startISO;
+  if (!place) {
+    showError(destinationInfo, 'Enter a destination (e.g., "Tokyo").');
+    return;
+  }
+
+  // Clear outputs
+  destinationInfo.innerHTML = `<div class="card muted">Looking up "${place}"…</div>`;
+  weatherBox.innerHTML = "";
+  sightsBox.innerHTML = "";
+  itineraryBox.innerHTML = "";
+
+  try {
+    // 1) Geocode
+    const geo = await geocode(place);
+    renderDestinationInfo(place, geo);
+    setMap(geo.lat, geo.lon, place);
+
+    // 2) Weather
+    const weather = await fetchWeather(geo.lat, geo.lon, startISO, endISO);
+    renderWeather(weather, startISO);
+
+    // 3) Sights
+    const sights = await fetchSights(geo.lat, geo.lon);
+    renderSights(sights);
+
+    // 4) Itinerary
+    const days = daysBetween(startISO, endISO);
+    const items = buildItinerary(startISO, days, sights, weather.daily);
+    renderItinerary(items);
+  } catch (err) {
+    console.error(err);
+    showError(
+      destinationInfo,
+      `Oops: ${err.message || "Something went wrong."}`
+    );
+  }
+}
