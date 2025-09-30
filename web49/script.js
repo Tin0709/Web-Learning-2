@@ -120,3 +120,44 @@ async function fetchSights(lat, lon) {
   }));
   return result;
 }
+// Simple activity suggestions based on weathercode (very simplified)
+function weatherTip(code, precipProb) {
+  // https://open-meteo.com/en/docs#api_form weathercodes; we’ll do broad buckets:
+  const wet = (precipProb || 0) >= 50;
+  if ([0].includes(code) && !wet) return "Best day for outdoor sightseeing 🌞";
+  if ([1, 2, 3].includes(code) && !wet)
+    return "Partly cloudy—great for walking tours ⛅";
+  if ([45, 48, 51, 53, 55, 56, 57].includes(code) || wet)
+    return "Plan museums/cafés; pack a light rain jacket ☔";
+  if (
+    [
+      61, 63, 65, 66, 67, 71, 73, 75, 77, 80, 81, 82, 85, 86, 95, 96, 99,
+    ].includes(code)
+  )
+    return "Consider indoor activities; check for weather alerts ⚠️";
+  return "Flexible day—mix indoor and outdoor plans 🙂";
+}
+
+function buildItinerary(startISO, days, sights, daily) {
+  const chunks = ["Morning", "Afternoon", "Evening"];
+  const items = [];
+  // Rotate through top sights
+  const pool = sights.slice(0, Math.max(6, Math.min(12, sights.length)));
+  for (let i = 0; i < days; i++) {
+    const date = new Date(new Date(startISO).getTime() + i * 24 * 3600 * 1000)
+      .toISOString()
+      .slice(0, 10);
+    const acts = chunks.map((label, idx) => {
+      const sight = pool[(i * 3 + idx) % Math.max(1, pool.length)];
+      return sight
+        ? `${label}: ${sight.title}`
+        : `${label}: Free time / explore`;
+    });
+    const tip = weatherTip(
+      daily.weathercode[i],
+      daily.precipitation_probability_mean?.[i]
+    );
+    items.push({ date, acts, tip });
+  }
+  return items;
+}
