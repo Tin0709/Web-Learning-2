@@ -202,3 +202,41 @@ function renderWeather(weather, startISO) {
   }
   weatherBox.innerHTML = cards.join("");
 }
+
+function renderSights(sights) {
+  if (!sights.length) {
+    sightsBox.innerHTML = `<div class="card muted">No nearby sights found. Try a city name.</div>`;
+    return;
+  }
+  sightsBox.innerHTML = sights
+    .map(
+      (s) => `
+      <div class="sight">
+        <img src="${
+          s.thumb ||
+          "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+        }" alt="${s.title}"/>
+        <div class="content">
+          <h3>${s.title}</h3>
+          <p>${s.extract}</p>
+          <a href="${s.url}" target="_blank" rel="noopener">Learn more ↗</a>
+        </div>
+      </div>
+    `
+    )
+    .join("");
+}
+
+function renderItinerary(items) {
+  itineraryBox.innerHTML = items
+    .map(
+      (it) => `
+      <div class="itin-card">
+        <h4>${weekday(it.date)}</h4>
+        ${it.acts.map((a) => `<div class="itin-item">• ${a}</div>`).join("")}
+        <div class="itin-item"><em>${it.tip}</em></div>
+      </div>
+    `
+    )
+    .join("");
+}
