@@ -18,6 +18,7 @@ endDateInput.value = new Date(Date.now() + 1000 * 60 * 60 * 24 * 2)
   .slice(0, 10); // +2 days
 
 let map, mapMarker;
+
 // Initialize Leaflet map
 function initMap() {
   map = L.map("map", { zoomControl: true, attributionControl: true }).setView(
@@ -61,6 +62,7 @@ function weekday(isoDate) {
 function showError(el, msg) {
   el.innerHTML = `<div class="card error">${msg}</div>`;
 }
+
 // ------------ APIs ------------
 async function geocode(place) {
   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
@@ -120,6 +122,7 @@ async function fetchSights(lat, lon) {
   }));
   return result;
 }
+
 // Simple activity suggestions based on weathercode (very simplified)
 function weatherTip(code, precipProb) {
   // https://open-meteo.com/en/docs#api_form weathercodes; we’ll do broad buckets:
@@ -161,24 +164,25 @@ function buildItinerary(startISO, days, sights, daily) {
   }
   return items;
 }
+
 // ------------ UI Renderers ------------
 function renderDestinationInfo(place, data) {
   destinationInfo.classList.remove("muted");
   destinationInfo.innerHTML = `
-      <div class="card">
-        <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start;">
-          <div>
-            <div style="font-weight:700; font-size:18px; margin-bottom:6px">${place}</div>
-            <div class="badge">Lat: ${data.lat.toFixed(
-              4
-            )}, Lon: ${data.lon.toFixed(4)}</div>
-          </div>
-          <div style="text-align:right; max-width:60%">
-            <div style="color:var(--sub)">${data.display}</div>
-          </div>
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start;">
+        <div>
+          <div style="font-weight:700; font-size:18px; margin-bottom:6px">${place}</div>
+          <div class="badge">Lat: ${data.lat.toFixed(
+            4
+          )}, Lon: ${data.lon.toFixed(4)}</div>
+        </div>
+        <div style="text-align:right; max-width:60%">
+          <div style="color:var(--sub)">${data.display}</div>
         </div>
       </div>
-    `;
+    </div>
+  `;
 }
 
 function renderWeather(weather, startISO) {
@@ -192,13 +196,13 @@ function renderWeather(weather, startISO) {
     const pop = daily.precipitation_probability_mean?.[i] ?? 0;
     const tip = weatherTip(daily.weathercode[i], pop);
     cards.push(`
-        <div class="weather-card">
-          <div class="day">${weekday(date)}</div>
-          <div class="temp">${fmtTemp(high)} / ${fmtTemp(low)}</div>
-          <div class="badge">Precip: ${Math.round(pop)}%</div>
-          <div style="color:var(--sub); font-size:13px">${tip}</div>
-        </div>
-      `);
+      <div class="weather-card">
+        <div class="day">${weekday(date)}</div>
+        <div class="temp">${fmtTemp(high)} / ${fmtTemp(low)}</div>
+        <div class="badge">Precip: ${Math.round(pop)}%</div>
+        <div style="color:var(--sub); font-size:13px">${tip}</div>
+      </div>
+    `);
   }
   weatherBox.innerHTML = cards.join("");
 }
@@ -211,18 +215,18 @@ function renderSights(sights) {
   sightsBox.innerHTML = sights
     .map(
       (s) => `
-      <div class="sight">
-        <img src="${
-          s.thumb ||
-          "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
-        }" alt="${s.title}"/>
-        <div class="content">
-          <h3>${s.title}</h3>
-          <p>${s.extract}</p>
-          <a href="${s.url}" target="_blank" rel="noopener">Learn more ↗</a>
-        </div>
+    <div class="sight">
+      <img src="${
+        s.thumb ||
+        "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+      }" alt="${s.title}"/>
+      <div class="content">
+        <h3>${s.title}</h3>
+        <p>${s.extract}</p>
+        <a href="${s.url}" target="_blank" rel="noopener">Learn more ↗</a>
       </div>
-    `
+    </div>
+  `
     )
     .join("");
 }
@@ -231,15 +235,16 @@ function renderItinerary(items) {
   itineraryBox.innerHTML = items
     .map(
       (it) => `
-      <div class="itin-card">
-        <h4>${weekday(it.date)}</h4>
-        ${it.acts.map((a) => `<div class="itin-item">• ${a}</div>`).join("")}
-        <div class="itin-item"><em>${it.tip}</em></div>
-      </div>
-    `
+    <div class="itin-card">
+      <h4>${weekday(it.date)}</h4>
+      ${it.acts.map((a) => `<div class="itin-item">• ${a}</div>`).join("")}
+      <div class="itin-item"><em>${it.tip}</em></div>
+    </div>
+  `
     )
     .join("");
 }
+
 // ------------ Orchestration ------------
 async function planTrip() {
   const place = destinationInput.value.trim();
@@ -282,3 +287,14 @@ async function planTrip() {
     );
   }
 }
+
+planBtn.addEventListener("click", planTrip);
+destinationInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") planTrip();
+});
+
+// Optional: try a default example on first load
+window.addEventListener("load", () => {
+  if (!destinationInput.value) destinationInput.value = "Singapore";
+  planTrip();
+});
