@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TinyBlog</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="logo" href="#/">TinyBlog</a>
+        <input
+          id="searchInput"
+          class="search"
+          type="search"
+          placeholder="Search posts…"
+        />
+        <button id="newPostBtn" class="btn primary">+ New Post</button>
+      </div>
+    </header>
+
+    <main id="app" class="wrap">
+      <!-- Home/List View -->
+      <section id="homeView" class="view hidden">
+        <div class="filters">
+          <div id="tagChips" class="chips"></div>
+          <button id="clearFilters" class="btn subtle">Clear filters</button>
+        </div>
+        <div id="postsGrid" class="posts-grid"></div>
+        <p id="emptyState" class="muted hidden">
+          No posts yet. Create the first one!
+        </p>
+      </section>
+
+      <!-- Post Detail View -->
+      <section id="postView" class="view hidden">
+        <article id="postArticle"></article>
+        <div class="post-actions">
+          <button id="editPostBtn" class="btn">Edit</button>
+          <button id="deletePostBtn" class="btn danger">Delete</button>
+          <a class="btn subtle" href="#/">← Back</a>
+        </div>
+
+        <section class="comments">
+          <h3>Comments</h3>
+          <div id="commentsList"></div>
+          <form id="commentForm" class="card">
+            <div class="row">
+              <input
+                id="commentName"
+                type="text"
+                placeholder="Your name"
+                required
+              />
+              <input
+                id="commentEmail"
+                type="email"
+                placeholder="Email (optional)"
+              />
+            </div>
+            <textarea
+              id="commentBody"
+              rows="3"
+              placeholder="Write a comment…"
+              required
+            ></textarea>
+            <button class="btn primary">Post comment</button>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <!-- Post Editor Modal -->
+    <dialog id="editorModal">
+      <form id="editorForm" method="dialog" class="editor">
+        <header class="editor-header">
+          <h3 id="editorTitle">New Post</h3>
+          <button
+            type="button"
+            id="closeEditor"
+            class="icon-btn"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </header>
+
+        <label
+          >Title
+          <input id="postTitle" type="text" required maxlength="120" />
+        </label>
+
+        <label
+          >Tags (comma separated)
+          <input id="postTags" type="text" placeholder="e.g. javascript, css" />
+        </label>
+
+        <label
+          >Cover Image URL (optional)
+          <input
+            id="postCover"
+            type="url"
+            placeholder="https://example.com/image.jpg"
+          />
+        </label>
+
+        <label
+          >Content (supports **bold**, *italic*, `code`, and links)
+          <textarea id="postContent" rows="12" required></textarea>
+        </label>
+
+        <div class="editor-actions">
+          <button type="submit" class="btn primary">Save</button>
+          <button type="button" id="deleteInEditor" class="btn danger hidden">
+            Delete
+          </button>
+          <button type="button" id="previewBtn" class="btn">Preview</button>
+        </div>
+
+        <div id="previewPane" class="preview hidden">
+          <h4>Preview</h4>
+          <div id="previewContent"></div>
+        </div>
+      </form>
+    </dialog>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        Built with ❤️ using HTML/CSS/JS only — stored in your browser.
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
