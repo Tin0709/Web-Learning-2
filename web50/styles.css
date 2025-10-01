@@ -170,6 +170,7 @@ body {
     width: 100%;
   }
 }
+
 .card {
   background: linear-gradient(180deg, #171a28, #131623);
   border: 1px solid #1f2333;
@@ -354,4 +355,49 @@ body {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(1px);
   z-index: 15;
+}
+
+.modal {
+  border: none;
+  border-radius: 16px;
+  padding: 0;
+  background: #111423;
+  color: var(--text);
+  width: min(520px, 95vw);
+  box-shadow: var(--shadow);
+}
+.checkout-form {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.checkout-form h3 {
+  margin: 0.2rem 0;
+}
+.checkout-form .muted {
+  color: var(--muted);
+  margin-top: -6px;
+}
+.checkout-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.checkout-form input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #22263a;
+  background: #0f1220;
+  color: var(--text);
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
 }
