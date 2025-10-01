@@ -201,6 +201,7 @@ function drawHome() {
     grid.append(card);
   });
 }
+
 function drawPost(slug) {
   const data = store.read();
   const post = data.posts.find((p) => p.slug === slug);
@@ -342,6 +343,7 @@ function savePost(e) {
     location.hash = `#/post/${newPost.slug}`;
   }
 }
+
 function deleteInEditor() {
   const data = store.read();
   const id = state.editingId;
@@ -383,3 +385,50 @@ function handleCommentSubmit(e) {
   q("#commentForm").reset();
   renderComments();
 }
+
+// ---------- Router ----------
+function router() {
+  const hash = location.hash || "#/";
+  const [_, route, param] = hash.split("/");
+  if (route === "" || route === "#") {
+    drawHome();
+  } else if (route === "#") {
+    drawHome();
+  } else if (route === "post" && param) {
+    drawPost(param);
+  } else {
+    location.hash = "#/";
+  }
+}
+
+// ---------- Init ----------
+function init() {
+  store.seedIfEmpty();
+
+  // search
+  q("#searchInput").addEventListener("input", (e) => {
+    state.search = e.target.value;
+    drawHome();
+  });
+
+  q("#clearFilters").onclick = () => {
+    state.tagFilter.clear();
+    drawHome();
+  };
+
+  // new post
+  q("#newPostBtn").onclick = () => openEditor(null);
+  q("#closeEditor").onclick = closeEditor;
+  q("#editorForm").addEventListener("submit", savePost);
+  q("#deleteInEditor").addEventListener("click", deleteInEditor);
+  q("#previewBtn").addEventListener("click", previewContent);
+
+  // comments
+  q("#commentForm").addEventListener("submit", handleCommentSubmit);
+
+  // hash router
+  window.addEventListener("hashchange", router);
+  router(); // first paint
+}
+
+document.addEventListener("DOMContentLoaded", init);
