@@ -292,3 +292,53 @@ function openEditor(postId) {
   if (typeof modal.showModal === "function") modal.showModal();
   else modal.classList.remove("hidden");
 }
+
+function closeEditor() {
+  const modal = q("#editorModal");
+  if (typeof modal.close === "function") modal.close();
+  else modal.classList.add("hidden");
+}
+
+function savePost(e) {
+  e.preventDefault();
+  const title = q("#postTitle").value.trim();
+  const tags = q("#postTags")
+    .value.split(",")
+    .map((t) => t.trim().toLowerCase())
+    .filter(Boolean);
+  const cover = q("#postCover").value.trim();
+  const content = q("#postContent").value.trim();
+  if (!title || !content) return;
+
+  const data = store.read();
+  const now = Date.now();
+
+  if (state.editingId) {
+    const p = data.posts.find((p) => p.id === state.editingId);
+    if (!p) return;
+    p.title = title;
+    p.slug = slugify(title);
+    p.tags = tags;
+    p.cover = cover;
+    p.content = content;
+    p.updatedAt = now;
+    store.write(data);
+    closeEditor();
+    location.hash = `#/post/${p.slug}`;
+  } else {
+    const newPost = {
+      id: crypto.randomUUID(),
+      title,
+      slug: slugify(title),
+      cover,
+      tags,
+      content,
+      createdAt: now,
+      updatedAt: now,
+    };
+    data.posts.push(newPost);
+    store.write(data);
+    closeEditor();
+    location.hash = `#/post/${newPost.slug}`;
+  }
+}
