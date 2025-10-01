@@ -75,3 +75,49 @@ const state = {
   currentPostId: null,
   editingId: null,
 };
+
+// ---------- Utils ----------
+const fmtDate = (ts) => new Date(ts).toLocaleString();
+const slugify = (str) =>
+  str
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 80);
+
+function renderTagChips(allTags) {
+  const wrap = q("#tagChips");
+  wrap.innerHTML = "";
+  [...allTags].sort().forEach((tag) => {
+    const chip = el("button", "chip", `#${tag}`);
+    if (state.tagFilter.has(tag)) chip.classList.add("active");
+    chip.addEventListener("click", () => {
+      if (state.tagFilter.has(tag)) state.tagFilter.delete(tag);
+      else state.tagFilter.add(tag);
+      drawHome();
+    });
+    wrap.appendChild(chip);
+  });
+}
+
+function markdownLite(text) {
+  // very small, safe-ish renderer (no HTML allowed)
+  let t = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  t = t
+    .replace(/^### (.*)$/gm, "<h3>$1</h3>")
+    .replace(/^## (.*)$/gm, "<h2>$1</h2>")
+    .replace(/^# (.*)$/gm, "<h1>$1</h1>")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(
+      /\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener">$1</a>'
+    );
+  return t;
+}
