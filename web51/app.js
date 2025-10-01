@@ -201,3 +201,53 @@ function drawHome() {
     grid.append(card);
   });
 }
+function drawPost(slug) {
+  const data = store.read();
+  const post = data.posts.find((p) => p.slug === slug);
+  const home = q("#homeView");
+  const postV = q("#postView");
+  const article = q("#postArticle");
+
+  if (!post) {
+    location.hash = "#/";
+    return;
+  }
+
+  state.currentPostId = post.id;
+
+  home.classList.add("hidden");
+  postV.classList.remove("hidden");
+
+  article.innerHTML = "";
+  const h1 = el("h1", null, post.title);
+  const meta = el(
+    "div",
+    "meta",
+    `<span>${fmtDate(post.updatedAt)}</span><span>•</span><span>${post.tags
+      .map((t) => `#${t}`)
+      .join(" ")}</span>`
+  );
+  if (post.cover) {
+    const img = el("img", "cover");
+    img.src = post.cover;
+    img.alt = "";
+    article.append(img);
+  }
+  const content = el("div", "content");
+  content.innerHTML = markdownLite(post.content);
+  article.append(h1, meta, content);
+
+  // buttons wiring
+  q("#editPostBtn").onclick = () => openEditor(post.id);
+  q("#deletePostBtn").onclick = () => {
+    if (!confirm("Delete this post?")) return;
+    const idx = data.posts.findIndex((p) => p.id === post.id);
+    if (idx >= 0) {
+      data.posts.splice(idx, 1);
+      store.write(data);
+    }
+    location.hash = "#/";
+  };
+
+  renderComments();
+}
