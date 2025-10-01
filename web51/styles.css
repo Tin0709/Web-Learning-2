@@ -199,3 +199,46 @@ article .content a {
   gap: 10px;
   margin: 20px 0;
 }
+.editor {
+  padding: 18px;
+}
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.editor label {
+  display: block;
+  margin: 10px 0;
+}
+.editor input,
+.editor textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0f1117;
+  color: var(--text);
+}
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.preview {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+}
+
+/* Small screens */
+@media (max-width: 640px) {
+  .site-header .wrap {
+    gap: 8px;
+  }
+  #commentForm .row {
+    flex-direction: column;
+  }
+}
