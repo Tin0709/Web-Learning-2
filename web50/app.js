@@ -77,3 +77,28 @@ const PRODUCTS = [
     img: "https://images.unsplash.com/photo-1550565118-3a14e8d03856?q=80&w=1200&auto=format&fit=crop",
   },
 ];
+
+const TAX_RATE = 0.08; // 8% demo tax
+
+// DOM
+const productGrid = document.getElementById("productGrid");
+const categoryFilter = document.getElementById("categoryFilter");
+const sortSelect = document.getElementById("sortSelect");
+const searchForm = document.getElementById("searchForm");
+const searchInput = document.getElementById("searchInput");
+
+const cartButton = document.getElementById("cartButton");
+const cartDrawer = document.getElementById("cartDrawer");
+const closeCartBtn = document.getElementById("closeCart");
+const overlay = document.getElementById("overlay");
+
+const cartItemsEl = document.getElementById("cartItems");
+const subtotalEl = document.getElementById("subtotal");
+const taxEl = document.getElementById("tax");
+const totalEl = document.getElementById("total");
+const cartCountEl = document.getElementById("cartCount");
+
+const checkoutBtn = document.getElementById("checkoutBtn");
+const checkoutModal = document.getElementById("checkoutModal");
+const checkoutForm = document.getElementById("checkoutForm");
+const yearEl = document.getElementById("year");
