@@ -203,3 +203,73 @@ function init() {
   renderProducts();
   renderCart();
 }
+/* ---------- Rendering Products ---------- */
+function renderProducts() {
+  const { q, category, sort } = viewQuery;
+
+  let list = PRODUCTS.slice();
+
+  if (category !== "all") list = list.filter((p) => p.category === category);
+
+  if (q) {
+    const s = q.toLowerCase();
+    list = list.filter(
+      (p) =>
+        p.name.toLowerCase().includes(s) ||
+        p.desc.toLowerCase().includes(s) ||
+        p.category.toLowerCase().includes(s)
+    );
+  }
+
+  switch (sort) {
+    case "price-asc":
+      list.sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      list.sort((a, b) => b.price - a.price);
+      break;
+    case "name-asc":
+      list.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case "name-desc":
+      list.sort((a, b) => b.name.localeCompare(a.name));
+      break;
+    default:
+      list.sort((a, b) => b.rating - a.rating); // popularity proxy
+  }
+
+  productGrid.innerHTML = "";
+  const tpl = document.getElementById("productCardTpl");
+
+  if (list.length === 0) {
+    productGrid.innerHTML = `<p class="muted">No products match your search.</p>`;
+    return;
+  }
+
+  for (const p of list) {
+    const node = tpl.content.firstElementChild.cloneNode(true);
+
+    const img = $(".thumb", node);
+    img.src = p.img;
+    img.alt = p.name;
+
+    $(".title", node).textContent = p.name;
+    $(".desc", node).textContent = p.desc;
+    $(".price", node).textContent = fmt(p.price);
+    $(".chip", node).textContent = `${p.category} • ★ ${p.rating}`;
+
+    const addBtn = $(".add", node);
+    addBtn.addEventListener("click", () => {
+      addToCart(p.id, 1);
+      animateAddToCart(addBtn);
+    });
+
+    const favBtn = $(".fav", node);
+    const favOn = favorites.includes(p.id);
+    favBtn.textContent = favOn ? "♥" : "♡";
+    favBtn.ariaLabel = favOn ? "Remove from favorites" : "Add to favorites";
+    favBtn.addEventListener("click", () => toggleFavorite(p.id, favBtn));
+
+    productGrid.appendChild(node);
+  }
+}
