@@ -299,3 +299,28 @@ function addToCart(id, qty = 1) {
   renderCart();
   openCart();
 }
+function setQty(id, qty) {
+  if (!(id in cart)) return;
+  qty = clamp(parseInt(qty, 10) || 1, 1, 99);
+  cart[id] = qty;
+  save("cart", cart);
+  renderCart();
+}
+
+function removeFromCart(id) {
+  delete cart[id];
+  save("cart", cart);
+  renderCart();
+}
+
+function calcTotals() {
+  let subtotal = 0;
+  for (const [id, qty] of Object.entries(cart)) {
+    const p = PRODUCTS.find((p) => p.id === id);
+    if (!p) continue;
+    subtotal += p.price * qty;
+  }
+  const tax = subtotal * TAX_RATE;
+  const total = subtotal + tax;
+  return { subtotal, tax, total };
+}
