@@ -102,3 +102,104 @@ const checkoutBtn = document.getElementById("checkoutBtn");
 const checkoutModal = document.getElementById("checkoutModal");
 const checkoutForm = document.getElementById("checkoutForm");
 const yearEl = document.getElementById("year");
+
+// State
+let favorites = load("favorites", []);
+let cart = load("cart", {}); // { productId: qty }
+let viewQuery = { q: "", category: "all", sort: "popularity" };
+
+// Utils
+const $ = (sel, parent = document) => parent.querySelector(sel);
+const fmt = (n) =>
+  n.toLocaleString(undefined, { style: "currency", currency: "USD" });
+const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+function load(k, fallback) {
+  try {
+    return JSON.parse(localStorage.getItem(k)) ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n));
+}
+
+// Init
+init();
+
+function init() {
+  // Year
+  yearEl.textContent = new Date().getFullYear();
+
+  // Build category options
+  const cats = Array.from(new Set(PRODUCTS.map((p) => p.category))).sort();
+  for (const c of cats) {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    categoryFilter.appendChild(opt);
+  }
+
+  // Listeners
+  searchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    viewQuery.q = searchInput.value.trim();
+    renderProducts();
+  });
+  searchInput.addEventListener("input", (e) => {
+    viewQuery.q = e.target.value.trim();
+    renderProducts();
+  });
+
+  categoryFilter.addEventListener("change", (e) => {
+    viewQuery.category = e.target.value;
+    renderProducts();
+  });
+  sortSelect.addEventListener("change", (e) => {
+    viewQuery.sort = e.target.value;
+    renderProducts();
+  });
+
+  cartButton.addEventListener("click", openCart);
+  closeCartBtn.addEventListener("click", closeCart);
+  overlay.addEventListener("click", () => {
+    closeCart();
+    if (checkoutModal.open) checkoutModal.close();
+  });
+
+  checkoutBtn.addEventListener("click", () => {
+    if (Object.keys(cart).length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
+    checkoutModal.showModal();
+  });
+
+  checkoutForm.addEventListener("submit", (e) => {
+    e.preventDefault(); // for Safari behavior
+  });
+
+  $("#placeOrderBtn").addEventListener("click", (e) => {
+    // Rudimentary validation
+    const name = $("#name").value.trim();
+    const email = $("#email").value.trim();
+    const address = $("#address").value.trim();
+    const card = $("#card").value.replace(/\s+/g, "");
+    if (!name || !email || !address || card.length < 12) {
+      alert("Please fill in all fields with valid info.");
+      return;
+    }
+    // Confirmation
+    const total = calcTotals().total;
+    alert(`Thanks, ${name}! Your demo order of ${fmt(total)} has been placed.`);
+    cart = {};
+    save("cart", cart);
+    renderCart();
+    checkoutModal.close();
+    closeCart();
+  });
+
+  // First render
+  renderProducts();
+  renderCart();
+}
