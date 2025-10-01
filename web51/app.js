@@ -121,3 +121,83 @@ function markdownLite(text) {
     );
   return t;
 }
+
+// ---------- Views ----------
+function drawHome() {
+  const data = store.read();
+  const grid = q("#postsGrid");
+  const empty = q("#emptyState");
+  const home = q("#homeView");
+  const postV = q("#postView");
+
+  home.classList.remove("hidden");
+  postV.classList.add("hidden");
+
+  // gather tags
+  const tagSet = new Set();
+  data.posts.forEach((p) => p.tags.forEach((t) => tagSet.add(t)));
+  renderTagChips(tagSet);
+
+  // filter
+  let list = data.posts
+    .filter((p) => {
+      const text = (
+        p.title +
+        " " +
+        p.content +
+        " " +
+        p.tags.join(" ")
+      ).toLowerCase();
+      const passSearch = state.search
+        ? text.includes(state.search.toLowerCase())
+        : true;
+      const passTags = state.tagFilter.size
+        ? p.tags.some((t) => state.tagFilter.has(t))
+        : true;
+      return passSearch && passTags;
+    })
+    .sort((a, b) => b.updatedAt - a.updatedAt);
+
+  grid.innerHTML = "";
+  if (!list.length) {
+    empty.classList.remove("hidden");
+    return;
+  }
+  empty.classList.add("hidden");
+
+  list.forEach((p) => {
+    const card = el("article", "post-card card");
+    const thumb = el("img", "thumb");
+    thumb.alt = "";
+    thumb.src =
+      p.cover ||
+      `data:image/svg+xml;base64,${btoa(
+        `<svg xmlns='http://www.w3.org/2000/svg' width='800' height='450'><rect width='100%' height='100%' fill='#0f141e'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='system-ui' font-size='28' fill='#8aa0b4'>${p.title.replace(
+          /&/g,
+          "&amp;"
+        )}</text></svg>`
+      )}`;
+    const body = el("div", "body");
+    const h3 = el("h3", null, `<a href="#/post/${p.slug}">${p.title}</a>`);
+    const meta = el(
+      "div",
+      "meta",
+      `<span>${fmtDate(p.updatedAt)}</span><span>•</span><span>${
+        p.tags.map((t) => `#${t}`).join(" ") || "no-tags"
+      }</span>`
+    );
+    const excerpt = el(
+      "p",
+      "muted",
+      p.content.length > 140 ? p.content.slice(0, 140) + "…" : p.content
+    );
+    const tags = el(
+      "div",
+      "tags",
+      p.tags.map((t) => `<span class="tag">#${t}</span>`).join("")
+    );
+    body.append(h3, meta, excerpt, tags);
+    card.append(thumb, body);
+    grid.append(card);
+  });
+}
