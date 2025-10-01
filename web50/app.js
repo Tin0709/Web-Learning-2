@@ -203,6 +203,7 @@ function init() {
   renderProducts();
   renderCart();
 }
+
 /* ---------- Rendering Products ---------- */
 function renderProducts() {
   const { q, category, sort } = viewQuery;
@@ -273,6 +274,7 @@ function renderProducts() {
     productGrid.appendChild(node);
   }
 }
+
 function animateAddToCart(btn) {
   btn.classList.add("success");
   btn.textContent = "Added ✓";
@@ -299,6 +301,7 @@ function addToCart(id, qty = 1) {
   renderCart();
   openCart();
 }
+
 function setQty(id, qty) {
   if (!(id in cart)) return;
   qty = clamp(parseInt(qty, 10) || 1, 1, 99);
@@ -324,6 +327,7 @@ function calcTotals() {
   const total = subtotal + tax;
   return { subtotal, tax, total };
 }
+
 function renderCart() {
   cartItemsEl.innerHTML = "";
 
@@ -374,4 +378,19 @@ function renderCart() {
   // Badge
   const count = Object.values(cart).reduce((a, b) => a + b, 0);
   cartCountEl.textContent = count;
+}
+
+/* ---------- Drawer ---------- */
+function openCart() {
+  cartDrawer.classList.add("open");
+  cartDrawer.setAttribute("aria-hidden", "false");
+  cartButton.setAttribute("aria-expanded", "true");
+  overlay.hidden = false;
+}
+
+function closeCart() {
+  cartDrawer.classList.remove("open");
+  cartDrawer.setAttribute("aria-hidden", "true");
+  cartButton.setAttribute("aria-expanded", "false");
+  overlay.hidden = true;
 }
