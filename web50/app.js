@@ -324,3 +324,54 @@ function calcTotals() {
   const total = subtotal + tax;
   return { subtotal, tax, total };
 }
+function renderCart() {
+  cartItemsEl.innerHTML = "";
+
+  const ids = Object.keys(cart);
+  if (ids.length === 0) {
+    cartItemsEl.innerHTML = `<p class="muted" style="padding:10px">Your cart is empty.</p>`;
+  } else {
+    for (const id of ids) {
+      const p = PRODUCTS.find((x) => x.id === id);
+      if (!p) continue;
+
+      const row = document.createElement("div");
+      row.className = "cart-item";
+      row.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <div>
+            <h4>${p.name}</h4>
+            <div class="muted">${fmt(p.price)} • ${p.category}</div>
+            <div class="qty" aria-label="Quantity controls">
+              <button aria-label="Decrease" data-act="dec">−</button>
+              <input type="number" min="1" max="99" value="${
+                cart[id]
+              }" aria-label="Quantity input">
+              <button aria-label="Increase" data-act="inc">+</button>
+              <button class="remove" aria-label="Remove">Remove</button>
+            </div>
+          </div>
+          <div><strong>${fmt(p.price * cart[id])}</strong></div>
+        `;
+
+      const [decBtn, qtyInput, incBtn, removeBtn] =
+        row.querySelectorAll(".qty > *");
+
+      decBtn.addEventListener("click", () => setQty(id, cart[id] - 1));
+      incBtn.addEventListener("click", () => setQty(id, cart[id] + 1));
+      qtyInput.addEventListener("change", (e) => setQty(id, e.target.value));
+      removeBtn.addEventListener("click", () => removeFromCart(id));
+
+      cartItemsEl.appendChild(row);
+    }
+  }
+
+  const { subtotal, tax, total } = calcTotals();
+  subtotalEl.textContent = fmt(subtotal);
+  taxEl.textContent = fmt(tax);
+  totalEl.textContent = fmt(total);
+
+  // Badge
+  const count = Object.values(cart).reduce((a, b) => a + b, 0);
+  cartCountEl.textContent = count;
+}
