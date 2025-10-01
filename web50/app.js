@@ -273,3 +273,29 @@ function renderProducts() {
     productGrid.appendChild(node);
   }
 }
+function animateAddToCart(btn) {
+  btn.classList.add("success");
+  btn.textContent = "Added ✓";
+  setTimeout(() => {
+    btn.classList.remove("success");
+    btn.textContent = "Add to Cart";
+  }, 900);
+}
+
+/* ---------- Favorites ---------- */
+function toggleFavorite(id, btn) {
+  const i = favorites.indexOf(id);
+  if (i === -1) favorites.push(id);
+  else favorites.splice(i, 1);
+  save("favorites", favorites);
+  btn.textContent = favorites.includes(id) ? "♥" : "♡";
+}
+
+/* ---------- Cart ---------- */
+function addToCart(id, qty = 1) {
+  cart[id] = (cart[id] ?? 0) + qty;
+  cart[id] = clamp(cart[id], 1, 99);
+  save("cart", cart);
+  renderCart();
+  openCart();
+}
