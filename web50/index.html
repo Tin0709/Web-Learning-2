@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TinyShop • Mini E-Commerce</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 24 24' fill='none' stroke='%234e46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='21' r='1'/%3E%3Ccircle cx='20' cy='21' r='1'/%3E%3Cpath d='M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6'/%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="#"><span>🛍️</span> TinyShop</a>
+
+        <form id="searchForm" class="search">
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search products…"
+            aria-label="Search products"
+          />
+        </form>
+
+        <div class="controls">
+          <select id="categoryFilter" aria-label="Filter by category">
+            <option value="all">All categories</option>
+          </select>
+
+          <select id="sortSelect" aria-label="Sort products">
+            <option value="popularity">Sort: Popularity</option>
+            <option value="price-asc">Price: Low → High</option>
+            <option value="price-desc">Price: High → Low</option>
+            <option value="name-asc">Name: A → Z</option>
+            <option value="name-desc">Name: Z → A</option>
+          </select>
+
+          <button
+            id="cartButton"
+            class="btn cart-btn"
+            aria-haspopup="dialog"
+            aria-controls="cartDrawer"
+            aria-expanded="false"
+          >
+            Cart <span id="cartCount" class="badge">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <div id="productGrid" class="grid"></div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© <span id="year"></span> TinyShop. Demo only.</p>
+        <nav class="footer-nav">
+          <a href="#" aria-disabled="true">Privacy</a>
+          <a href="#" aria-disabled="true">Terms</a>
+          <a href="#" aria-disabled="true">Support</a>
+        </nav>
+      </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <aside
+      id="cartDrawer"
+      class="cart"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cartTitle"
+      aria-hidden="true"
+    >
+      <div class="cart-header">
+        <h2 id="cartTitle">Your Cart</h2>
+        <button class="icon-btn" id="closeCart" aria-label="Close cart">
+          ✖
+        </button>
+      </div>
+
+      <div id="cartItems" class="cart-items"></div>
+
+      <div class="cart-summary">
+        <div class="row">
+          <span>Subtotal</span><span id="subtotal">$0.00</span>
+        </div>
+        <div class="row">
+          <span>Estimated Tax</span><span id="tax">$0.00</span>
+        </div>
+        <div class="row total">
+          <span>Total</span><span id="total">$0.00</span>
+        </div>
+        <button id="checkoutBtn" class="btn primary">Checkout</button>
+      </div>
+    </aside>
+
+    <div id="overlay" class="overlay" hidden></div>
+
+    <!-- Checkout Modal -->
+    <dialog id="checkoutModal" class="modal">
+      <form method="dialog" id="checkoutForm" class="checkout-form">
+        <h3>Checkout</h3>
+        <p class="muted">This is a demo—no real payments.</p>
+        <label>
+          Full Name
+          <input type="text" id="name" placeholder="Jane Doe" required />
+        </label>
+        <label>
+          Email
+          <input
+            type="email"
+            id="email"
+            placeholder="jane@example.com"
+            required
+          />
+        </label>
+        <label>
+          Address
+          <input type="text" id="address" placeholder="123 Demo St" required />
+        </label>
+        <label>
+          Card (fake)
+          <input
+            type="text"
+            id="card"
+            placeholder="4242 4242 4242 4242"
+            required
+          />
+        </label>
+
+        <div class="modal-actions">
+          <button class="btn" value="cancel">Cancel</button>
+          <button class="btn primary" id="placeOrderBtn" value="confirm">
+            Place Order
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <template id="productCardTpl">
+      <article class="card">
+        <div class="thumb-wrap">
+          <img class="thumb" alt="" loading="lazy" />
+          <button class="icon-btn fav" aria-label="Add to favorites">♡</button>
+        </div>
+        <div class="card-body">
+          <h3 class="title"></h3>
+          <p class="desc"></p>
+          <div class="meta">
+            <span class="price"></span>
+            <span class="chip"></span>
+          </div>
+          <div class="actions">
+            <button class="btn add">Add to Cart</button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
