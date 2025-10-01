@@ -342,3 +342,44 @@ function savePost(e) {
     location.hash = `#/post/${newPost.slug}`;
   }
 }
+function deleteInEditor() {
+  const data = store.read();
+  const id = state.editingId;
+  if (!id) return;
+  if (!confirm("Delete this post?")) return;
+  const idx = data.posts.findIndex((p) => p.id === id);
+  if (idx >= 0) data.posts.splice(idx, 1);
+  store.write(data);
+  closeEditor();
+  location.hash = "#/";
+}
+
+function previewContent() {
+  const content = q("#postContent").value;
+  q("#previewContent").innerHTML = markdownLite(content);
+  q("#previewPane").classList.remove("hidden");
+}
+
+// ---------- Comments ----------
+function handleCommentSubmit(e) {
+  e.preventDefault();
+  const name = q("#commentName").value.trim();
+  const email = q("#commentEmail").value.trim();
+  const body = q("#commentBody").value.trim();
+  if (!body) return;
+
+  const data = store.read();
+  const pid = state.currentPostId;
+  data.comments[pid] ??= [];
+  data.comments[pid].push({
+    id: crypto.randomUUID(),
+    name,
+    email,
+    body,
+    createdAt: Date.now(),
+  });
+  store.write(data);
+
+  q("#commentForm").reset();
+  renderComments();
+}
