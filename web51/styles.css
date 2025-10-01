@@ -199,6 +199,57 @@ article .content a {
   gap: 10px;
   margin: 20px 0;
 }
+
+.comments {
+  margin: 28px 0;
+}
+#commentsList .comment {
+  padding: 12px 14px;
+  border-bottom: 1px dashed var(--border);
+}
+#commentsList .comment .author {
+  font-weight: 600;
+}
+#commentsList .comment .when {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+#commentForm {
+  margin-top: 10px;
+  gap: 10px;
+}
+#commentForm .row {
+  display: flex;
+  gap: 10px;
+}
+#commentForm input,
+#commentForm textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0f1117;
+  color: var(--text);
+  outline: none;
+}
+
+.site-footer {
+  padding: 30px 0;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* Editor */
+dialog#editorModal {
+  border: none;
+  border-radius: 18px;
+  padding: 0;
+  background: #0c0e14;
+  width: min(900px, 94vw);
+  box-shadow: var(--shadow);
+}
 .editor {
   padding: 18px;
 }
@@ -241,37 +292,4 @@ article .content a {
   #commentForm .row {
     flex-direction: column;
   }
-}
-.comments {
-  margin: 28px 0;
-}
-#commentsList .comment {
-  padding: 12px 14px;
-  border-bottom: 1px dashed var(--border);
-}
-#commentsList .comment .author {
-  font-weight: 600;
-}
-#commentsList .comment .when {
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-#commentForm {
-  margin-top: 10px;
-  gap: 10px;
-}
-#commentForm .row {
-  display: flex;
-  gap: 10px;
-}
-#commentForm input,
-#commentForm textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: #0f1117;
-  color: var(--text);
-  outline: none;
 }
