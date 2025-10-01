@@ -251,3 +251,44 @@ function drawPost(slug) {
 
   renderComments();
 }
+
+function renderComments() {
+  const data = store.read();
+  const pid = state.currentPostId;
+  const list = data.comments[pid] || [];
+  const box = q("#commentsList");
+  box.innerHTML = "";
+  if (!list.length) {
+    box.innerHTML = `<p class="muted">No comments yet. Be the first!</p>`;
+    return;
+  }
+  list.forEach((c) => {
+    const row = el("div", "comment");
+    row.innerHTML = `
+      <div><span class="author">${
+        c.name || "Anonymous"
+      }</span> <span class="when">• ${fmtDate(c.createdAt)}</span></div>
+      <div>${markdownLite(c.body)}</div>
+    `;
+    box.append(row);
+  });
+}
+
+// ---------- Editor ----------
+function openEditor(postId) {
+  const modal = q("#editorModal");
+  const data = store.read();
+  const editing = postId ? data.posts.find((p) => p.id === postId) : null;
+
+  state.editingId = editing ? editing.id : null;
+  q("#editorTitle").textContent = editing ? "Edit Post" : "New Post";
+  q("#postTitle").value = editing ? editing.title : "";
+  q("#postTags").value = editing ? editing.tags.join(", ") : "";
+  q("#postCover").value = editing?.cover || "";
+  q("#postContent").value = editing ? editing.content : "";
+  q("#deleteInEditor").classList.toggle("hidden", !editing);
+  q("#previewPane").classList.add("hidden");
+
+  if (typeof modal.showModal === "function") modal.showModal();
+  else modal.classList.remove("hidden");
+}
