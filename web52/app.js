@@ -118,3 +118,23 @@ els.input.addEventListener("keydown", (e) => {
     return;
   }
 });
+
+els.input.addEventListener("input", () => {
+  // Autosize textarea
+  els.input.style.height = "auto";
+  els.input.style.height = Math.min(160, els.input.scrollHeight) + "px";
+
+  broadcastTyping();
+  if (typingTimer) clearTimeout(typingTimer);
+  typingTimer = setTimeout(() => (els.typing.hidden = true), TYPING_DEBOUNCE);
+});
+
+// Emoji helper
+els.emojiBtn.addEventListener("click", () => {
+  const emoji = "🙂";
+  const { selectionStart, selectionEnd, value } = els.input;
+  els.input.value =
+    value.slice(0, selectionStart) + emoji + value.slice(selectionEnd);
+  els.input.focus();
+  els.input.dispatchEvent(new Event("input"));
+});
