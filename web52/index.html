@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple Chat</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="chat">
+      <header class="chat__header">
+        <div class="chat__room">
+          <span class="dot"></span>
+          <strong>Simple Chat</strong>
+        </div>
+        <div id="usernameDisplay" class="chat__user"></div>
+      </header>
+
+      <main id="messages" class="chat__messages" aria-live="polite"></main>
+
+      <div id="typing" class="chat__typing" aria-live="polite" hidden></div>
+
+      <form id="form" class="chat__input" autocomplete="off">
+        <button
+          type="button"
+          id="emojiBtn"
+          class="btn btn--ghost"
+          title="Insert 🙂"
+          aria-label="Insert emoji"
+        >
+          🙂
+        </button>
+        <textarea
+          id="input"
+          class="input"
+          rows="1"
+          placeholder="Type a message… (Enter to send, Shift+Enter for new line)"
+        ></textarea>
+        <button type="submit" class="btn">Send</button>
+      </form>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
