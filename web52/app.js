@@ -43,3 +43,30 @@ const getMessages = () => {
 };
 const setMessages = (arr) =>
   localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+
+// Render
+function render() {
+  const data = getMessages();
+  els.messages.innerHTML = "";
+  data.forEach((m) => {
+    const wrap = document.createElement("div");
+    wrap.className = `msg ${m.user === username ? "msg--mine" : "msg--theirs"}`;
+
+    const meta = document.createElement("div");
+    meta.className = "msg__meta";
+    meta.textContent =
+      m.user === username
+        ? `You • ${fmtTime(m.time)}`
+        : `${m.user} • ${fmtTime(m.time)}`;
+
+    const bubble = document.createElement("div");
+    bubble.className = "msg__bubble";
+    bubble.textContent = m.text;
+
+    wrap.appendChild(meta);
+    wrap.appendChild(bubble);
+    els.messages.appendChild(wrap);
+  });
+  // Autoscroll
+  els.messages.scrollTop = els.messages.scrollHeight;
+}
