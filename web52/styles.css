@@ -29,6 +29,7 @@ body {
   place-items: center;
   padding: 16px;
 }
+
 .chat {
   width: 100%;
   max-width: 760px;
@@ -140,4 +141,23 @@ body {
 .input:focus {
   border-color: var(--ring);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+.btn {
+  border: none;
+  padding: 10px 14px;
+  background: var(--ring);
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover {
+  filter: brightness(1.08);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
