@@ -70,3 +70,51 @@ function render() {
   // Autoscroll
   els.messages.scrollTop = els.messages.scrollHeight;
 }
+
+// Send a message
+function sendMessage(text) {
+  const trimmed = text.replace(/\s+$/g, "");
+  if (!trimmed) return;
+
+  const message = {
+    id: crypto.randomUUID
+      ? crypto.randomUUID()
+      : Math.random().toString(36).slice(2),
+    user: username,
+    text: trimmed,
+    time: now(),
+  };
+
+  const data = getMessages();
+  data.push(message);
+  setMessages(data);
+  render();
+
+  // Broadcast to other tabs
+  bc?.postMessage({ type: "message", payload: message });
+}
+
+// Typing indicator
+function broadcastTyping() {
+  bc?.postMessage({
+    type: "typing",
+    payload: { user: username, at: Date.now() },
+  });
+}
+
+// Handle form
+els.form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  sendMessage(els.input.value);
+  els.input.value = "";
+  els.input.style.height = "auto";
+});
+
+els.input.addEventListener("keydown", (e) => {
+  // Enter to send, Shift+Enter for newline
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    els.form.dispatchEvent(new Event("submit"));
+    return;
+  }
+});
