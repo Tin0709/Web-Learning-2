@@ -71,3 +71,47 @@ body {
   color: var(--muted);
   font-size: 14px;
 }
+
+/* Messages */
+.chat__messages {
+  overflow: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.msg {
+  display: grid;
+  gap: 4px;
+  max-width: min(70%, 520px);
+}
+.msg--mine {
+  margin-left: auto;
+  text-align: right;
+}
+.msg__meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+.msg__bubble {
+  padding: 10px 12px;
+  border-radius: 12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+.msg--mine .msg__bubble {
+  background: var(--mine);
+}
+.msg--theirs .msg__bubble {
+  background: var(--theirs);
+}
+
+/* Typing indicator */
+.chat__typing {
+  padding: 0 16px 8px 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
