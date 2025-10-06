@@ -18,6 +18,7 @@ const TYPING_DEBOUNCE = 1200;
 const bc =
   "BroadcastChannel" in window ? new BroadcastChannel(CHANNEL_NAME) : null;
 let typingTimer = null;
+
 // Username (stored once)
 let username = localStorage.getItem("simple-chat-username");
 if (!username) {
@@ -138,3 +139,33 @@ els.emojiBtn.addEventListener("click", () => {
   els.input.focus();
   els.input.dispatchEvent(new Event("input"));
 });
+
+// Receive events from other tabs
+bc &&
+  (bc.onmessage = (ev) => {
+    const { type, payload } = ev.data || {};
+    if (type === "message") {
+      // De-dup: only add if not already present
+      const data = getMessages();
+      if (!data.some((m) => m.id === payload.id)) {
+        data.push(payload);
+        setMessages(data);
+        render();
+      }
+    } else if (type === "typing") {
+      if (payload.user !== username) {
+        els.typing.textContent = `${payload.user} is typing…`;
+        els.typing.hidden = false;
+        if (typingTimer) clearTimeout(typingTimer);
+        typingTimer = setTimeout(
+          () => (els.typing.hidden = true),
+          TYPING_DEBOUNCE
+        );
+      }
+    }
+  });
+
+// Initial load
+render();
+
+// Helpful: clear chat with devtools -> localStorage.removeItem("simple-chat-messages")
