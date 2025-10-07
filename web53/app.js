@@ -44,3 +44,29 @@ let current = 0;
 let score = 0;
 let hasAnswered = false;
 let order = shuffle([...Array(QUESTIONS.length).keys()]); // randomized question order
+
+/* ========= DOM Refs ========= */
+const questionEl = document.getElementById("questionText");
+const answersWrap = document.getElementById("answers");
+const feedbackEl = document.getElementById("feedback");
+const progressBar = document.getElementById("progressBar");
+const questionCounter = document.getElementById("questionCounter");
+const scoreCounter = document.getElementById("scoreCounter");
+const nextBtn = document.getElementById("nextBtn");
+const restartBtn = document.getElementById("restartBtn");
+
+init();
+
+/* ========= Functions ========= */
+
+function init() {
+  current = 0;
+  score = 0;
+  hasAnswered = false;
+  order = shuffle([...Array(QUESTIONS.length).keys()]);
+  nextBtn.disabled = true;
+  restartBtn.classList.add("hidden");
+  renderQuestion();
+  updateMeta();
+  document.addEventListener("keydown", handleKeys);
+}
