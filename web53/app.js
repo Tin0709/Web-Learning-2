@@ -142,3 +142,37 @@ function handleKeys(e) {
     if (!nextBtn.disabled) goNext();
   }
 }
+
+nextBtn.addEventListener("click", goNext);
+restartBtn.addEventListener("click", init);
+
+function goNext() {
+  if (current < QUESTIONS.length - 1) {
+    current++;
+    renderQuestion();
+    updateMeta();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  // Fill the progress bar to 100%
+  progressBar.style.width = "100%";
+  questionCounter.textContent = `Finished!`;
+  scoreCounter.textContent = `Score: ${score}/${QUESTIONS.length}`;
+
+  const percent = Math.round((score / QUESTIONS.length) * 100);
+
+  questionEl.textContent = "Results";
+  answersWrap.innerHTML = `
+    <div class="btn" style="cursor:default">
+      You scored <strong>${score}</strong> out of <strong>${QUESTIONS.length}</strong> (${percent}%)
+    </div>
+  `;
+
+  feedbackEl.textContent = getMessage(percent);
+  nextBtn.disabled = true;
+  nextBtn.textContent = "Next";
+  restartBtn.classList.remove("hidden");
+}
