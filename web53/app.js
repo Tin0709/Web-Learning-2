@@ -70,3 +70,32 @@ function init() {
   updateMeta();
   document.addEventListener("keydown", handleKeys);
 }
+
+function renderQuestion() {
+  const qIndex = order[current];
+  const q = QUESTIONS[qIndex];
+
+  questionEl.textContent = q.text;
+  answersWrap.innerHTML = "";
+
+  const keys = ["1", "2", "3", "4"];
+  q.choices.forEach((choice, i) => {
+    const btn = document.createElement("button");
+    btn.className = "btn answer";
+    btn.setAttribute("data-index", i);
+    btn.innerHTML = `
+      <span class="answer__key">${keys[i]}</span>
+      <span>${escapeHTML(choice)}</span>
+    `;
+    btn.addEventListener("click", () => selectAnswer(i));
+    answersWrap.appendChild(btn);
+  });
+
+  feedbackEl.textContent = "";
+  hasAnswered = false;
+  nextBtn.disabled = true;
+
+  // progress
+  const progress = (current / QUESTIONS.length) * 100;
+  progressBar.style.width = `${progress}%`;
+}
