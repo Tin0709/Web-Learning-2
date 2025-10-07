@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interactive Quiz App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="quiz-header">
+        <h1>Quiz</h1>
+        <div class="progress" aria-label="quiz progress">
+          <div id="progressBar" class="progress__bar" style="width: 0%"></div>
+        </div>
+        <div class="meta">
+          <span id="questionCounter" aria-live="polite">Question 1/1</span>
+          <span id="scoreCounter" aria-live="polite">Score: 0</span>
+        </div>
+      </header>
+
+      <section id="card" class="card" aria-live="polite">
+        <h2 id="questionText" class="question">Question text</h2>
+
+        <div
+          id="answers"
+          class="answers"
+          role="group"
+          aria-label="answer choices"
+        >
+          <!-- answer buttons injected by JS -->
+        </div>
+
+        <p id="feedback" class="feedback" aria-live="polite"></p>
+
+        <div class="actions">
+          <button id="nextBtn" class="btn btn-primary" disabled>
+            Next <span aria-hidden="true">↵</span>
+          </button>
+          <button id="restartBtn" class="btn btn-secondary hidden">
+            Restart
+          </button>
+        </div>
+      </section>
+
+      <footer class="credits">
+        <small>
+          Tip: press <kbd>1</kbd>-<kbd>4</kbd> to answer, <kbd>Enter</kbd> for
+          Next.
+        </small>
+      </footer>
+    </main>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
