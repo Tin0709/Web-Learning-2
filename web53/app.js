@@ -176,3 +176,86 @@ function showResults() {
   nextBtn.textContent = "Next";
   restartBtn.classList.remove("hidden");
 }
+
+nextBtn.addEventListener("click", goNext);
+restartBtn.addEventListener("click", init);
+
+function goNext() {
+  if (current < QUESTIONS.length - 1) {
+    current++;
+    renderQuestion();
+    updateMeta();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  // Fill the progress bar to 100%
+  progressBar.style.width = "100%";
+  questionCounter.textContent = `Finished!`;
+  scoreCounter.textContent = `Score: ${score}/${QUESTIONS.length}`;
+
+  const percent = Math.round((score / QUESTIONS.length) * 100);
+
+  questionEl.textContent = "Results";
+  answersWrap.innerHTML = `
+    <div class="btn" style="cursor:default">
+      You scored <strong>${score}</strong> out of <strong>${QUESTIONS.length}</strong> (${percent}%)
+    </div>
+  `;
+
+  feedbackEl.textContent = getMessage(percent);
+  nextBtn.disabled = true;
+  nextBtn.textContent = "Next";
+  restartBtn.classList.remove("hidden");
+}
+
+nextBtn.addEventListener("click", goNext);
+restartBtn.addEventListener("click", init);
+
+function goNext() {
+  if (current < QUESTIONS.length - 1) {
+    current++;
+    renderQuestion();
+    updateMeta();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  // Fill the progress bar to 100%
+  progressBar.style.width = "100%";
+  questionCounter.textContent = `Finished!`;
+  scoreCounter.textContent = `Score: ${score}/${QUESTIONS.length}`;
+
+  const percent = Math.round((score / QUESTIONS.length) * 100);
+
+  questionEl.textContent = "Results";
+  answersWrap.innerHTML = `
+    <div class="btn" style="cursor:default">
+      You scored <strong>${score}</strong> out of <strong>${QUESTIONS.length}</strong> (${percent}%)
+    </div>
+  `;
+
+  feedbackEl.textContent = getMessage(percent);
+  nextBtn.disabled = true;
+  nextBtn.textContent = "Next";
+  restartBtn.classList.remove("hidden");
+}
+function getMessage(p) {
+  if (p === 100) return "🎉 Perfect! You nailed it.";
+  if (p >= 80) return "🔥 Great job! Almost perfect.";
+  if (p >= 50) return "👍 Not bad—keep practicing.";
+  return "💡 Keep going—you’ll get there!";
+}
+
+/* ========= Utils ========= */
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
