@@ -1,0 +1,46 @@
+/* ========= Editable Quiz Data ========= */
+const QUESTIONS = [
+  {
+    text: "Which HTML element is used to create a hyperlink?",
+    choices: ["<link>", "<a>", "<href>", "<hyper>"],
+    answerIndex: 1,
+    explanation:
+      "<a> defines a hyperlink; <link> is for external resources in <head>.",
+  },
+  {
+    text: "In CSS, which property controls the text size?",
+    choices: ["font-style", "text-size", "font-size", "size"],
+    answerIndex: 2,
+    explanation: "The correct CSS property is font-size.",
+  },
+  {
+    text: "Which of the following declares a constant in JavaScript?",
+    choices: ["var x = 1", "let x = 1", "const x = 1", "constant x = 1"],
+    answerIndex: 2,
+    explanation: "Use const for block-scoped constants.",
+  },
+  {
+    text: "What does JSON stand for?",
+    choices: [
+      "Java Syntax Object Notation",
+      "JavaScript Object Notation",
+      "Java Source Oriented Notation",
+      "Joined String Over Network",
+    ],
+    answerIndex: 1,
+    explanation: "JSON = JavaScript Object Notation.",
+  },
+  {
+    text: "Which array method creates a new array with elements that pass a test?",
+    choices: ["map()", "reduce()", "filter()", "forEach()"],
+    answerIndex: 2,
+    explanation:
+      "filter() returns a new array with elements that pass the predicate.",
+  },
+];
+
+/* ========= App State ========= */
+let current = 0;
+let score = 0;
+let hasAnswered = false;
+let order = shuffle([...Array(QUESTIONS.length).keys()]); // randomized question order
