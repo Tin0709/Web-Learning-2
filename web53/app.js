@@ -177,73 +177,14 @@ function showResults() {
   restartBtn.classList.remove("hidden");
 }
 
-nextBtn.addEventListener("click", goNext);
-restartBtn.addEventListener("click", init);
-
-function goNext() {
-  if (current < QUESTIONS.length - 1) {
-    current++;
-    renderQuestion();
-    updateMeta();
-  } else {
-    showResults();
-  }
+function updateMeta() {
+  questionCounter.textContent = `Question ${Math.min(
+    current + 1,
+    QUESTIONS.length
+  )}/${QUESTIONS.length}`;
+  scoreCounter.textContent = `Score: ${score}`;
 }
 
-function showResults() {
-  // Fill the progress bar to 100%
-  progressBar.style.width = "100%";
-  questionCounter.textContent = `Finished!`;
-  scoreCounter.textContent = `Score: ${score}/${QUESTIONS.length}`;
-
-  const percent = Math.round((score / QUESTIONS.length) * 100);
-
-  questionEl.textContent = "Results";
-  answersWrap.innerHTML = `
-    <div class="btn" style="cursor:default">
-      You scored <strong>${score}</strong> out of <strong>${QUESTIONS.length}</strong> (${percent}%)
-    </div>
-  `;
-
-  feedbackEl.textContent = getMessage(percent);
-  nextBtn.disabled = true;
-  nextBtn.textContent = "Next";
-  restartBtn.classList.remove("hidden");
-}
-
-nextBtn.addEventListener("click", goNext);
-restartBtn.addEventListener("click", init);
-
-function goNext() {
-  if (current < QUESTIONS.length - 1) {
-    current++;
-    renderQuestion();
-    updateMeta();
-  } else {
-    showResults();
-  }
-}
-
-function showResults() {
-  // Fill the progress bar to 100%
-  progressBar.style.width = "100%";
-  questionCounter.textContent = `Finished!`;
-  scoreCounter.textContent = `Score: ${score}/${QUESTIONS.length}`;
-
-  const percent = Math.round((score / QUESTIONS.length) * 100);
-
-  questionEl.textContent = "Results";
-  answersWrap.innerHTML = `
-    <div class="btn" style="cursor:default">
-      You scored <strong>${score}</strong> out of <strong>${QUESTIONS.length}</strong> (${percent}%)
-    </div>
-  `;
-
-  feedbackEl.textContent = getMessage(percent);
-  nextBtn.disabled = true;
-  nextBtn.textContent = "Next";
-  restartBtn.classList.remove("hidden");
-}
 function getMessage(p) {
   if (p === 100) return "🎉 Perfect! You nailed it.";
   if (p >= 80) return "🔥 Great job! Almost perfect.";
@@ -258,4 +199,13 @@ function shuffle(arr) {
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
+}
+
+function escapeHTML(str) {
+  return str
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
