@@ -99,3 +99,46 @@ function renderQuestion() {
   const progress = (current / QUESTIONS.length) * 100;
   progressBar.style.width = `${progress}%`;
 }
+
+function selectAnswer(i) {
+  if (hasAnswered) return;
+  hasAnswered = true;
+
+  const q = QUESTIONS[order[current]];
+  const correct = q.answerIndex;
+
+  const buttons = [...answersWrap.querySelectorAll("button")];
+  buttons.forEach((btn, idx) => {
+    btn.disabled = true;
+    if (idx === correct) btn.classList.add("correct");
+    if (idx === i && i !== correct) btn.classList.add("wrong");
+  });
+
+  if (i === correct) {
+    score++;
+    feedbackEl.textContent = "✅ Correct! " + (q.explanation || "");
+  } else {
+    feedbackEl.textContent = "❌ Not quite. " + (q.explanation || "");
+  }
+
+  updateMeta();
+  nextBtn.disabled = false;
+
+  // If it's the last question, change Next to "See results"
+  if (current === QUESTIONS.length - 1) {
+    nextBtn.textContent = "See results ↵";
+  } else {
+    nextBtn.textContent = "Next ↵";
+  }
+}
+
+function handleKeys(e) {
+  const key = e.key;
+  if (!hasAnswered && ["1", "2", "3", "4"].includes(key)) {
+    const idx = Number(key) - 1;
+    const buttons = answersWrap.querySelectorAll("button");
+    if (buttons[idx]) buttons[idx].click();
+  } else if (key === "Enter") {
+    if (!nextBtn.disabled) goNext();
+  }
+}
