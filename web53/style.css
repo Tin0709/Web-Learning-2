@@ -75,3 +75,44 @@ body {
   padding: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
 }
+
+.question {
+  margin: 0 0 16px;
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.answers {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.btn {
+  border: 1px solid var(--border);
+  background: #0f1330;
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.02s ease, border-color 0.2s ease, background 0.2s ease;
+  text-align: left;
+}
+.btn:hover {
+  border-color: #33406a;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #21306a, #1a2457);
+}
+.btn-secondary {
+  background: transparent;
+}
