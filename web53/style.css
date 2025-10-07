@@ -168,3 +168,13 @@ kbd {
   background: #0d1126;
   color: var(--muted);
 }
+
+/* Responsive */
+@media (max-width: 520px) {
+  .question {
+    font-size: 18px;
+  }
+  .btn {
+    font-size: 15px;
+  }
+}
