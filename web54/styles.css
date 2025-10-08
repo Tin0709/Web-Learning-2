@@ -83,6 +83,7 @@ header {
     grid-template-columns: 1fr;
   }
 }
+
 .panel {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -239,4 +240,16 @@ td .chip {
 }
 .muted {
   color: var(--muted);
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+.chartCard {
+  background: #0b1230;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
 }
