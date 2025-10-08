@@ -220,3 +220,29 @@ function renderCharts(list) {
     },
   });
 }
+function renderAll() {
+  const filtered = applyFilters();
+  renderTable(filtered);
+  renderTotals(filtered);
+  renderCharts(filtered);
+  refreshFilterCategoryOptions();
+}
+
+/* ---------- CRUD ---------- */
+function addTx(data) {
+  transactions.push({ id: uid(), createdAt: Date.now(), ...data });
+  save(transactions);
+}
+
+function updateTx(id, data) {
+  const idx = transactions.findIndex((t) => t.id === id);
+  if (idx >= 0) {
+    transactions[idx] = { ...transactions[idx], ...data };
+    save(transactions);
+  }
+}
+
+function deleteTx(id) {
+  transactions = transactions.filter((t) => t.id !== id);
+  save(transactions);
+}
