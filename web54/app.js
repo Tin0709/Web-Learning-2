@@ -47,3 +47,15 @@ const emptyState = document.getElementById("emptyState");
 
 const exportBtn = document.getElementById("exportBtn");
 const importFile = document.getElementById("importFile");
+// Charts
+let categoryChart, trendChart;
+
+/* ---------- Utils ---------- */
+const fmtCurrency = (n) =>
+  new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: "VND",
+    maximumFractionDigits: 0,
+  }).format(n);
+
+const todayStr = () => new Date().toISOString().slice(0, 10);
