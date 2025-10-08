@@ -173,3 +173,50 @@ function renderTotals(list) {
   incomeEl.textContent = fmtCurrency(income);
   expenseEl.textContent = fmtCurrency(expense);
 }
+function renderCharts(list) {
+  // Category pie (expenses only for clarity)
+  const catMap = {};
+  list
+    .filter((t) => t.type === "expense")
+    .forEach((t) => {
+      catMap[t.category] = (catMap[t.category] || 0) + t.amount;
+    });
+  const catLabels = Object.keys(catMap);
+  const catData = Object.values(catMap);
+
+  const catCtx = document.getElementById("categoryChart");
+  if (categoryChart) categoryChart.destroy();
+  categoryChart = new Chart(catCtx, {
+    type: "pie",
+    data: { labels: catLabels, datasets: [{ data: catData }] },
+    options: { plugins: { legend: { position: "bottom" } } },
+  });
+
+  // Monthly trend (net balance per month)
+  const monthMap = {};
+  list.forEach((t) => {
+    const key = t.date.slice(0, 7); // YYYY-MM
+    monthMap[key] =
+      (monthMap[key] || 0) + (t.type === "income" ? t.amount : -t.amount);
+  });
+  const sortedKeys = Object.keys(monthMap).sort();
+  const trendCtx = document.getElementById("trendChart");
+  if (trendChart) trendChart.destroy();
+  trendChart = new Chart(trendCtx, {
+    type: "line",
+    data: {
+      labels: sortedKeys,
+      datasets: [
+        {
+          label: "Net (Income - Expense)",
+          data: sortedKeys.map((k) => monthMap[k]),
+          tension: 0.25,
+        },
+      ],
+    },
+    options: {
+      plugins: { legend: { display: true } },
+      scales: { y: { beginAtZero: true } },
+    },
+  });
+}
