@@ -83,3 +83,104 @@ header {
     grid-template-columns: 1fr;
   }
 }
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+}
+.row {
+  display: flex;
+  flex-direction: column;
+  margin: 0.75rem 0;
+}
+.row label {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  background: #0b1230;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  padding: 0.7rem 0.8rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+input:focus,
+select:focus {
+  border-color: var(--accent);
+}
+.segmented {
+  display: flex;
+  gap: 0.8rem;
+}
+.segmented label {
+  background: #0b1230;
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.segmented input {
+  margin-right: 0.4rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+button.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #0b1020;
+}
+button.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+button.small {
+  padding: 0.45rem 0.7rem;
+  font-size: 0.9rem;
+}
+button.danger {
+  background: transparent;
+  border: 1px solid #3a2230;
+  color: #ff9aa9;
+}
+button.icon {
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+}
+
+.import-export {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+label.file {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px dashed var(--border);
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  cursor: pointer;
+  opacity: 0.9;
+}
+label.file:hover {
+  opacity: 1;
+}
