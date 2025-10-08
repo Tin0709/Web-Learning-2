@@ -59,3 +59,30 @@ const fmtCurrency = (n) =>
   }).format(n);
 
 const todayStr = () => new Date().toISOString().slice(0, 10);
+function uid() {
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function save(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+/* ---------- State ---------- */
+let transactions = load(); // [{ id, type, amount, category, date, note }]
+
+/* ---------- Category Options ---------- */
+function refreshCategorySelect(type = "income") {
+  const list = DEFAULT_CATEGORIES[type];
+  categorySel.innerHTML = list
+    .map((c) => `<option value="${c}">${c}</option>`)
+    .join("");
+}
