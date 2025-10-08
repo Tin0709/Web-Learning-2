@@ -109,3 +109,35 @@ function computeTotals(current = transactions) {
     .reduce((s, t) => s + t.amount, 0);
   return { income, expense, balance: income - expense };
 }
+function applyFilters() {
+  let list = [...transactions];
+
+  // Type
+  const type = filterTypeSel.value;
+  if (type !== "all") {
+    list = list.filter((t) => t.type === type);
+  }
+
+  // Category
+  const cat = filterCatSel.value;
+  if (cat !== "all") {
+    list = list.filter((t) => t.category === cat);
+  }
+
+  // Date range
+  const from = fromDateInp.value ? new Date(fromDateInp.value) : null;
+  const to = toDateInp.value ? new Date(toDateInp.value) : null;
+  if (from) list = list.filter((t) => new Date(t.date) >= from);
+  if (to) list = list.filter((t) => new Date(t.date) <= to);
+
+  // Search note
+  const q = searchTextInp.value.trim().toLowerCase();
+  if (q) list = list.filter((t) => (t.note || "").toLowerCase().includes(q));
+
+  // Sort by date desc
+  list.sort(
+    (a, b) => new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt
+  );
+
+  return list;
+}
