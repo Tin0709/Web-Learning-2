@@ -141,3 +141,35 @@ function applyFilters() {
 
   return list;
 }
+function renderTable(list) {
+  txTbody.innerHTML = list
+    .map(
+      (t) => `
+      <tr>
+        <td>${t.date}</td>
+        <td><span class="chip ${t.type}">${t.type}</span></td>
+        <td>${t.category}</td>
+        <td class="right">${fmtCurrency(t.amount)}</td>
+        <td>${t.note ? escapeHtml(t.note) : ""}</td>
+        <td class="right">
+          <button class="icon ghost" title="Edit" data-action="edit" data-id="${
+            t.id
+          }">✏️</button>
+          <button class="icon danger" title="Delete" data-action="delete" data-id="${
+            t.id
+          }">🗑️</button>
+        </td>
+      </tr>
+    `
+    )
+    .join("");
+
+  emptyState.style.display = list.length ? "none" : "";
+}
+
+function renderTotals(list) {
+  const { income, expense, balance } = computeTotals(list);
+  balanceEl.textContent = fmtCurrency(balance);
+  incomeEl.textContent = fmtCurrency(income);
+  expenseEl.textContent = fmtCurrency(expense);
+}
