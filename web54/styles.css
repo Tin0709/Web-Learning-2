@@ -184,3 +184,59 @@ label.file {
 label.file:hover {
   opacity: 1;
 }
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+.tableWrap {
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+thead th {
+  position: sticky;
+  top: 0;
+  background: #0b1230;
+  color: #cbd5e1;
+  text-align: left;
+  font-weight: 600;
+  padding: 0.7rem;
+  border-bottom: 1px solid var(--border);
+}
+tbody td,
+tfoot td {
+  padding: 0.7rem;
+  border-bottom: 1px solid var(--border);
+}
+td.right {
+  text-align: right;
+}
+td.center {
+  text-align: center;
+}
+td .chip {
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+.chip.income {
+  background: #0b2a1b;
+  color: #9af5b1;
+  border: 1px solid #1f5b39;
+}
+.chip.expense {
+  background: #2b1117;
+  color: #ffb6c1;
+  border: 1px solid #5b1f34;
+}
+.muted {
+  color: var(--muted);
+}
