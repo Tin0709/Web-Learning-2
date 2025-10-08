@@ -47,6 +47,7 @@ const emptyState = document.getElementById("emptyState");
 
 const exportBtn = document.getElementById("exportBtn");
 const importFile = document.getElementById("importFile");
+
 // Charts
 let categoryChart, trendChart;
 
@@ -59,6 +60,7 @@ const fmtCurrency = (n) =>
   }).format(n);
 
 const todayStr = () => new Date().toISOString().slice(0, 10);
+
 function uid() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
@@ -86,6 +88,7 @@ function refreshCategorySelect(type = "income") {
     .map((c) => `<option value="${c}">${c}</option>`)
     .join("");
 }
+
 function refreshFilterCategoryOptions() {
   const allCats = Array.from(
     new Set([
@@ -109,6 +112,7 @@ function computeTotals(current = transactions) {
     .reduce((s, t) => s + t.amount, 0);
   return { income, expense, balance: income - expense };
 }
+
 function applyFilters() {
   let list = [...transactions];
 
@@ -141,26 +145,27 @@ function applyFilters() {
 
   return list;
 }
+
 function renderTable(list) {
   txTbody.innerHTML = list
     .map(
       (t) => `
-      <tr>
-        <td>${t.date}</td>
-        <td><span class="chip ${t.type}">${t.type}</span></td>
-        <td>${t.category}</td>
-        <td class="right">${fmtCurrency(t.amount)}</td>
-        <td>${t.note ? escapeHtml(t.note) : ""}</td>
-        <td class="right">
-          <button class="icon ghost" title="Edit" data-action="edit" data-id="${
-            t.id
-          }">✏️</button>
-          <button class="icon danger" title="Delete" data-action="delete" data-id="${
-            t.id
-          }">🗑️</button>
-        </td>
-      </tr>
-    `
+       <tr>
+         <td>${t.date}</td>
+         <td><span class="chip ${t.type}">${t.type}</span></td>
+         <td>${t.category}</td>
+         <td class="right">${fmtCurrency(t.amount)}</td>
+         <td>${t.note ? escapeHtml(t.note) : ""}</td>
+         <td class="right">
+           <button class="icon ghost" title="Edit" data-action="edit" data-id="${
+             t.id
+           }">✏️</button>
+           <button class="icon danger" title="Delete" data-action="delete" data-id="${
+             t.id
+           }">🗑️</button>
+         </td>
+       </tr>
+     `
     )
     .join("");
 
@@ -173,6 +178,7 @@ function renderTotals(list) {
   incomeEl.textContent = fmtCurrency(income);
   expenseEl.textContent = fmtCurrency(expense);
 }
+
 function renderCharts(list) {
   // Category pie (expenses only for clarity)
   const catMap = {};
@@ -220,6 +226,7 @@ function renderCharts(list) {
     },
   });
 }
+
 function renderAll() {
   const filtered = applyFilters();
   renderTable(filtered);
@@ -246,6 +253,7 @@ function deleteTx(id) {
   transactions = transactions.filter((t) => t.id !== id);
   save(transactions);
 }
+
 /* ---------- Form & Events ---------- */
 function resetForm() {
   txForm.reset();
@@ -270,6 +278,7 @@ function fillForm(tx) {
   noteInp.value = tx.note || "";
   editIdInp.value = tx.id;
 }
+
 txForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const formData = new FormData(txForm);
@@ -323,6 +332,7 @@ txTbody.addEventListener("click", (e) => {
     }
   }
 });
+
 // Filters
 [filterTypeSel, filterCatSel, fromDateInp, toDateInp, searchTextInp].forEach(
   (el) => el.addEventListener("input", renderAll)
@@ -335,6 +345,7 @@ clearFiltersBtn.addEventListener("click", () => {
   searchTextInp.value = "";
   renderAll();
 });
+
 // Export / Import
 exportBtn.addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(transactions, null, 2)], {
@@ -385,3 +396,64 @@ importFile.addEventListener("change", async (e) => {
     importFile.value = "";
   }
 });
+
+/* ---------- Security tiny helper ---------- */
+function escapeHtml(str) {
+  return str.replace(
+    /[&<>"']/g,
+    (m) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[
+        m
+      ])
+  );
+}
+
+/* ---------- Init ---------- */
+(function init() {
+  // Default date today
+  dateInp.value = todayStr();
+
+  // Default categories for form
+  refreshCategorySelect("income");
+
+  // Seed filter categories
+  refreshFilterCategoryOptions();
+
+  // Initial render
+  renderAll();
+
+  // Example seed if empty (optional: comment out if you don’t want demo data)
+  if (transactions.length === 0) {
+    transactions = [
+      {
+        id: uid(),
+        createdAt: Date.now(),
+        type: "income",
+        amount: 10000000,
+        category: "Salary",
+        date: todayStr(),
+        note: "September salary",
+      },
+      {
+        id: uid(),
+        createdAt: Date.now(),
+        type: "expense",
+        amount: 1800000,
+        category: "Rent",
+        date: todayStr(),
+        note: "Room",
+      },
+      {
+        id: uid(),
+        createdAt: Date.now(),
+        type: "expense",
+        amount: 120000,
+        category: "Food",
+        date: todayStr(),
+        note: "Lunch",
+      },
+    ];
+    save(transactions);
+    renderAll();
+  }
+})();
