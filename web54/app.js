@@ -246,3 +246,27 @@ function deleteTx(id) {
   transactions = transactions.filter((t) => t.id !== id);
   save(transactions);
 }
+/* ---------- Form & Events ---------- */
+function resetForm() {
+  txForm.reset();
+  formTitle.textContent = "Add Transaction";
+  editIdInp.value = "";
+  // keep default radio -> refresh categories
+  refreshCategorySelect(
+    document.querySelector('input[name="type"]:checked').value
+  );
+  dateInp.value = todayStr();
+}
+
+function fillForm(tx) {
+  formTitle.textContent = "Edit Transaction";
+  document
+    .querySelectorAll('input[name="type"]')
+    .forEach((r) => (r.checked = r.value === tx.type));
+  refreshCategorySelect(tx.type);
+  amountInp.value = tx.amount;
+  categorySel.value = tx.category;
+  dateInp.value = tx.date;
+  noteInp.value = tx.note || "";
+  editIdInp.value = tx.id;
+}
