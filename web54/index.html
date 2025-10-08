@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Expense Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Chart.js CDN -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+      defer
+    ></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="container">
+      <h1>Expense Tracker</h1>
+      <div class="totals">
+        <div class="card">
+          <span class="label">Balance</span>
+          <span id="balance" class="value">₫0</span>
+        </div>
+        <div class="card income">
+          <span class="label">Income</span>
+          <span id="totalIncome" class="value">₫0</span>
+        </div>
+        <div class="card expense">
+          <span class="label">Expense</span>
+          <span id="totalExpense" class="value">₫0</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="container grid">
+      <!-- Add / Edit Form -->
+      <section class="panel">
+        <h2 id="formTitle">Add Transaction</h2>
+        <form id="txForm">
+          <div class="row">
+            <label>Type</label>
+            <div class="segmented">
+              <label
+                ><input type="radio" name="type" value="income" checked />
+                Income</label
+              >
+              <label
+                ><input type="radio" name="type" value="expense" />
+                Expense</label
+              >
+            </div>
+          </div>
+
+          <div class="row">
+            <label for="amount">Amount</label>
+            <input
+              id="amount"
+              name="amount"
+              type="number"
+              step="0.01"
+              min="0"
+              required
+              placeholder="e.g. 150000"
+            />
+          </div>
+
+          <div class="row">
+            <label for="category">Category</label>
+            <select id="category" name="category" required></select>
+          </div>
+
+          <div class="row">
+            <label for="date">Date</label>
+            <input id="date" name="date" type="date" required />
+          </div>
+
+          <div class="row">
+            <label for="note">Note</label>
+            <input
+              id="note"
+              name="note"
+              type="text"
+              maxlength="120"
+              placeholder="Optional note..."
+            />
+          </div>
+
+          <input type="hidden" id="editId" value="" />
+          <div class="actions">
+            <button type="submit" class="primary" id="saveBtn">Save</button>
+            <button type="button" class="ghost" id="resetBtn">Reset</button>
+          </div>
+        </form>
+
+        <div class="import-export">
+          <button id="exportBtn" class="ghost">Export JSON</button>
+          <label class="file">
+            <input type="file" id="importFile" accept=".json" hidden />
+            <span>Import JSON</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Filters + List -->
+      <section class="panel">
+        <h2>Transactions</h2>
+
+        <div class="filters">
+          <select id="filterType">
+            <option value="all">All types</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+
+          <select id="filterCategory">
+            <option value="all">All categories</option>
+          </select>
+
+          <input type="date" id="fromDate" />
+          <input type="date" id="toDate" />
+          <input type="text" id="searchText" placeholder="Search note…" />
+          <button id="clearFilters" class="ghost small">Clear</button>
+        </div>
+
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Category</th>
+                <th class="right">Amount</th>
+                <th>Note</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="txTbody"></tbody>
+            <tfoot id="emptyState" style="display: none">
+              <tr>
+                <td colspan="6" class="muted center">No transactions found.</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <!-- Charts -->
+      <section class="panel">
+        <h2>Insights</h2>
+        <div class="charts">
+          <div class="chartCard">
+            <h3>By Category</h3>
+            <canvas id="categoryChart" height="220"></canvas>
+          </div>
+          <div class="chartCard">
+            <h3>Monthly Trend</h3>
+            <canvas id="trendChart" height="220"></canvas>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="container footer">
+      <span
+        >Built with ❤️ — your data stays in your browser (localStorage).</span
+      >
+    </footer>
+  </body>
+</html>
