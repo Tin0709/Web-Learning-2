@@ -335,3 +335,53 @@ clearFiltersBtn.addEventListener("click", () => {
   searchTextInp.value = "";
   renderAll();
 });
+// Export / Import
+exportBtn.addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(transactions, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `expense-tracker-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+importFile.addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!Array.isArray(data)) throw new Error("Invalid file format");
+    // Basic validation
+    const cleaned = data
+      .filter(
+        (x) =>
+          x &&
+          (x.type === "income" || x.type === "expense") &&
+          Number.isFinite(+x.amount) &&
+          x.date
+      )
+      .map((x) => ({
+        id: x.id || uid(),
+        createdAt: x.createdAt || Date.now(),
+        type: x.type,
+        amount: +x.amount,
+        category: x.category || "Other",
+        date: String(x.date).slice(0, 10),
+        note: x.note || "",
+      }));
+    transactions = cleaned;
+    save(transactions);
+    renderAll();
+    alert("Imported successfully!");
+  } catch (err) {
+    alert("Import failed: " + err.message);
+  } finally {
+    importFile.value = "";
+  }
+});
