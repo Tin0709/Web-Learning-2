@@ -323,3 +323,15 @@ txTbody.addEventListener("click", (e) => {
     }
   }
 });
+// Filters
+[filterTypeSel, filterCatSel, fromDateInp, toDateInp, searchTextInp].forEach(
+  (el) => el.addEventListener("input", renderAll)
+);
+clearFiltersBtn.addEventListener("click", () => {
+  filterTypeSel.value = "all";
+  filterCatSel.value = "all";
+  fromDateInp.value = "";
+  toDateInp.value = "";
+  searchTextInp.value = "";
+  renderAll();
+});
