@@ -303,3 +303,23 @@ resetBtn.addEventListener("click", () => {
 document.querySelectorAll('input[name="type"]').forEach((r) => {
   r.addEventListener("change", (e) => refreshCategorySelect(e.target.value));
 });
+
+// Table actions
+txTbody.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  const id = btn.dataset.id;
+  const action = btn.dataset.action;
+
+  if (action === "edit") {
+    const tx = transactions.find((t) => t.id === id);
+    if (tx) fillForm(tx);
+  } else if (action === "delete") {
+    if (confirm("Delete this transaction?")) {
+      deleteTx(id);
+      // If the form was editing this one, reset it
+      if (editIdInp.value === id) resetForm();
+      renderAll();
+    }
+  }
+});
