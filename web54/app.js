@@ -23,3 +23,27 @@ const DEFAULT_CATEGORIES = {
 const balanceEl = document.getElementById("balance");
 const incomeEl = document.getElementById("totalIncome");
 const expenseEl = document.getElementById("totalExpense");
+
+const txForm = document.getElementById("txForm");
+const formTitle = document.getElementById("formTitle");
+const saveBtn = document.getElementById("saveBtn");
+const resetBtn = document.getElementById("resetBtn");
+const editIdInp = document.getElementById("editId");
+
+const amountInp = document.getElementById("amount");
+const categorySel = document.getElementById("category");
+const dateInp = document.getElementById("date");
+const noteInp = document.getElementById("note");
+
+const filterTypeSel = document.getElementById("filterType");
+const filterCatSel = document.getElementById("filterCategory");
+const fromDateInp = document.getElementById("fromDate");
+const toDateInp = document.getElementById("toDate");
+const searchTextInp = document.getElementById("searchText");
+const clearFiltersBtn = document.getElementById("clearFilters");
+
+const txTbody = document.getElementById("txTbody");
+const emptyState = document.getElementById("emptyState");
+
+const exportBtn = document.getElementById("exportBtn");
+const importFile = document.getElementById("importFile");
