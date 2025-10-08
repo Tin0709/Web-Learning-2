@@ -270,3 +270,36 @@ function fillForm(tx) {
   noteInp.value = tx.note || "";
   editIdInp.value = tx.id;
 }
+txForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const formData = new FormData(txForm);
+  const type = formData.get("type");
+  const amount = parseFloat(formData.get("amount"));
+  const category = formData.get("category");
+  const date = formData.get("date");
+  const note = formData.get("note")?.trim();
+
+  if (!isFinite(amount) || amount <= 0) {
+    alert("Please enter a valid amount > 0");
+    return;
+  }
+
+  const payload = { type, amount, category, date, note };
+
+  const editingId = editIdInp.value;
+  if (editingId) {
+    updateTx(editingId, payload);
+  } else {
+    addTx(payload);
+  }
+  resetForm();
+  renderAll();
+});
+
+resetBtn.addEventListener("click", () => {
+  resetForm();
+});
+
+document.querySelectorAll('input[name="type"]').forEach((r) => {
+  r.addEventListener("change", (e) => refreshCategorySelect(e.target.value));
+});
