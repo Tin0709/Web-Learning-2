@@ -86,3 +86,26 @@ function refreshCategorySelect(type = "income") {
     .map((c) => `<option value="${c}">${c}</option>`)
     .join("");
 }
+function refreshFilterCategoryOptions() {
+  const allCats = Array.from(
+    new Set([
+      ...DEFAULT_CATEGORIES.income,
+      ...DEFAULT_CATEGORIES.expense,
+      ...transactions.map((t) => t.category),
+    ])
+  ).sort();
+  filterCatSel.innerHTML =
+    `<option value="all">All categories</option>` +
+    allCats.map((c) => `<option value="${c}">${c}</option>`).join("");
+}
+
+/* ---------- Render ---------- */
+function computeTotals(current = transactions) {
+  const income = current
+    .filter((t) => t.type === "income")
+    .reduce((s, t) => s + t.amount, 0);
+  const expense = current
+    .filter((t) => t.type === "expense")
+    .reduce((s, t) => s + t.amount, 0);
+  return { income, expense, balance: income - expense };
+}
