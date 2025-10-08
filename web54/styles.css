@@ -1,0 +1,85 @@
+:root {
+  --bg: #0b1020; /* deep blue-gray */
+  --panel: #111833;
+  --muted: #9aa3b2;
+  --text: #e8ecf3;
+  --accent: #6aa9ff;
+  --accent-2: #7df2cf;
+  --danger: #ff6b6b;
+  --success: #5ad27b;
+  --border: #1c2446;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+h1,
+h2,
+h3 {
+  margin: 0 0 0.6rem;
+}
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+header {
+  padding-top: 1.2rem;
+}
+.footer {
+  opacity: 0.7;
+  font-size: 0.9rem;
+  padding: 2rem 1rem 3rem;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+}
+.card .label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.card .value {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 0.3rem;
+}
+.card.income .value {
+  color: var(--success);
+}
+.card.expense .value {
+  color: var(--danger);
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.grid {
+  grid-template-columns: 1fr 1.4fr;
+}
+@media (max-width: 980px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
