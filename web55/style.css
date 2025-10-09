@@ -214,3 +214,34 @@ h2 {
   gap: 10px;
   margin: 14px 0;
 }
+.summary-grid .k {
+  color: var(--muted);
+}
+.summary-grid .v {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.summary-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.review {
+  margin-top: 10px;
+}
+.review ol {
+  padding-left: 18px;
+}
+.review li {
+  margin: 0.3rem 0;
+}
+
+.icon-btn {
+  border: 1px solid var(--btn-border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
