@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mini Quiz App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>⚡ Mini Quiz</h1>
+      <button
+        id="themeToggle"
+        class="icon-btn"
+        aria-label="Toggle dark mode"
+        title="Toggle theme"
+      >
+        🌓
+      </button>
+    </header>
+
+    <main class="app">
+      <section class="panel">
+        <div class="top-bar">
+          <div
+            class="progress"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+            aria-label="Quiz progress"
+          >
+            <div class="progress__bar" id="progressBar"></div>
+          </div>
+
+          <div class="stats">
+            <span id="qCounter" aria-live="polite">Q 1/10</span>
+            <span id="timer" aria-live="polite">20s</span>
+          </div>
+        </div>
+
+        <div id="questionWrap">
+          <h2 id="question" tabindex="-1">Question text</h2>
+          <ul id="answers" class="answers" role="list">
+            <!-- Buttons injected here -->
+          </ul>
+        </div>
+
+        <div class="controls">
+          <button id="nextBtn" class="primary" disabled>Next ➜</button>
+          <button id="skipBtn" class="ghost">Skip</button>
+          <button id="restartBtn" class="ghost" title="Start over">
+            Restart
+          </button>
+        </div>
+
+        <div class="meta">
+          <span>Score: <strong id="score">0</strong></span>
+          <span>Streak: <strong id="streak">0</strong></span>
+          <span>Best: <strong id="best">0</strong></span>
+        </div>
+
+        <p id="feedback" class="feedback" aria-live="polite"></p>
+        <p class="hint">Shortcuts: 1–4 = answer, Enter = Next</p>
+      </section>
+
+      <section id="summary" class="summary hidden" aria-live="polite">
+        <h2>🎉 Quiz Complete</h2>
+        <p id="finalLine"></p>
+        <div class="summary-grid">
+          <div>
+            <span class="k">Score</span><span id="sumScore" class="v">0</span>
+          </div>
+          <div>
+            <span class="k">Out of</span><span id="sumTotal" class="v">0</span>
+          </div>
+          <div>
+            <span class="k">Best</span><span id="sumBest" class="v">0</span>
+          </div>
+          <div>
+            <span class="k">Accuracy</span><span id="sumAcc" class="v">0%</span>
+          </div>
+        </div>
+        <div class="summary-actions">
+          <button id="playAgain" class="primary">Play again</button>
+          <button id="review" class="ghost">Review answers</button>
+        </div>
+        <details class="review hidden" id="reviewBlock">
+          <summary>Review</summary>
+          <ol id="reviewList"></ol>
+        </details>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <small>Built with vanilla HTML/CSS/JS — no libraries.</small>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
