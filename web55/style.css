@@ -245,3 +245,13 @@ h2 {
   padding: 6px 10px;
   cursor: pointer;
 }
+
+.hidden {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .answers {
+    grid-template-columns: 1fr 1fr;
+  }
+}
