@@ -1,0 +1,78 @@
+/* ========= Quiz Data =========
+  Each question: { q, choices: [..4], answer: index (0-3), explain? }
+*/
+const QUESTIONS = [
+  {
+    q: "Which HTML element is used to define the title of a document shown in the browser tab?",
+    choices: ["<meta>", "<title>", "<header>", "<caption>"],
+    answer: 1,
+    explain: "<title> goes inside <head> and sets the tab/window title.",
+  },
+  {
+    q: "Which CSS property controls the space outside an element’s border?",
+    choices: ["padding", "margin", "gap", "outline-offset"],
+    answer: 1,
+    explain: "Padding is inside the border; margin is outside.",
+  },
+  {
+    q: "In JavaScript, what does `Array.prototype.map` return?",
+    choices: ["A new array", "The same array", "A number", "An iterator"],
+    answer: 0,
+    explain:
+      "map creates a new array of the same length with transformed values.",
+  },
+  {
+    q: "Which HTTP status code means “Not Found”?",
+    choices: ["200", "301", "404", "500"],
+    answer: 2,
+    explain: "404 indicates the requested resource couldn’t be found.",
+  },
+  {
+    q: "Which CSS unit scales with the root element’s font size?",
+    choices: ["em", "rem", "px", "vh"],
+    answer: 1,
+    explain: "rem = root em (relative to :root font-size).",
+  },
+  {
+    q: "What does `const` do in JavaScript?",
+    choices: [
+      "Creates an immutable object",
+      "Creates a block-scoped binding",
+      "Prevents reassignment of properties",
+      "Hoists like var",
+    ],
+    answer: 1,
+    explain:
+      "`const` prevents reassigning the binding; the value can still be a mutable object.",
+  },
+  {
+    q: "Which tag semantically represents a self-contained piece of content (e.g., a blog post)?",
+    choices: ["<section>", "<article>", "<aside>", "<div>"],
+    answer: 1,
+    explain: "<article> is for independent, self-contained content.",
+  },
+  {
+    q: "Which method adds an item to the end of an array?",
+    choices: ["shift()", "unshift()", "push()", "pop()"],
+    answer: 2,
+    explain: "push() appends; pop() removes from the end.",
+  },
+  {
+    q: "Which CSS property is used to create a grid with columns of equal width?",
+    choices: [
+      "grid-rows",
+      "grid-template-columns: repeat(n, 1fr)",
+      "display: inline-grid(n)",
+      "grid-auto-flow: column 1fr",
+    ],
+    answer: 1,
+    explain: "repeat(n, 1fr) creates n equal-width columns.",
+  },
+  {
+    q: "Which attribute improves accessibility by labeling form inputs?",
+    choices: ["for on <label>", "name on <input>", "placeholder", "value"],
+    answer: 0,
+    explain:
+      "Use <label for='id'> to associate labels with inputs for screen readers and click targets.",
+  },
+];
