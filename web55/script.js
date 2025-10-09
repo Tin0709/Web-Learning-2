@@ -283,3 +283,57 @@ function onAnswer(choiceIndex, fromTimeout = false) {
   ui.nextBtn.disabled = false;
   ui.nextBtn.focus();
 }
+function onNext() {
+  if (!lock) return; // need to answer or timeout first
+  index += 1;
+  if (index >= order.length) {
+    finish();
+  } else {
+    render();
+  }
+}
+
+function onSkip() {
+  if (lock) return; // can't skip after answering
+  onAnswer(-1); // treat as no answer
+  // Auto-advance after a brief pause
+  setTimeout(onNext, 450);
+}
+
+function finish() {
+  clearInterval(tick);
+  updateProgressToEnd();
+  const total = order.length;
+  const acc = total ? Math.round((score / total) * 100) : 0;
+  if (score > best) {
+    best = score;
+    localStorage.setItem("miniQuiz.best", String(best));
+  }
+
+  ui.sumScore.textContent = String(score);
+  ui.sumTotal.textContent = String(total);
+  ui.sumBest.textContent = String(best);
+  ui.sumAcc.textContent = `${acc}%`;
+  ui.finalLine.textContent = `You scored ${score} out of ${total}.`;
+
+  // Build review
+  ui.reviewList.innerHTML = "";
+  history.forEach((h, i) => {
+    const li = document.createElement("li");
+    const user = h.chosen >= 0 ? h.choices[h.chosen] : "No answer";
+    li.innerHTML = `
+        <div><strong>Q${i + 1}.</strong> ${escapeHTML(h.q)}</div>
+        <div>• Your answer: ${escapeHTML(user)} ${h.correct ? "✅" : "❌"}</div>
+        <div>• Correct: ${escapeHTML(h.choices[h.correctIndex])}</div>
+      `;
+    ui.reviewList.appendChild(li);
+  });
+
+  ui.summary.classList.remove("hidden");
+  ui.reviewBlock.classList.add("hidden");
+  ui.feedback.textContent = "";
+  ui.nextBtn.disabled = true;
+
+  // Move focus for accessibility
+  $("#summary h2").focus({ preventScroll: false });
+}
