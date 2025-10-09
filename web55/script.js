@@ -151,3 +151,38 @@ function startQuiz() {
 
   render();
 }
+
+function wireEvents() {
+  ui.nextBtn.addEventListener("click", onNext);
+  ui.skipBtn.addEventListener("click", onSkip);
+  ui.restartBtn.addEventListener("click", startQuiz);
+  ui.playAgain.addEventListener("click", startQuiz);
+  ui.review.addEventListener("click", () =>
+    ui.reviewBlock.classList.toggle("hidden")
+  );
+  ui.themeToggle.addEventListener("click", toggleTheme);
+
+  // Keyboard shortcuts
+  window.addEventListener("keydown", (e) => {
+    if (lock && e.key === "Enter") {
+      onNext();
+      return;
+    }
+    const num = Number(e.key);
+    if (!Number.isNaN(num) && num >= 1 && num <= 4) {
+      const btn = ui.answers.children[num - 1];
+      if (btn) btn.click();
+    } else if (e.key === "Enter") {
+      // If focused on answer phase, treat as Next
+      if (!ui.nextBtn.disabled) onNext();
+    }
+  });
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("light");
+  localStorage.setItem(
+    "miniQuiz.theme",
+    document.body.classList.contains("light") ? "light" : "dark"
+  );
+}
