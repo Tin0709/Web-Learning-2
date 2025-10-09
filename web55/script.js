@@ -229,3 +229,57 @@ function render() {
     }
   }, 1000);
 }
+
+function updateProgress() {
+  const pct = (index / order.length) * 100;
+  ui.progressBar.style.width = `${pct}%`;
+  ui.progressBar.parentElement.setAttribute("aria-valuenow", Math.round(pct));
+}
+
+// ====== Answer flow ======
+function onAnswer(choiceIndex, fromTimeout = false) {
+  if (lock) return;
+  lock = true;
+  clearInterval(tick);
+
+  const qIdx = order[index];
+  const item = QUESTIONS[qIdx];
+
+  const correctIndex = item.answer;
+  const correct = choiceIndex === correctIndex;
+
+  // Decorate buttons
+  $$(".answers button").forEach((b, i) => {
+    b.disabled = true;
+    if (i === correctIndex) b.classList.add("correct");
+    if (choiceIndex === i && !correct) b.classList.add("wrong");
+  });
+
+  // Score/streak/feedback
+  if (correct) {
+    score += 1;
+    streak += 1;
+    ui.feedback.textContent = `✅ Correct! ${item.explain || ""}`;
+  } else {
+    streak = 0;
+    const userChoice =
+      choiceIndex >= 0 ? item.choices[choiceIndex] : "No answer";
+    ui.feedback.textContent = `❌ ${
+      fromTimeout ? "Time's up." : "Not quite."
+    } Correct: “${item.choices[correctIndex]}”. ${item.explain || ""}`;
+  }
+  ui.score.textContent = String(score);
+  ui.streak.textContent = String(streak);
+
+  // Save to history for review
+  history.push({
+    q: item.q,
+    choices: item.choices,
+    chosen: choiceIndex,
+    correctIndex,
+    correct,
+  });
+
+  ui.nextBtn.disabled = false;
+  ui.nextBtn.focus();
+}
