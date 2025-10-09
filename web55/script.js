@@ -112,3 +112,15 @@ const ui = {
   themeToggle: $("#themeToggle"),
   questionWrap: $("#questionWrap"),
 };
+
+// ====== State ======
+const QUIZ_SECONDS = 20; // per-question timer
+let order = [];
+let index = 0;
+let score = 0;
+let streak = 0;
+let best = Number(localStorage.getItem("miniQuiz.best") || 0);
+let lock = false; // prevent double answers
+let tick = null; // interval id
+let timeLeft = QUIZ_SECONDS;
+let history = []; // keep {q, chosen, correctIndex, correct}
