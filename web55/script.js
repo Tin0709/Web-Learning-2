@@ -76,3 +76,39 @@ const QUESTIONS = [
       "Use <label for='id'> to associate labels with inputs for screen readers and click targets.",
   },
 ];
+// ====== Helpers ======
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+const shuffle = (arr) =>
+  arr
+    .map((v) => [Math.random(), v])
+    .sort((a, b) => a[0] - b[0])
+    .map(([, v]) => v);
+const clamp = (n, min, max) => Math.max(min, Math.min(n, max));
+
+const ui = {
+  progressBar: $("#progressBar"),
+  qCounter: $("#qCounter"),
+  timer: $("#timer"),
+  question: $("#question"),
+  answers: $("#answers"),
+  nextBtn: $("#nextBtn"),
+  skipBtn: $("#skipBtn"),
+  restartBtn: $("#restartBtn"),
+  score: $("#score"),
+  streak: $("#streak"),
+  best: $("#best"),
+  feedback: $("#feedback"),
+  summary: $("#summary"),
+  finalLine: $("#finalLine"),
+  sumScore: $("#sumScore"),
+  sumTotal: $("#sumTotal"),
+  sumBest: $("#sumBest"),
+  sumAcc: $("#sumAcc"),
+  playAgain: $("#playAgain"),
+  review: $("#review"),
+  reviewBlock: $("#reviewBlock"),
+  reviewList: $("#reviewList"),
+  themeToggle: $("#themeToggle"),
+  questionWrap: $("#questionWrap"),
+};
