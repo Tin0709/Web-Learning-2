@@ -76,6 +76,7 @@ const QUESTIONS = [
       "Use <label for='id'> to associate labels with inputs for screen readers and click targets.",
   },
 ];
+
 // ====== Helpers ======
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -283,6 +284,7 @@ function onAnswer(choiceIndex, fromTimeout = false) {
   ui.nextBtn.disabled = false;
   ui.nextBtn.focus();
 }
+
 function onNext() {
   if (!lock) return; // need to answer or timeout first
   index += 1;
@@ -337,3 +339,18 @@ function finish() {
   // Move focus for accessibility
   $("#summary h2").focus({ preventScroll: false });
 }
+
+function updateProgressToEnd() {
+  ui.progressBar.style.width = `100%`;
+  ui.progressBar.parentElement.setAttribute("aria-valuenow", 100);
+}
+
+function escapeHTML(s) {
+  return String(s)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+// Kick off
+window.addEventListener("DOMContentLoaded", init);
