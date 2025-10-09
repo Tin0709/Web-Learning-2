@@ -54,3 +54,46 @@ body {
   font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
     sans-serif;
 }
+
+.app-header,
+.app-footer {
+  max-width: 900px;
+  margin: 16px auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.app-footer {
+  justify-content: center;
+  opacity: 0.8;
+}
+
+.app {
+  max-width: 900px;
+  margin: 16px auto 48px;
+  padding: 16px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--btn-border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.progress {
+  flex: 1;
+  height: 12px;
+  background: var(--bar);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--btn-border);
+}
