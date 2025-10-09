@@ -186,3 +186,46 @@ function toggleTheme() {
     document.body.classList.contains("light") ? "light" : "dark"
   );
 }
+
+// ====== Render a question ======
+function render() {
+  clearInterval(tick);
+  timeLeft = QUIZ_SECONDS;
+
+  const qIdx = order[index];
+  const item = QUESTIONS[qIdx];
+  ui.question.textContent = item.q;
+  ui.question.focus();
+
+  // build answers (keep original order; could also shuffle choices)
+  ui.answers.innerHTML = "";
+  item.choices.forEach((choice, i) => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "answer-btn";
+    btn.setAttribute("data-index", i);
+    btn.innerHTML = `<strong>${i + 1}.</strong> ${escapeHTML(choice)}`;
+    btn.addEventListener("click", () => onAnswer(i));
+    li.appendChild(btn);
+    ui.answers.appendChild(li);
+  });
+
+  ui.qCounter.textContent = `Q ${index + 1}/${order.length}`;
+  updateProgress();
+  ui.feedback.textContent = "";
+  ui.nextBtn.disabled = true;
+  lock = false;
+
+  // timer
+  ui.timer.textContent = `${timeLeft}s`;
+  tick = setInterval(() => {
+    timeLeft = clamp(timeLeft - 1, 0, QUIZ_SECONDS);
+    ui.timer.textContent = `${timeLeft}s`;
+    if (timeLeft === 0) {
+      clearInterval(tick);
+      // auto mark as wrong if not answered
+      onAnswer(-1, true);
+    }
+  }, 1000);
+}
