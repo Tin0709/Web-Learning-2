@@ -124,3 +124,30 @@ let lock = false; // prevent double answers
 let tick = null; // interval id
 let timeLeft = QUIZ_SECONDS;
 let history = []; // keep {q, chosen, correctIndex, correct}
+
+function init() {
+  // Theme
+  const savedTheme = localStorage.getItem("miniQuiz.theme");
+  if (savedTheme === "light") document.body.classList.add("light");
+  ui.best.textContent = best;
+
+  startQuiz();
+  wireEvents();
+}
+
+function startQuiz() {
+  // Build question order and reset state
+  order = shuffle([...QUESTIONS.keys()]);
+  index = 0;
+  score = 0;
+  streak = 0;
+  history = [];
+  ui.summary.classList.add("hidden");
+  ui.reviewBlock.classList.add("hidden");
+  ui.feedback.textContent = "";
+  ui.score.textContent = "0";
+  ui.streak.textContent = "0";
+  ui.nextBtn.disabled = true;
+
+  render();
+}
