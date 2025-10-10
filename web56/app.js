@@ -217,3 +217,91 @@ function renderMeals(meals, mode) {
     });
   });
 }
+/* ----------------- Modal (Details) ----------------- */
+async function openMeal(id) {
+  try {
+    EL.modalContent.innerHTML =
+      '<p class="muted" style="padding:16px">Loading…</p>';
+    EL.modal.showModal();
+
+    const res = await fetch(API.lookup(id));
+    const data = await res.json();
+    const meal = data.meals?.[0];
+    if (!meal) {
+      EL.modalContent.innerHTML =
+        '<p style="padding:16px">Failed to load recipe.</p>';
+      return;
+    }
+
+    const ingredients = collectIngredients(meal);
+    const yt = meal.strYoutube
+      ? `<p><a href="${meal.strYoutube}" target="_blank" rel="noopener">Watch on YouTube</a></p>`
+      : "";
+    const source = meal.strSource
+      ? `<p><a href="${meal.strSource}" target="_blank" rel="noopener">Original Source</a></p>`
+      : "";
+
+    EL.modalContent.innerHTML = `
+      <img class="modal-img" src="${meal.strMealThumb}" alt="${escapeHTML(
+      meal.strMeal
+    )}">
+      <div>
+        <h2 id="meal-title" style="margin:0 0 6px">${escapeHTML(
+          meal.strMeal
+        )}</h2>
+        <p class="meta" style="margin: 0 0 10px">
+          ${
+            meal.strCategory
+              ? `<span class="chip">${escapeHTML(meal.strCategory)}</span>`
+              : ""
+          }
+          ${
+            meal.strArea
+              ? `<span class="chip">${escapeHTML(meal.strArea)}</span>`
+              : ""
+          }
+        </p>
+
+        <h3 style="margin: 8px 0 6px">Ingredients</h3>
+        <div class="ingredients">
+          ${ingredients
+            .map((it) => `<div class="ingredient">${escapeHTML(it)}</div>`)
+            .join("")}
+        </div>
+
+        <h3 style="margin: 10px 0 6px">Instructions</h3>
+        <p style="white-space: pre-wrap; line-height: 1.6">${escapeHTML(
+          meal.strInstructions || ""
+        )}</p>
+
+        ${yt}
+        ${source}
+
+        <div style="display:flex; gap:8px; margin-top:12px">
+          <button class="btn ${
+            isFavorite(meal.idMeal) ? "primary" : ""
+          }" data-fav-toggle="${meal.idMeal}" aria-pressed="${isFavorite(
+      meal.idMeal
+    )}">
+            ${isFavorite(meal.idMeal) ? "♥ Favorited" : "♡ Favorite"}
+          </button>
+          <button class="btn" id="modal-close-2">Close</button>
+        </div>
+      </div>
+    `;
+
+    // Attach internal buttons
+    EL.modalContent
+      .querySelector("[data-fav-toggle]")
+      ?.addEventListener("click", () => {
+        toggleFavorite(meal.idMeal, meal.strMeal);
+      });
+    EL.modalContent
+      .querySelector("#modal-close-2")
+      ?.addEventListener("click", closeModal);
+  } catch (err) {
+    console.error(err);
+    EL.modalContent.innerHTML =
+      '<p style="padding:16px">Something went wrong.</p>';
+  }
+}
