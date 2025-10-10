@@ -26,6 +26,7 @@ const EL = {
 
   toast: document.getElementById("toast"),
 };
+
 const API = {
   searchByName: (q) =>
     `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(
@@ -90,6 +91,7 @@ function toggleFavorite(id, title) {
     btn.setAttribute("aria-pressed", isFavorite(sid) ? "true" : "false");
   });
 }
+
 /* ----------------- Tabs ----------------- */
 function activateTab(tab) {
   const isSearch = tab === "search";
@@ -152,6 +154,7 @@ EL.form.addEventListener("submit", async (e) => {
     EL.form.querySelector('button[type="submit"]').disabled = false;
   }
 });
+
 EL.btnClear.addEventListener("click", () => {
   EL.query.value = "";
   EL.results.innerHTML = "";
@@ -217,6 +220,7 @@ function renderMeals(meals, mode) {
     });
   });
 }
+
 /* ----------------- Modal (Details) ----------------- */
 async function openMeal(id) {
   try {
@@ -334,6 +338,7 @@ function renderFavorites() {
     return;
   }
   EL.favsEmpty.hidden = true;
+
   // Fetch details in parallel (lookup by id)
   Promise.all(
     ids.map((id) =>
@@ -442,3 +447,15 @@ function escapeHTML(str) {
       }[s])
   );
 }
+
+/* ----------------- Initial State ----------------- */
+setStatus(
+  "Try searching “chicken” or switch to Ingredient mode and try “garlic”."
+);
+
+// Optional: perform a gentle demo search on first load
+// (comment out if you don't want this)
+// window.addEventListener('load', () => {
+//   EL.query.value = 'chicken';
+//   EL.form.requestSubmit();
+// });
