@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe Finder</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="data:," />
+    <meta
+      name="description"
+      content="Find recipes by name or ingredient using TheMealDB."
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>🍳 Recipe Finder</h1>
+      <nav class="nav">
+        <button id="tab-search" class="tab-button active" aria-pressed="true">
+          Search
+        </button>
+        <button id="tab-favorites" class="tab-button" aria-pressed="false">
+          Favorites
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- SEARCH PANEL -->
+      <section
+        id="panel-search"
+        class="panel active"
+        aria-labelledby="tab-search"
+      >
+        <form id="search-form" class="search-bar" autocomplete="off">
+          <label class="search-label" for="query">Search</label>
+          <input
+            id="query"
+            name="query"
+            type="text"
+            placeholder="e.g., chicken, pasta, curry…"
+          />
+          <div class="search-modes" role="radiogroup" aria-label="Search mode">
+            <label class="radio">
+              <input type="radio" name="mode" value="name" checked />
+              <span>By Name</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="mode" value="ingredient" />
+              <span>By Ingredient</span>
+            </label>
+          </div>
+          <div class="search-actions">
+            <button type="submit" class="btn primary">Search</button>
+            <button type="button" id="btn-clear" class="btn">Clear</button>
+          </div>
+        </form>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+
+        <section aria-label="Search Results">
+          <div id="results" class="grid"></div>
+        </section>
+      </section>
+
+      <!-- FAVORITES PANEL -->
+      <section
+        id="panel-favorites"
+        class="panel"
+        aria-labelledby="tab-favorites"
+        hidden
+      >
+        <div class="favorites-header">
+          <h2>Your Favorites</h2>
+          <button id="btn-clear-favs" class="btn danger small">
+            Clear All
+          </button>
+        </div>
+        <div id="favorites-grid" class="grid"></div>
+        <p id="favorites-empty" class="muted" hidden>
+          No favorites yet. Add some recipes ♥
+        </p>
+      </section>
+    </main>
+
+    <!-- DETAILS MODAL -->
+    <dialog id="meal-modal" class="modal" aria-labelledby="meal-title">
+      <button class="modal-close" aria-label="Close" id="modal-close">✕</button>
+      <div id="modal-content" class="modal-content">
+        <!-- Filled by JS -->
+      </div>
+    </dialog>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <footer class="site-footer">
+      <p>
+        Data by
+        <a href="https://www.themealdb.com/" target="_blank" rel="noopener"
+          >TheMealDB</a
+        >. Built with ❤️ for learning.
+      </p>
+    </footer>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
