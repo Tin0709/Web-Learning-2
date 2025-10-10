@@ -152,3 +152,68 @@ EL.form.addEventListener("submit", async (e) => {
     EL.form.querySelector('button[type="submit"]').disabled = false;
   }
 });
+EL.btnClear.addEventListener("click", () => {
+  EL.query.value = "";
+  EL.results.innerHTML = "";
+  setStatus("");
+  EL.query.focus();
+});
+
+/* ----------------- Render Cards ----------------- */
+function renderMeals(meals, mode) {
+  const html = meals
+    .map((m) => {
+      const id = m.idMeal;
+      const title = m.strMeal;
+      const img = m.strMealThumb;
+      const cat = m.strCategory || "";
+      const area = m.strArea || "";
+      const categoryChip = cat
+        ? `<span class="chip">${escapeHTML(cat)}</span>`
+        : "";
+      const areaChip = area
+        ? `<span class="chip">${escapeHTML(area)}</span>`
+        : "";
+
+      return `
+      <article class="card">
+        <div class="card-thumb">
+          <img src="${img}" alt="${escapeHTML(title)}" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">${escapeHTML(title)}</h3>
+          <div class="meta">${categoryChip}${areaChip}</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn primary" data-open="${id}">View</button>
+          <button class="btn ${
+            isFavorite(id) ? "primary" : ""
+          }" data-fav-toggle="${id}" aria-pressed="${isFavorite(id)}">
+            ${isFavorite(id) ? "♥ Favorited" : "♡ Favorite"}
+          </button>
+        </div>
+      </article>
+    `;
+    })
+    .join("");
+
+  EL.results.innerHTML = html;
+
+  // attach listeners
+  EL.results.querySelectorAll("[data-open]").forEach((btn) => {
+    btn.addEventListener("click", () =>
+      openMeal(btn.getAttribute("data-open"))
+    );
+  });
+  EL.results.querySelectorAll("[data-fav-toggle]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-fav-toggle");
+      const title =
+        btn
+          .closest(".card")
+          .querySelector(".card-title")
+          ?.textContent?.trim() || "Recipe";
+      toggleFavorite(id, title);
+    });
+  });
+}
