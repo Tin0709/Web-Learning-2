@@ -299,3 +299,33 @@ main {
   padding: 8px 10px;
   font-size: 0.95rem;
 }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #0d141c;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  opacity: 0;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  pointer-events: none;
+  box-shadow: var(--shadow);
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* Footer */
+.site-footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 10px 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 30px;
+}
