@@ -26,3 +26,67 @@ const EL = {
 
   toast: document.getElementById("toast"),
 };
+const API = {
+  searchByName: (q) =>
+    `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(
+      q
+    )}`,
+  searchByIngredient: (ing) =>
+    `https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(
+      ing
+    )}`,
+  lookup: (id) =>
+    `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${encodeURIComponent(
+      id
+    )}`,
+};
+
+const LS_KEY = "recipe_favorites_v1";
+
+/* ----------------- Helpers ----------------- */
+function setStatus(msg = "") {
+  EL.status.textContent = msg;
+}
+
+function toast(msg) {
+  EL.toast.textContent = msg;
+  EL.toast.classList.add("show");
+  setTimeout(() => EL.toast.classList.remove("show"), 1600);
+}
+
+function getFavorites() {
+  try {
+    return JSON.parse(localStorage.getItem(LS_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function setFavorites(ids) {
+  localStorage.setItem(LS_KEY, JSON.stringify(ids));
+}
+
+function isFavorite(id) {
+  return getFavorites().includes(String(id));
+}
+
+function toggleFavorite(id, title) {
+  const favs = getFavorites();
+  const sid = String(id);
+  const idx = favs.indexOf(sid);
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+    toast(`Removed “${title}” from favorites`);
+  } else {
+    favs.push(sid);
+    toast(`Saved “${title}” to favorites`);
+  }
+  setFavorites(favs);
+  // Update favorites panel and any visible fav buttons
+  renderFavorites();
+  document.querySelectorAll(`[data-fav-toggle="${sid}"]`).forEach((btn) => {
+    btn.classList.toggle("primary", isFavorite(sid));
+    btn.textContent = isFavorite(sid) ? "♥ Favorited" : "♡ Favorite";
+    btn.setAttribute("aria-pressed", isFavorite(sid) ? "true" : "false");
+  });
+}
