@@ -404,3 +404,41 @@ function renderFavorites() {
     });
   });
 }
+
+EL.btnClearFavs.addEventListener("click", () => {
+  if (!confirm("Clear all favorites?")) return;
+  setFavorites([]);
+  renderFavorites();
+  toast("Cleared favorites");
+});
+
+/* ----------------- Utilities ----------------- */
+function collectIngredients(meal) {
+  const list = [];
+  for (let i = 1; i <= 20; i++) {
+    const ing = meal[`strIngredient${i}`];
+    const measure = meal[`strMeasure${i}`];
+    if (ing && ing.trim()) {
+      const entry =
+        measure && measure.trim()
+          ? `${measure.trim()} ${ing.trim()}`
+          : ing.trim();
+      list.push(entry);
+    }
+  }
+  return list;
+}
+
+function escapeHTML(str) {
+  return String(str).replace(
+    /[&<>"']/g,
+    (s) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[s])
+  );
+}
