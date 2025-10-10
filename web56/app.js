@@ -305,3 +305,102 @@ async function openMeal(id) {
       '<p style="padding:16px">Something went wrong.</p>';
   }
 }
+
+function closeModal() {
+  EL.modal.close();
+}
+
+EL.modalClose.addEventListener("click", closeModal);
+EL.modal.addEventListener("click", (e) => {
+  // Close when click backdrop (click outside content)
+  const rect = EL.modalContent.getBoundingClientRect();
+  const inDialog =
+    e.clientX >= rect.left &&
+    e.clientX <= rect.right &&
+    e.clientY >= rect.top &&
+    e.clientY <= rect.bottom;
+  if (!inDialog) closeModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && EL.modal.open) closeModal();
+});
+
+/* ----------------- Favorites Panel ----------------- */
+function renderFavorites() {
+  const ids = getFavorites();
+  if (!ids.length) {
+    EL.favsGrid.innerHTML = "";
+    EL.favsEmpty.hidden = false;
+    return;
+  }
+  EL.favsEmpty.hidden = true;
+  // Fetch details in parallel (lookup by id)
+  Promise.all(
+    ids.map((id) =>
+      fetch(API.lookup(id))
+        .then((r) => r.json())
+        .then((d) => d.meals?.[0])
+        .catch(() => null)
+    )
+  ).then((meals) => {
+    const filtered = meals.filter(Boolean);
+    const html = filtered
+      .map(
+        (m) => `
+        <article class="card">
+          <div class="card-thumb">
+            <img src="${m.strMealThumb}" alt="${escapeHTML(
+          m.strMeal
+        )}" loading="lazy">
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">${escapeHTML(m.strMeal)}</h3>
+            <div class="meta">
+              ${
+                m.strCategory
+                  ? `<span class="chip">${escapeHTML(m.strCategory)}</span>`
+                  : ""
+              }
+              ${
+                m.strArea
+                  ? `<span class="chip">${escapeHTML(m.strArea)}</span>`
+                  : ""
+              }
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn primary" data-open="${m.idMeal}">View</button>
+            <button class="btn ${
+              isFavorite(m.idMeal) ? "primary" : ""
+            }" data-fav-toggle="${m.idMeal}" aria-pressed="${isFavorite(
+          m.idMeal
+        )}">
+              ${isFavorite(m.idMeal) ? "♥ Favorited" : "♡ Favorite"}
+            </button>
+          </div>
+        </article>
+      `
+      )
+      .join("");
+    EL.favsGrid.innerHTML = html;
+
+    EL.favsGrid
+      .querySelectorAll("[data-open]")
+      .forEach((btn) =>
+        btn.addEventListener("click", () =>
+          openMeal(btn.getAttribute("data-open"))
+        )
+      );
+    EL.favsGrid.querySelectorAll("[data-fav-toggle]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-fav-toggle");
+        const title =
+          btn
+            .closest(".card")
+            .querySelector(".card-title")
+            ?.textContent?.trim() || "Recipe";
+        toggleFavorite(id, title);
+      });
+    });
+  });
+}
