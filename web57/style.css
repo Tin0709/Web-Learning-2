@@ -150,6 +150,7 @@ h1 {
   display: grid;
   gap: 8px;
 }
+
 .task {
   display: grid;
   grid-template-columns: auto 1fr auto;
