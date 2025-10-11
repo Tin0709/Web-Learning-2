@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app" aria-labelledby="app-title">
+      <header class="app__header">
+        <h1 id="app-title">To-Do List</h1>
+
+        <form id="new-task-form" autocomplete="off" aria-label="Add a new task">
+          <input
+            id="task-input"
+            type="text"
+            name="task"
+            placeholder="What needs to be done?"
+            aria-label="Task description"
+            required
+            minlength="1"
+          />
+          <button id="add-btn" type="submit" aria-label="Add task">Add</button>
+        </form>
+      </header>
+
+      <section class="controls" aria-label="Task controls">
+        <div class="filters" role="tablist" aria-label="Filter tasks">
+          <button
+            class="filter is-active"
+            data-filter="all"
+            role="tab"
+            aria-selected="true"
+          >
+            All
+          </button>
+          <button
+            class="filter"
+            data-filter="active"
+            role="tab"
+            aria-selected="false"
+          >
+            Active
+          </button>
+          <button
+            class="filter"
+            data-filter="completed"
+            role="tab"
+            aria-selected="false"
+          >
+            Completed
+          </button>
+        </div>
+
+        <div class="meta">
+          <span id="items-left" aria-live="polite">0 items left</span>
+          <button id="clear-completed" class="linklike" type="button">
+            Clear completed
+          </button>
+        </div>
+      </section>
+
+      <ul id="task-list" class="tasks" aria-label="To-do items"></ul>
+
+      <footer class="app__footer">
+        <small
+          >Drag items to reorder • Double-click a task to edit • Press Enter to
+          save</small
+        >
+      </footer>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
