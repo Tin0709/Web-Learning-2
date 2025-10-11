@@ -41,3 +41,55 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
+
+.app__header {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 32px);
+  letter-spacing: 0.3px;
+}
+
+#new-task-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+#task-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #0f121a;
+  color: var(--text);
+  outline: none;
+}
+#task-input:focus {
+  border-color: var(--acc);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--acc) 30%, transparent);
+}
+
+#add-btn {
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in oklab, var(--acc) 40%, white 10%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--acc) 25%, #19243a),
+    color-mix(in oklab, var(--acc) 15%, #0c1628)
+  );
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+#add-btn:hover {
+  filter: brightness(1.08);
+}
+#add-btn:active {
+  transform: translateY(1px);
+}
