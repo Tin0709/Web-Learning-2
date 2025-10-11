@@ -93,3 +93,60 @@ h1 {
 #add-btn:active {
   transform: translateY(1px);
 }
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0 8px;
+  flex-wrap: wrap;
+}
+
+.filters {
+  display: inline-flex;
+  background: #0f121a;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+.filter {
+  border: 0;
+  padding: 8px 14px;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.filter.is-active {
+  color: var(--text);
+  background: #1a2132;
+  border: 1px solid var(--border);
+}
+
+.meta {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  color: var(--muted);
+}
+
+.linklike {
+  background: transparent;
+  border: 0;
+  color: var(--acc);
+  padding: 6px 8px;
+  cursor: pointer;
+}
+.linklike:hover {
+  text-decoration: underline;
+}
+
+.tasks {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
