@@ -150,3 +150,80 @@ h1 {
   display: grid;
   gap: 8px;
 }
+.task {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: #0f121a;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25) inset;
+}
+
+.task[draggable="true"] {
+  cursor: grab;
+}
+.task.dragging {
+  opacity: 0.6;
+  outline: 2px dashed var(--acc);
+}
+
+.task__checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--acc-2);
+  cursor: pointer;
+}
+
+.task__title {
+  line-height: 1.35;
+  word-break: break-word;
+  outline: none;
+}
+.task.completed .task__title {
+  color: color-mix(in oklab, var(--muted) 85%, #889);
+  text-decoration: line-through;
+}
+
+.task__actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.iconbtn {
+  border: 1px solid var(--border);
+  background: #121622;
+  color: var(--muted);
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.iconbtn:hover {
+  color: var(--text);
+  border-color: #2a3147;
+}
+.iconbtn--danger {
+  color: #ff8a8a;
+  border-color: color-mix(in oklab, var(--danger) 30%, #2a3147);
+}
+.iconbtn--danger:hover {
+  background: #201316;
+  color: white;
+}
+
+.app__footer {
+  margin-top: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .task__actions {
+    gap: 4px;
+  }
+  .iconbtn {
+    padding: 6px 8px;
+  }
+}
