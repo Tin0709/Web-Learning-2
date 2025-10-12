@@ -222,3 +222,67 @@ button {
   border-radius: 1rem;
   background: rgba(255, 255, 255, 0.02);
 }
+
+/* Modal */
+dialog {
+  border: none;
+  border-radius: 1rem;
+  padding: 0;
+  margin: auto;
+  background: var(--elev);
+  color: var(--text);
+  width: min(900px, 92vw);
+}
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding: 1rem;
+}
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding: 1rem;
+  gap: 0.5rem;
+}
+form {
+  padding: 0;
+}
+.grid {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.field input,
+.field textarea,
+.field select {
+  background: #0f141b;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  color: var(--text);
+  padding: 0.7rem 0.8rem;
+}
+.field textarea {
+  resize: vertical;
+}
+label {
+  color: #c6d0e1;
+  font-size: 0.9rem;
+}
