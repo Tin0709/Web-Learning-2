@@ -139,3 +139,86 @@ button {
   display: flex;
   flex-direction: column;
 }
+.card-media {
+  width: 100%;
+  height: 180px;
+  background: #0f141b;
+  display: block;
+  background-size: cover;
+  background-position: center;
+}
+.card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.post-title {
+  margin: 0.2rem 0 0 0;
+  font-size: 1.1rem;
+}
+.badge {
+  background: var(--badge);
+  color: #c6d0e1;
+  border: 1px solid var(--border);
+  font-size: 0.75rem;
+  padding: 0.22rem 0.45rem;
+  border-radius: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.meta {
+  color: var(--muted);
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+}
+.excerpt {
+  margin: 0.2rem 0 0.4rem 0;
+  color: #cdd6e3;
+}
+.content {
+  white-space: pre-line;
+  border-top: 1px dashed var(--border);
+  padding-top: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+#pageInfo {
+  color: var(--muted);
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 1rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.empty-state {
+  text-align: center;
+  border: 1px dashed var(--border);
+  padding: 2rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+}
