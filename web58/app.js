@@ -57,4 +57,37 @@
   const savePostBtn = document.getElementById("savePostBtn");
   const saveDraftBtn = document.getElementById("saveDraftBtn");
   const deletePostBtn = document.getElementById("deletePostBtn");
+
+  // Utils
+  function loadPosts() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      console.warn("Failed to parse posts", e);
+      return [];
+    }
+  }
+
+  function persist() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+  }
+
+  function uid() {
+    return (
+      "p_" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36)
+    );
+  }
+
+  function slugify(s) {
+    return s
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .slice(0, 120);
+  }
 };
