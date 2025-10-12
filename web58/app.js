@@ -26,4 +26,35 @@
   const nextPageBtn = document.getElementById("nextPage");
   const pageInfo = document.getElementById("pageInfo");
   const template = document.getElementById("postItemTemplate");
+
+  // Filters
+  const searchInput = document.getElementById("searchInput");
+  const statusFilter = document.getElementById("statusFilter");
+  const tagFilter = document.getElementById("tagFilter");
+  const sortSelect = document.getElementById("sortSelect");
+  const perPageSelect = document.getElementById("perPageSelect");
+
+  // Header actions
+  const newPostBtn = document.getElementById("newPostBtn");
+  const exportBtn = document.getElementById("exportBtn");
+  const importInput = document.getElementById("importInput");
+  const clearBtn = document.getElementById("clearBtn");
+
+  // Modal + editor fields
+  const editorModal = document.getElementById("editorModal");
+  const editorForm = document.getElementById("editorForm");
+  const closeModalBtn = document.getElementById("closeModal");
+  const modalTitle = document.getElementById("modalTitle");
+
+  const titleInput = document.getElementById("titleInput");
+  const slugInput = document.getElementById("slugInput");
+  const statusSelectInput = document.getElementById("statusSelectInput");
+  const tagsInput = document.getElementById("tagsInput");
+  const coverInput = document.getElementById("coverInput");
+  const dateInput = document.getElementById("dateInput");
+  const contentInput = document.getElementById("contentInput");
+
+  const savePostBtn = document.getElementById("savePostBtn");
+  const saveDraftBtn = document.getElementById("saveDraftBtn");
+  const deletePostBtn = document.getElementById("deletePostBtn");
 };
