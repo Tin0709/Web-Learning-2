@@ -90,4 +90,25 @@
       .replace(/-+/g, "-")
       .slice(0, 120);
   }
+  function escapeHTML(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function nl2br(str) {
+    return escapeHTML(str).replace(/\n/g, "<br>");
+  }
+
+  function toExcerpt(str, n = 200) {
+    const clean = str.replace(/\s+/g, " ").trim();
+    return clean.length > n ? clean.slice(0, n - 1) + "…" : clean;
+  }
+
+  function uniqueTags(allPosts) {
+    const s = new Set();
+    allPosts.forEach((p) => (p.tags || []).forEach((t) => s.add(t)));
+    return Array.from(s).sort((a, b) => a.localeCompare(b));
+  }
 };
