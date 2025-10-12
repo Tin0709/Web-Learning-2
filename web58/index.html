@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Blog CMS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <h1>Mini Blog CMS</h1>
+        <div class="actions">
+          <button id="newPostBtn" class="btn primary">+ New Post</button>
+          <label class="file-btn">
+            <input
+              type="file"
+              id="importInput"
+              accept="application/json"
+              hidden
+            />
+            <span class="btn">Import</span>
+          </label>
+          <button id="exportBtn" class="btn">Export</button>
+          <button
+            id="clearBtn"
+            class="btn danger"
+            title="Clear ALL posts (cannot undo)"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <div class="filters">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by title or content..."
+        />
+        <select id="statusFilter">
+          <option value="all">All statuses</option>
+          <option value="published">Published</option>
+          <option value="draft">Drafts</option>
+        </select>
+        <select id="tagFilter">
+          <option value="all">All tags</option>
+        </select>
+        <select id="sortSelect" title="Sort order">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="az">Title A–Z</option>
+          <option value="za">Title Z–A</option>
+        </select>
+        <select id="perPageSelect" title="Posts per page">
+          <option value="5">5 / page</option>
+          <option value="10" selected>10 / page</option>
+          <option value="20">20 / page</option>
+        </select>
+      </div>
+    </header>
+
+    <main class="container">
+      <div id="emptyState" class="empty-state" style="display: none">
+        <p>No posts yet. Create your first one!</p>
+      </div>
+
+      <ul id="postList" class="post-list"></ul>
+
+      <div id="pagination" class="pagination" style="display: none">
+        <button id="prevPage" class="btn">&larr; Prev</button>
+        <span id="pageInfo"></span>
+        <button id="nextPage" class="btn">Next &rarr;</button>
+      </div>
+    </main>
+
+    <!-- Editor Modal -->
+    <dialog id="editorModal">
+      <form id="editorForm" method="dialog">
+        <div class="modal-header">
+          <h2 id="modalTitle">New Post</h2>
+          <button type="button" id="closeModal" class="icon-btn" title="Close">
+            &times;
+          </button>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="titleInput">Title</label>
+            <input id="titleInput" type="text" required maxlength="160" />
+          </div>
+
+          <div class="field">
+            <label for="slugInput">Slug (auto from title, can edit)</label>
+            <input id="slugInput" type="text" pattern="[a-z0-9-]+" />
+          </div>
+
+          <div class="field">
+            <label for="statusSelectInput">Status</label>
+            <select id="statusSelectInput">
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="tagsInput">Tags (comma separated)</label>
+            <input
+              id="tagsInput"
+              type="text"
+              placeholder="e.g. javascript, css, tips"
+            />
+          </div>
+
+          <div class="field">
+            <label for="coverInput">Cover Image URL (optional)</label>
+            <input id="coverInput" type="url" placeholder="https://..." />
+          </div>
+
+          <div class="field">
+            <label for="dateInput">Publish Date (optional)</label>
+            <input id="dateInput" type="date" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="contentInput"
+            >Content (supports plain text / basic HTML). New lines → line
+            breaks.</label
+          >
+          <textarea
+            id="contentInput"
+            rows="12"
+            placeholder="Write your post..."
+          ></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <div class="left">
+            <button
+              type="button"
+              id="deletePostBtn"
+              class="btn danger"
+              style="display: none"
+            >
+              Delete
+            </button>
+          </div>
+          <div class="right">
+            <button type="button" id="saveDraftBtn" class="btn">
+              Save as Draft
+            </button>
+            <button id="savePostBtn" class="btn primary">Save</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <template id="postItemTemplate">
+      <li class="post-card">
+        <div class="card-media" data-media></div>
+        <div class="card-body">
+          <div class="card-top">
+            <h3 class="post-title" data-title></h3>
+            <span class="badge" data-status></span>
+          </div>
+          <div class="meta">
+            <span data-date></span>
+            <span>&middot;</span>
+            <span data-tags></span>
+          </div>
+          <p class="excerpt" data-excerpt></p>
+          <details>
+            <summary>Read more</summary>
+            <div class="content" data-content></div>
+          </details>
+          <div class="card-actions">
+            <button class="btn small" data-edit>Edit</button>
+            <button class="btn small danger" data-delete>Delete</button>
+          </div>
+        </div>
+      </li>
+    </template>
+
+    <footer class="site-footer">
+      <p>
+        Local demo CMS — data saved to your browser’s <code>localStorage</code>.
+      </p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
