@@ -158,3 +158,116 @@ button.small {
   display: grid;
   place-items: center;
 }
+/* Form */
+.habit-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.habit-form input[type="text"] {
+  flex: 1 1 260px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0f121a;
+  color: var(--text);
+}
+.color-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.color-picker input {
+  height: 42px;
+  width: 42px;
+  padding: 0;
+  border: none;
+  background: #0f121a;
+  border-radius: 10px;
+}
+
+/* Cards */
+.habits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 10px;
+}
+.habit-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.habit-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.habit-card__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.habit-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #6366f1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.habit-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.stat {
+  background: #10131b;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 10px;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.stat-value {
+  font-size: 1.05rem;
+  margin-top: 3px;
+}
+
+.habit-card__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.progressbar {
+  height: 10px;
+  background: #10131b;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progressbar .bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--ok), #22c55e 70%, #86efac);
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--muted);
+  padding: 28px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  margin-top: 10px;
+}
