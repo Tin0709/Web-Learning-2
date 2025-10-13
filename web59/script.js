@@ -163,3 +163,163 @@ function loadState() {
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
+/* ---------- Date helpers ---------- */
+function daysInMonth(y, m) {
+  return new Date(y, m + 1, 0).getDate();
+}
+function isoDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+function isSameDayStr(str1, str2) {
+  return str1 === str2;
+}
+function uid() {
+  return "h_" + Math.random().toString(36).slice(2, 9);
+}
+
+/* ---------- Rendering ---------- */
+function renderAll(scrollToBottom = false) {
+  const { year, month } = state.monthView;
+
+  // Month label
+  const dt = new Date(year, month, 1);
+  const full = dt.toLocaleString(undefined, { month: "long", year: "numeric" });
+  monthLabel.textContent = full;
+
+  // Weekday header
+  renderWeekdayHeader(year, month);
+
+  // Habit rows
+  habitList.innerHTML = "";
+  const frag = document.createDocumentFragment();
+  const habits = [...state.habits].sort(
+    (a, b) =>
+      Number(a.archived) - Number(b.archived) || a.name.localeCompare(b.name)
+  );
+  if (habits.length === 0) {
+    const empty = document.createElement("div");
+    empty.style.padding = "18px";
+    empty.style.color = "#9aa0a6";
+    empty.textContent = "No habits yet. Add one above to get started!";
+    habitList.appendChild(empty);
+    return;
+  }
+
+  habits.forEach((habit) => {
+    const row = habitRowTpl.content.firstElementChild.cloneNode(true);
+    row.dataset.id = habit.id;
+    if (habit.archived) row.classList.add("archived");
+
+    // Meta
+    const colorDot = $(".color-dot", row);
+    colorDot.style.background = habit.color;
+
+    const titleEl = $(".habit-title", row);
+    titleEl.textContent = habit.name;
+    titleEl.addEventListener("dblclick", () => beginRename(row, habit));
+    $(".renameBtn", row).addEventListener("click", () =>
+      beginRename(row, habit)
+    );
+
+    $(".archiveBtn", row).addEventListener("click", () => {
+      habit.archived = !habit.archived;
+      saveState();
+      renderAll();
+    });
+    $(".deleteBtn", row).addEventListener("click", () => {
+      const ok = confirm(`Delete "${habit.name}"? This cannot be undone.`);
+      if (!ok) return;
+      state.habits = state.habits.filter((h) => h.id !== habit.id);
+      saveState();
+      renderAll();
+    });
+
+    // Day grid
+    const grid = $(".day-grid", row);
+    const countDays = daysInMonth(year, month);
+    const todayStr = isoDate(new Date());
+
+    let completedThisMonth = 0;
+    for (let d = 1; d <= countDays; d++) {
+      const dateStr = isoDate(new Date(year, month, d));
+      const cell = document.createElement("button");
+      cell.type = "button";
+      cell.className = "day-cell";
+      cell.title = `${dateStr} • ${habit.name}`;
+      cell.setAttribute("aria-pressed", String(Boolean(habit.marks[dateStr])));
+      cell.dataset.date = dateStr;
+
+      const dot = document.createElement("div");
+      dot.className = "dot";
+      cell.appendChild(dot);
+
+      if (habit.marks[dateStr]) {
+        cell.classList.add("done");
+        completedThisMonth++;
+        dot.style.background = habit.color + "66";
+        dot.style.borderColor = habit.color;
+      }
+      if (isSameDayStr(dateStr, todayStr)) cell.classList.add("today");
+
+      cell.addEventListener("click", () => {
+        habit.marks[dateStr] = !habit.marks[dateStr];
+        // If false, clean up
+        if (!habit.marks[dateStr]) delete habit.marks[dateStr];
+        saveState();
+        // Update cell visual quickly instead of full rerender
+        cell.classList.toggle("done");
+        cell.setAttribute(
+          "aria-pressed",
+          String(Boolean(habit.marks[dateStr]))
+        );
+        dot.style.background = habit.marks[dateStr] ? habit.color + "66" : "";
+        dot.style.borderColor = habit.marks[dateStr] ? habit.color : "";
+        // Update progress + streak
+        updateMeta(row, habit, year, month);
+      });
+
+      grid.appendChild(cell);
+    }
+
+    // Meta details
+    updateMeta(row, habit, year, month);
+
+    frag.appendChild(row);
+  });
+
+  habitList.appendChild(frag);
+
+  if (scrollToBottom) habitList.scrollTop = habitList.scrollHeight;
+}
+
+function renderWeekdayHeader(year, month) {
+  weekdayRow.innerHTML = "";
+  const countDays = daysInMonth(year, month);
+  for (let d = 1; d <= countDays; d++) {
+    const date = new Date(year, month, d);
+    const wd = date.toLocaleString(undefined, { weekday: "short" });
+    const wrap = document.createElement("div");
+    wrap.className = "weekday";
+    wrap.innerHTML = `<div>${wd}</div><span class="daynum">${d}</span>`;
+    weekdayRow.appendChild(wrap);
+  }
+}
+
+function changeMonth(delta) {
+  let { year, month } = state.monthView;
+  month += delta;
+  if (month < 0) {
+    month = 11;
+    year -= 1;
+  }
+  if (month > 11) {
+    month = 0;
+    year += 1;
+  }
+  state.monthView = { year, month };
+  saveState();
+  renderAll();
+}
