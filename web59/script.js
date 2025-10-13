@@ -323,3 +323,53 @@ function changeMonth(delta) {
   saveState();
   renderAll();
 }
+/* ---------- Meta (streak & progress) ---------- */
+function updateMeta(row, habit, year, month) {
+  const streakEl = $(".streak", row);
+  const prog = $(".progress", row);
+  const bar = $(".progress-bar", row);
+  const progLabel = $(".progress-label", row);
+
+  const monthDays = daysInMonth(year, month);
+  let completed = 0;
+  for (let d = 1; d <= monthDays; d++) {
+    const dateStr = isoDate(new Date(year, month, d));
+    if (habit.marks[dateStr]) completed++;
+  }
+  const percent = Math.round((completed / monthDays) * 100);
+  bar.style.width = `${percent}%`;
+  progLabel.textContent = `${percent}%`;
+
+  const s = computeStreak(habit);
+  streakEl.textContent = `🔥 ${s}`;
+}
+
+function computeStreak(habit) {
+  // Streak counts consecutive days up to TODAY (in local time)
+  const today = new Date();
+  let cur = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  let streak = 0;
+  for (;;) {
+    const key = isoDate(cur);
+    if (habit.marks[key]) {
+      streak++;
+      cur.setDate(cur.getDate() - 1);
+    } else {
+      // allow "skip today but counted from yesterday" ONLY if today not marked and yesterday is
+      if (streak === 0) {
+        const y = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate() - 1
+        );
+        if (habit.marks[isoDate(y)]) {
+          streak = 1; // start from yesterday
+          cur = new Date(y.getFullYear(), y.getMonth(), y.getDate() - 1);
+          continue;
+        }
+      }
+      break;
+    }
+  }
+  return streak;
+}
