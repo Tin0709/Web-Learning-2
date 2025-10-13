@@ -122,3 +122,39 @@ body {
   gap: 6px;
   flex-wrap: wrap;
 }
+/* Buttons */
+button {
+  border: 1px solid transparent;
+  background: #202333;
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+button:hover {
+  transform: translateY(-1px);
+}
+button:active {
+  transform: translateY(0);
+}
+button.primary {
+  background: var(--brand);
+}
+button.ghost {
+  background: transparent;
+  border-color: var(--border);
+}
+button.small {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+}
