@@ -5,174 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Habit Tracker</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="data:," />
   </head>
   <body>
     <header class="app-header">
-      <div class="branding">
-        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24">
-          <path
-            d="M12 1.75a.75.75 0 0 1 .75.75v3.19a6.25 6.25 0 1 1-1.5 0V2.5a.75.75 0 0 1 .75-.75Zm0 7.5a4.75 4.75 0 1 0 0 9.5 4.75 4.75 0 0 0 0-9.5Z"
-            fill="currentColor"
-          />
-        </svg>
-        <h1>Habit Tracker</h1>
+      <h1>✅ Habit Tracker</h1>
+
+      <div class="month-nav" role="group" aria-label="Month navigation">
+        <button id="prevMonthBtn" aria-label="Previous month">◀</button>
+        <div id="monthLabel" aria-live="polite" aria-atomic="true"></div>
+        <button id="nextMonthBtn" aria-label="Next month">▶</button>
+        <button id="todayBtn" class="ghost">Today</button>
       </div>
 
-      <div class="header-actions">
-        <button id="exportBtn" class="ghost">Export</button>
-        <label class="switch" aria-label="Toggle dark mode">
-          <input id="themeToggle" type="checkbox" />
-          <span class="slider"></span>
+      <div class="actions">
+        <button id="exportBtn" class="ghost" title="Download a backup JSON">
+          Export
+        </button>
+        <label class="import-label ghost" title="Restore from backup JSON">
+          Import
+          <input
+            id="importInput"
+            type="file"
+            accept="application/json"
+            hidden
+          />
         </label>
+        <button id="clearAllBtn" class="danger ghost" title="Clear all data">
+          Reset
+        </button>
       </div>
     </header>
 
     <main class="container">
-      <section aria-labelledby="add-habit-title" class="panel">
-        <h2 id="add-habit-title">Add a habit</h2>
-        <form id="habitForm" class="habit-form" autocomplete="off">
-          <label class="sr-only" for="habitName">Habit name</label>
+      <section class="add-habit">
+        <form id="addHabitForm" autocomplete="off">
+          <label for="habitName">Add habit</label>
           <input
             id="habitName"
             name="habitName"
             type="text"
-            placeholder="e.g., Drink water"
+            placeholder="e.g., Read 20 mins"
             required
+            minlength="1"
             maxlength="60"
           />
-          <label class="color-picker" for="habitColor">
-            <span>Color</span>
-            <input
-              id="habitColor"
-              name="habitColor"
-              type="color"
-              value="#4f46e5"
-            />
-          </label>
-          <button type="submit" class="primary">Add</button>
+          <label for="habitColor" class="visually-hidden">Color</label>
+          <input
+            id="habitColor"
+            name="habitColor"
+            type="color"
+            value="#4f46e5"
+          />
+          <button type="submit">+ Add</button>
         </form>
       </section>
 
-      <section aria-labelledby="your-habits-title" class="panel">
-        <div class="panel-head">
-          <h2 id="your-habits-title">Your habits</h2>
-          <div class="filters">
-            <button id="sortByCreated" class="ghost small" aria-pressed="true">
-              Sort: Created
-            </button>
-            <button id="sortByName" class="ghost small">Name</button>
-            <button id="sortByProgress" class="ghost small">Progress</button>
-          </div>
+      <section class="calendar" aria-label="Monthly habit tracker">
+        <div class="calendar-head">
+          <div class="sticky-col head-cell">Habit</div>
+          <div id="weekdayRow" class="weekday-row"></div>
         </div>
-
-        <div id="habitsEmpty" class="empty">
-          <p>No habits yet. Add one above to get started!</p>
-        </div>
-
         <div
-          id="habitsGrid"
-          class="habits-grid"
-          role="list"
+          id="habitList"
+          class="habit-list"
           aria-live="polite"
+          aria-atomic="false"
         ></div>
       </section>
     </main>
 
-    <!-- History / Calendar Modal -->
-    <dialog id="historyModal" aria-labelledby="historyTitle">
-      <form method="dialog" class="modal">
-        <header class="modal-header">
-          <h3 id="historyTitle">History</h3>
-          <button value="cancel" class="icon-btn" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </header>
+    <footer class="footer">
+      <p>
+        Tip: Click any day cell to toggle done/undone. Double-click habit name
+        to rename.
+      </p>
+    </footer>
 
-        <div class="modal-body">
-          <div class="habit-summary">
-            <div class="dot" id="modalHabitDot"></div>
-            <div class="info">
-              <div id="modalHabitName" class="name"></div>
-              <div id="modalHabitMeta" class="meta"></div>
+    <template id="habitRowTpl">
+      <div class="habit-row" role="row">
+        <div class="sticky-col habit-meta">
+          <span class="color-dot" aria-hidden="true"></span>
+          <span
+            class="habit-title"
+            contenteditable="false"
+            spellcheck="false"
+          ></span>
+          <div class="meta">
+            <span class="streak" title="Current streak">🔥 0</span>
+            <div class="progress" title="Completion this month">
+              <div class="progress-bar"></div>
             </div>
+            <span class="progress-label">0%</span>
           </div>
-
-          <div id="calendar" class="calendar" aria-live="polite"></div>
-          <div class="calendar-legend">
-            <span class="legend done">Done</span>
-            <span class="legend missed">Missed</span>
-            <span class="legend future">Future</span>
-          </div>
-        </div>
-
-        <footer class="modal-footer">
-          <button id="clearMonthBtn" type="button" class="ghost">
-            Clear this month
-          </button>
-          <menu>
-            <button value="cancel" class="ghost">Close</button>
-          </menu>
-        </footer>
-      </form>
-    </dialog>
-
-    <template id="habitCardTemplate">
-      <article class="habit-card" role="listitem">
-        <header class="habit-card__header">
-          <div class="habit-card__left">
-            <span class="dot"></span>
-            <h3 class="habit-title"></h3>
-          </div>
-          <div class="habit-card__right">
-            <button
-              class="icon-btn open-history"
-              title="Open history (calendar)"
-              aria-label="Open history"
-            >
-              📅
+          <div class="row-actions">
+            <button class="renameBtn ghost" title="Rename">✎</button>
+            <button class="archiveBtn ghost" title="Archive/Unarchive">
+              📦
             </button>
-            <button
-              class="icon-btn delete-habit"
-              title="Delete habit"
-              aria-label="Delete habit"
-            >
-              🗑️
-            </button>
-          </div>
-        </header>
-
-        <div class="habit-card__stats">
-          <div class="stat">
-            <div class="stat-label">Streak</div>
-            <div class="stat-value streak">0🔥</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">This month</div>
-            <div class="stat-value month-progress">0%</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">All time</div>
-            <div class="stat-value total-days">0d</div>
+            <button class="deleteBtn danger ghost" title="Delete">🗑</button>
           </div>
         </div>
-
-        <div class="habit-card__actions">
-          <button class="primary mark-today">Mark Today</button>
-          <button class="ghost small undo-today">Undo Today</button>
-        </div>
-
-        <div
-          class="progressbar"
-          role="progressbar"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          aria-valuenow="0"
-        >
-          <div class="bar"></div>
-        </div>
-      </article>
+        <div class="day-grid"></div>
+      </div>
     </template>
 
-    <script src="app.js" defer></script>
+    <script src="script.js" defer></script>
   </body>
 </html>
