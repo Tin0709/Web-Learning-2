@@ -373,3 +373,46 @@ function computeStreak(habit) {
   }
   return streak;
 }
+/* ---------- Rename inline ---------- */
+function beginRename(row, habit) {
+  const title = $(".habit-title", row);
+  if (title.isContentEditable) return;
+  title.contentEditable = "true";
+  title.focus();
+  // place caret at end
+  document.getSelection()?.selectAllChildren(title);
+  document.getSelection()?.collapseToEnd();
+
+  function end(ok) {
+    title.contentEditable = "false";
+    title.removeEventListener("blur", onBlur);
+    title.removeEventListener("keydown", onKey);
+    if (ok) {
+      const newName = title.textContent.trim();
+      title.textContent = newName || habit.name;
+      if (newName && newName !== habit.name) {
+        habit.name = newName.slice(0, 60);
+        saveState();
+      } else {
+        title.textContent = habit.name;
+      }
+    } else {
+      title.textContent = habit.name;
+    }
+  }
+  function onBlur() {
+    end(true);
+  }
+  function onKey(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      end(true);
+    }
+    if (e.key === "Escape") {
+      e.preventDefault();
+      end(false);
+    }
+  }
+  title.addEventListener("blur", onBlur);
+  title.addEventListener("keydown", onKey);
+}
