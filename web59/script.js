@@ -38,6 +38,7 @@ const importInput = $("#importInput");
 const clearAllBtn = $("#clearAllBtn");
 
 const habitRowTpl = $("#habitRowTpl");
+
 init();
 
 function init() {
@@ -163,6 +164,7 @@ function loadState() {
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
+
 /* ---------- Date helpers ---------- */
 function daysInMonth(y, m) {
   return new Date(y, m + 1, 0).getDate();
@@ -323,6 +325,7 @@ function changeMonth(delta) {
   saveState();
   renderAll();
 }
+
 /* ---------- Meta (streak & progress) ---------- */
 function updateMeta(row, habit, year, month) {
   const streakEl = $(".streak", row);
@@ -373,6 +376,7 @@ function computeStreak(habit) {
   }
   return streak;
 }
+
 /* ---------- Rename inline ---------- */
 function beginRename(row, habit) {
   const title = $(".habit-title", row);
@@ -416,3 +420,6 @@ function beginRename(row, habit) {
   title.addEventListener("blur", onBlur);
   title.addEventListener("keydown", onKey);
 }
+
+/* ---------- Utilities ---------- */
+// (none)
