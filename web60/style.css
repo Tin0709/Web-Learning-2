@@ -35,3 +35,52 @@ body {
   padding: 1rem;
   border-bottom: 1px solid var(--border);
 }
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+.toggles {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: transform 0.06s ease, background 0.2s ease;
+}
+.btn:hover {
+  background: #0b1220;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+.unit-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.6rem;
+  background: var(--card);
+}
+.unit-toggle input {
+  display: none;
+}
+.unit-toggle label {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  color: var(--muted);
+}
+.unit-toggle input:checked + label {
+  background: #0b1220;
+  color: var(--text);
+}
