@@ -140,3 +140,73 @@ function renderRecents(list) {
     els.recent.appendChild(d);
   });
 }
+// Draw a simple line chart on canvas (no libs)
+function drawHourlyChart(hoursISO, tempsC, tz) {
+  const ctx = els.hourlyCanvas.getContext("2d");
+  const W = els.hourlyCanvas.width;
+  const H = els.hourlyCanvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Padding
+  const padL = 40,
+    padR = 10,
+    padT = 20,
+    padB = 40;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // Slice next 24 points
+  const points = hoursISO.slice(0, 24).map((iso, i) => ({
+    t: new Date(iso),
+    c: tempsC[i],
+  }));
+  const minC = Math.min(...points.map((p) => p.c));
+  const maxC = Math.max(...points.map((p) => p.c));
+
+  // Axis lines
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgba(255,255,255,.2)";
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, H - padB);
+  ctx.lineTo(W - padR, H - padB);
+  ctx.stroke();
+
+  // Y labels (min, mid, max)
+  const ticks = [minC, (minC + maxC) / 2, maxC];
+  ctx.fillStyle = "rgba(229,231,235,.9)";
+  ctx.font = "12px system-ui";
+  ticks.forEach((v, i) => {
+    const y = padT + (1 - (v - minC) / (maxC - minC || 1)) * plotH;
+    ctx.fillText(unitTemp(v), 4, y + 4);
+    ctx.strokeStyle = "rgba(255,255,255,.08)";
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(W - padR, y);
+    ctx.stroke();
+  });
+
+  // Points path
+  ctx.beginPath();
+  points.forEach((p, i) => {
+    const x = padL + (i / (points.length - 1)) * plotW;
+    const y = padT + (1 - (p.c - minC) / (maxC - minC || 1)) * plotH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = "rgba(96,165,250,1)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // X labels every 3 hours
+  ctx.fillStyle = "rgba(156,163,175,1)";
+  for (let i = 0; i < points.length; i += 3) {
+    const p = points[i];
+    const x = padL + (i / (points.length - 1)) * plotW;
+    const label = new Intl.DateTimeFormat(undefined, {
+      hour: "numeric",
+      timeZone: tz,
+    }).format(p.t);
+    ctx.fillText(label, x - 8, H - padB + 16);
+  }
+}
