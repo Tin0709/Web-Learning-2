@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://api.open-meteo.com">
+  <link rel="preconnect" href="https://geocoding-api.open-meteo.com">
+</head>
+<body>
+  <header class="app-header">
+    <h1>🌤️ Weather Dashboard</h1>
+    <div class="toggles">
+      <button id="geoBtn" class="btn">📍 Use my location</button>
+      <div class="unit-toggle" role="group" aria-label="Units">
+        <input type="radio" id="celsius" name="unit" value="c" checked />
+        <label for="celsius">°C</label>
+        <input type="radio" id="fahrenheit" name="unit" value="f" />
+        <label for="fahrenheit">°F</label>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="search">
+      <form id="searchForm" autocomplete="off">
+        <input
+          id="cityInput"
+          type="text"
+          placeholder="Search city (e.g., Tokyo, Paris, New York)"
+          aria-label="Search city"
+          required
+        />
+        <button class="btn" type="submit">Search</button>
+      </form>
+      <div id="recentSearches" class="chips" aria-label="Recent searches"></div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="current" class="card current">
+      <div class="current-top">
+        <div>
+          <h2 id="locationName">—</h2>
+          <p id="dateStr">—</p>
+        </div>
+        <div class="temp-block">
+          <div id="currentIcon" class="big-emoji">⛅</div>
+          <div>
+            <div id="currentTemp" class="temp">—</div>
+            <div id="currentDesc" class="muted">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="current-grid">
+        <div><span>💧 Humidity:</span> <strong id="humidity">—</strong></div>
+        <div><span💨>💨 Wind:</span> <strong id="wind">—</strong></div>
+        <div><span>🌡️ Feels like:</span> <strong id="apparent">—</strong></div>
+        <div><span>🧭 Direction:</span> <strong id="winddir">—</strong></div>
+        <div><span>🌅 Sunrise:</span> <strong id="sunrise">—</strong></div>
+        <div><span>🌇 Sunset:</span> <strong id="sunset">—</strong></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Hourly Temperature (next 24h)</h3>
+      <canvas id="hourlyChart" width="900" height="260" aria-label="Hourly temperature chart" role="img"></canvas>
+    </section>
+
+    <section class="card">
+      <h3>7-Day Forecast</h3>
+      <div id="forecast" class="forecast-grid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Data: <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a> • No API key required</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
