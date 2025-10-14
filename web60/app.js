@@ -76,3 +76,67 @@ const WEATHER = {
     return this.map[code] || ["—", "⛅"];
   },
 };
+function setStatus(msg) {
+  els.status.textContent = msg || "";
+}
+function formatTime(dt, tz, opts) {
+  return new Intl.DateTimeFormat(undefined, { ...opts, timeZone: tz }).format(
+    new Date(dt)
+  );
+}
+function degToCompass(d) {
+  const dirs = [
+    "N",
+    "NNE",
+    "NE",
+    "ENE",
+    "E",
+    "ESE",
+    "SE",
+    "SSE",
+    "S",
+    "SSW",
+    "SW",
+    "WSW",
+    "W",
+    "WNW",
+    "NW",
+    "NNW",
+  ];
+  return dirs[Math.round((d % 360) / 22.5) % 16];
+}
+function toF(c) {
+  return (c * 9) / 5 + 32;
+}
+function unitTemp(valueC) {
+  return state.unit === "c"
+    ? `${Math.round(valueC)}°C`
+    : `${Math.round(toF(valueC))}°F`;
+}
+function saveRecents(name, lat, lon, country, tz) {
+  const recents = JSON.parse(
+    localStorage.getItem(STORAGE_KEYS.RECENTS) || "[]"
+  );
+  const entry = { name, lat, lon, country, tz };
+  const existing = recents.find(
+    (r) => r.name === name && r.country === country
+  );
+  const updated = [entry, ...recents.filter((r) => r !== existing)].slice(0, 8);
+  localStorage.setItem(STORAGE_KEYS.RECENTS, JSON.stringify(updated));
+  renderRecents(updated);
+}
+function renderRecents(list) {
+  els.recent.innerHTML = "";
+  (
+    list || JSON.parse(localStorage.getItem(STORAGE_KEYS.RECENTS) || "[]")
+  ).forEach((r) => {
+    const d = document.createElement("button");
+    d.className = "chip";
+    d.title = `${r.name}, ${r.country}`;
+    d.textContent = `${r.name} ${r.country ? "• " + r.country : ""}`;
+    d.addEventListener("click", () =>
+      loadByCoords(r.lat, r.lon, r.name, r.country, r.tz)
+    );
+    els.recent.appendChild(d);
+  });
+}
