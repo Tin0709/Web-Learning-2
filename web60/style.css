@@ -84,6 +84,7 @@ body {
   background: #0b1220;
   color: var(--text);
 }
+
 .search {
   margin: 1rem 0;
 }
@@ -194,6 +195,7 @@ body {
   border-top: 1px solid var(--border);
   margin-top: 1rem;
 }
+
 /* Responsive */
 @media (max-width: 900px) {
   .forecast-grid {
