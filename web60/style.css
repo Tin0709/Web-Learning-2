@@ -84,3 +84,41 @@ body {
   background: #0b1220;
   color: var(--text);
 }
+.search {
+  margin: 1rem 0;
+}
+#searchForm {
+  display: flex;
+  gap: 0.5rem;
+}
+#cityInput {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+.status {
+  color: var(--muted);
+  margin: 0.5rem 0 0;
+  min-height: 1.25rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.chips .chip {
+  background: var(--chip);
+  color: var(--text);
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+}
+.chips .chip:hover {
+  background: #0b1220;
+}
