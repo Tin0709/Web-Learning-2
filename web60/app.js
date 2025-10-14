@@ -210,3 +210,79 @@ function drawHourlyChart(hoursISO, tempsC, tz) {
     ctx.fillText(label, x - 8, H - padB + 16);
   }
 }
+// Fetch helpers
+async function geocodeCity(q) {
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+    q
+  )}&count=1&language=en&format=json`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Geocoding failed");
+  const data = await res.json();
+  if (!data.results || data.results.length === 0)
+    throw new Error("City not found");
+  const r = data.results[0];
+  return {
+    name: r.name,
+    country: r.country,
+    lat: r.latitude,
+    lon: r.longitude,
+    tz: r.timezone,
+  };
+}
+
+async function fetchWeather(lat, lon, tz) {
+  // Get 7-day + hourly (temp, apparent, humidity, wind)
+  const url = new URL("https://api.open-meteo.com/v1/forecast");
+  url.search = new URLSearchParams({
+    latitude: lat,
+    longitude: lon,
+    current:
+      "temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_direction_10m,weather_code",
+    hourly:
+      "temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code",
+    daily: "weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset",
+    timezone: tz || "auto",
+  }).toString();
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Weather fetch failed");
+  return await res.json();
+}
+
+async function loadByCity(q) {
+  setStatus("Searching…");
+  try {
+    const place = await geocodeCity(q);
+    await loadByCoords(
+      place.lat,
+      place.lon,
+      place.name,
+      place.country,
+      place.tz
+    );
+  } catch (e) {
+    console.error(e);
+    setStatus(e.message || "Could not find that city.");
+  }
+}
+
+async function loadByCoords(
+  lat,
+  lon,
+  name = "Your location",
+  country = "",
+  tz = "auto"
+) {
+  setStatus("Loading weather…");
+  try {
+    const data = await fetchWeather(lat, lon, tz);
+    state.location = { lat, lon, name, country, tz: data.timezone };
+    state.raw = data;
+    saveRecents(name, lat, lon, country, data.timezone);
+    renderAll();
+    setStatus("");
+  } catch (e) {
+    console.error(e);
+    setStatus("Failed to fetch weather data.");
+  }
+}
