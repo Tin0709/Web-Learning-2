@@ -194,3 +194,21 @@ body {
   border-top: 1px solid var(--border);
   margin-top: 1rem;
 }
+/* Responsive */
+@media (max-width: 900px) {
+  .forecast-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .current-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .current .current-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .forecast-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
