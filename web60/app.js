@@ -76,6 +76,7 @@ const WEATHER = {
     return this.map[code] || ["—", "⛅"];
   },
 };
+
 function setStatus(msg) {
   els.status.textContent = msg || "";
 }
@@ -140,6 +141,7 @@ function renderRecents(list) {
     els.recent.appendChild(d);
   });
 }
+
 // Draw a simple line chart on canvas (no libs)
 function drawHourlyChart(hoursISO, tempsC, tz) {
   const ctx = els.hourlyCanvas.getContext("2d");
@@ -210,6 +212,7 @@ function drawHourlyChart(hoursISO, tempsC, tz) {
     ctx.fillText(label, x - 8, H - padB + 16);
   }
 }
+
 // Fetch helpers
 async function geocodeCity(q) {
   const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
@@ -286,3 +289,127 @@ async function loadByCoords(
     setStatus("Failed to fetch weather data.");
   }
 }
+
+function renderAll() {
+  const { raw, location } = state;
+  if (!raw || !location) return;
+
+  // Header & current
+  els.locationName.textContent = location.country
+    ? `${location.name}, ${location.country}`
+    : location.name;
+  els.dateStr.textContent = formatTime(raw.current.time, raw.timezone, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const [desc, emoji] = WEATHER.get(raw.current.weather_code);
+  els.currentIcon.textContent = emoji;
+  els.currentDesc.textContent = desc;
+
+  els.currentTemp.textContent = unitTemp(raw.current.temperature_2m);
+  els.apparent.textContent = unitTemp(raw.current.apparent_temperature);
+  els.humidity.textContent = `${raw.current.relative_humidity_2m}%`;
+  els.wind.textContent = `${Math.round(raw.current.wind_speed_10m)} km/h`;
+  els.winddir.textContent = `${degToCompass(raw.current.wind_direction_10m)} (${
+    raw.current.wind_direction_10m
+  }°)`;
+
+  // Daily forecast
+  els.forecast.innerHTML = "";
+  raw.daily.time.forEach((iso, idx) => {
+    const code = raw.daily.weather_code[idx];
+    const [dDesc, dEmoji] = WEATHER.get(code);
+    const hi = raw.daily.temperature_2m_max[idx];
+    const lo = raw.daily.temperature_2m_min[idx];
+    const day = document.createElement("div");
+    day.className = "day";
+    day.innerHTML = `
+        <div class="muted">${formatTime(iso, raw.timezone, {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+        })}</div>
+        <div class="emoji">${dEmoji}</div>
+        <div>${dDesc}</div>
+        <div><span class="hi">${unitTemp(
+          hi
+        )}</span> / <span class="lo">${unitTemp(lo)}</span></div>
+      `;
+    els.forecast.appendChild(day);
+  });
+
+  // Sunrise / Sunset of day 0
+  els.sunrise.textContent = formatTime(raw.daily.sunrise[0], raw.timezone, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  els.sunset.textContent = formatTime(raw.daily.sunset[0], raw.timezone, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  // Hourly chart (next 24h)
+  drawHourlyChart(raw.hourly.time, raw.hourly.temperature_2m, raw.timezone);
+}
+
+// Unit switching
+for (const r of els.unitRadios) {
+  r.addEventListener("change", () => {
+    state.unit = r.value;
+    localStorage.setItem(STORAGE_KEYS.UNIT, state.unit);
+    if (state.raw) renderAll();
+  });
+}
+
+// Search form
+els.searchForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const q = els.cityInput.value.trim();
+  if (!q) return;
+  loadByCity(q);
+});
+
+// Geolocation
+els.geoBtn.addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    setStatus("Geolocation is not supported by your browser.");
+    return;
+  }
+  setStatus("Getting your location…");
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const { latitude, longitude } = pos.coords;
+      // Reverse-look up timezone via weather call itself
+      loadByCoords(latitude, longitude, "Your location", "", "auto");
+    },
+    (err) => {
+      setStatus("Could not get your location.");
+      console.error(err);
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+});
+
+// Load recents on start and try a default
+renderRecents();
+(async function bootstrap() {
+  const recents = JSON.parse(
+    localStorage.getItem(STORAGE_KEYS.RECENTS) || "[]"
+  );
+  if (recents.length) {
+    loadByCoords(
+      recents[0].lat,
+      recents[0].lon,
+      recents[0].name,
+      recents[0].country,
+      recents[0].tz
+    );
+  } else {
+    // Fallback default: London
+    loadByCity("London");
+  }
+})();
