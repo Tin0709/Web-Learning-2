@@ -81,3 +81,57 @@ body {
   cursor: pointer;
   transition: transform 0.04s ease, background 0.2s ease, border-color 0.2s ease;
 }
+.app__actions button:hover,
+.msg__controls button:hover {
+  background: #0b1020;
+  border-color: #2b3550;
+}
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.theme-toggle input {
+  display: none;
+}
+.theme-toggle span {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.chat {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+}
+.chat__messages {
+  list-style: none;
+  margin: 0;
+  padding: 20px 16px 8px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+}
+.chat__messages::-webkit-scrollbar {
+  width: 10px;
+}
+.chat__messages::-webkit-scrollbar-thumb {
+  background: #1d2841;
+  border-radius: 8px;
+}
+
+.msg {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 8px;
+}
+.msg.me {
+  justify-items: end;
+}
+.msg.bot {
+  justify-items: start;
+}
