@@ -35,6 +35,7 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
 }
+
 .app__header {
   display: flex;
   align-items: center;
@@ -180,6 +181,7 @@ body {
   font-size: 13px;
   color: var(--muted);
 }
+
 .composer {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -217,4 +219,40 @@ body {
 }
 .composer__send:hover {
   transform: translateY(-1px);
+}
+
+/* Light theme (toggled) */
+body.light {
+  --bg: #f1f5f9;
+  --panel: #ffffff;
+  --muted: #475569;
+  --text: #0f172a;
+  --accent: #4f46e5;
+  --me: #edf2ff;
+  --bot: #ffffff;
+  --bubble-me: #eef2ff;
+  --bubble-bot: #ffffff;
+  --border: #e2e8f0;
+  background: linear-gradient(180deg, #e6eefc, #f4f7fb 60%);
+}
+body.light .composer__input {
+  background: #fff;
+}
+body.light .msg.bot .msg__bubble {
+  background: #fff;
+}
+body.light .msg.me .msg__bubble {
+  background: #eef2ff;
+}
+
+@media (max-width: 520px) {
+  .app__header {
+    padding: 12px;
+  }
+  .chat__messages {
+    padding: 14px 12px 6px;
+  }
+  .composer {
+    padding: 10px 12px 12px;
+  }
 }
