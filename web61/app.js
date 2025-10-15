@@ -1,7 +1,7 @@
 // ----- Simple Chat App (frontend-only) -----
 // Features: persistence via localStorage, typing indicator, edit/delete, dark mode, export
 
-() => {
+(() => {
   const els = {
     list: document.getElementById("messages"),
     input: document.getElementById("input"),
@@ -115,6 +115,7 @@
       ts: msg.ts || Date.now(),
       edited: !!msg.edited,
     };
+
     renderMessage(message);
     scrollToBottom();
 
@@ -128,6 +129,7 @@
     }
     return message;
   }
+
   function renderAll(messages) {
     els.list.innerHTML = "";
     messages.forEach(renderMessage);
@@ -220,6 +222,7 @@
       showTyping(false);
     }, delay);
   }
+
   // ----- Utilities -----
   function sanitize(str) {
     // Basic sanitization (textContent is used, but sanitize anyway)
@@ -248,4 +251,29 @@
     clearTimeout(typingTimer);
     typingTimer = setTimeout(() => showTyping(false), 800);
   }
-};
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { messages: [] };
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed.messages)) return { messages: [] };
+      return { messages: parsed.messages };
+    } catch {
+      return { messages: [] };
+    }
+  }
+  function persist() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function applyTheme(mode) {
+    document.body.classList.toggle("light", mode === "light");
+  }
+  function saveTheme(mode) {
+    localStorage.setItem(THEME_KEY, mode);
+  }
+  function loadTheme() {
+    return localStorage.getItem(THEME_KEY) || "dark";
+  }
+})();
