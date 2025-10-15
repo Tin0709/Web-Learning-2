@@ -220,4 +220,32 @@
       showTyping(false);
     }, delay);
   }
+  // ----- Utilities -----
+  function sanitize(str) {
+    // Basic sanitization (textContent is used, but sanitize anyway)
+    return str.replace(/\p{C}/gu, ""); // remove control chars
+  }
+  function formatTime(ts) {
+    try {
+      const d = new Date(ts);
+      return new Intl.DateTimeFormat(undefined, {
+        hour: "2-digit",
+        minute: "2-digit",
+        day: "2-digit",
+        month: "short",
+      }).format(d);
+    } catch {
+      return "";
+    }
+  }
+  function scrollToBottom() {
+    els.list.scrollTop = els.list.scrollHeight;
+  }
+  function showTyping(show) {
+    els.typing.hidden = !show;
+  }
+  function debounceHideTyping() {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => showTyping(false), 800);
+  }
 };
