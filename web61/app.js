@@ -128,4 +128,60 @@
     }
     return message;
   }
+  function renderAll(messages) {
+    els.list.innerHTML = "";
+    messages.forEach(renderMessage);
+    // apply initial theme toggle position
+    els.themeToggle.checked = loadTheme() === "light";
+    setTimeout(scrollToBottom, 0);
+  }
+
+  function renderMessage(message) {
+    const node = els.template.content.firstElementChild.cloneNode(true);
+    node.dataset.id = message.id;
+    node.classList.add(message.sender === "you" ? "me" : "bot");
+
+    const bubble = node.querySelector(".msg__bubble");
+    const textEl = node.querySelector(".msg__text");
+    const timeEl = node.querySelector(".msg__time");
+    const editedEl = node.querySelector(".msg__edited");
+    const controls = node.querySelector(".msg__controls");
+
+    textEl.textContent = message.text;
+    timeEl.textContent = formatTime(message.ts);
+    editedEl.hidden = !message.edited;
+
+    if (message.sender === "you") {
+      controls.hidden = false;
+      controls
+        .querySelector(".msg__edit")
+        .addEventListener("click", () => editMessage(message.id));
+      controls
+        .querySelector(".msg__delete")
+        .addEventListener("click", () => deleteMessage(message.id));
+    }
+
+    els.list.appendChild(node);
+  }
+
+  function editMessage(id) {
+    const idx = state.messages.findIndex(
+      (m) => m.id === id && m.sender === "you"
+    );
+    if (idx === -1) return;
+    const current = state.messages[idx].text;
+    const next = prompt("Edit your message:", current);
+    if (next === null) return;
+    const trimmed = next.trim();
+    if (!trimmed) return alert("Message cannot be empty.");
+    state.messages[idx].text = trimmed;
+    state.messages[idx].edited = true;
+    persist();
+    // update DOM
+    const node = els.list.querySelector(`.msg[data-id="${id}"]`);
+    if (node) {
+      node.querySelector(".msg__text").textContent = trimmed;
+      node.querySelector(".msg__edited").hidden = false;
+    }
+  }
 };
