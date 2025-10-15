@@ -180,3 +180,41 @@ body {
   font-size: 13px;
   color: var(--muted);
 }
+.composer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 10px 16px 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 8, 23, 0.15),
+    rgba(2, 8, 23, 0.4)
+  );
+  border-top: 1px solid var(--border);
+}
+.composer__input {
+  width: 100%;
+  resize: none;
+  min-height: 40px;
+  max-height: 160px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #0b1120;
+  color: var(--text);
+  border: 1px solid var(--border);
+  outline: none;
+}
+.composer__input:focus {
+  border-color: #2b3550;
+}
+.composer__send {
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #374151, #1f2937);
+  border-radius: 10px;
+  padding: 0 16px;
+  min-width: 80px;
+  font-weight: 600;
+}
+.composer__send:hover {
+  transform: translateY(-1px);
+}
