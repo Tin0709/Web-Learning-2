@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple Chat</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app__header">
+        <div class="app__title">
+          <span class="dot"></span>
+          <h1>Chat</h1>
+        </div>
+        <div class="app__actions">
+          <button id="exportBtn" title="Export chat">Export</button>
+          <button id="clearBtn" title="Clear chat">Clear</button>
+          <label class="theme-toggle" title="Toggle theme">
+            <input type="checkbox" id="themeToggle" />
+            <span>🌙</span>
+          </label>
+        </div>
+      </header>
+
+      <main class="chat">
+        <ul id="messages" class="chat__messages" aria-live="polite"></ul>
+        <div id="typing" class="chat__typing" hidden>Bot is typing…</div>
+      </main>
+
+      <form id="composer" class="composer" autocomplete="off">
+        <textarea
+          id="input"
+          class="composer__input"
+          placeholder="Type a message… (Enter to send, Shift+Enter for newline)"
+          rows="1"
+          required
+        ></textarea>
+        <button
+          id="sendBtn"
+          class="composer__send"
+          type="submit"
+          aria-label="Send"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+
+    <template id="messageTemplate">
+      <li class="msg">
+        <div class="msg__bubble">
+          <div class="msg__text"></div>
+          <div class="msg__meta">
+            <time class="msg__time"></time>
+            <span class="msg__edited" hidden>(edited)</span>
+          </div>
+        </div>
+        <div class="msg__controls" hidden>
+          <button class="msg__edit" title="Edit">Edit</button>
+          <button class="msg__delete" title="Delete">Delete</button>
+        </div>
+      </li>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
