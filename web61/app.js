@@ -184,4 +184,40 @@
       node.querySelector(".msg__edited").hidden = false;
     }
   }
+
+  function deleteMessage(id) {
+    const idx = state.messages.findIndex(
+      (m) => m.id === id && m.sender === "you"
+    );
+    if (idx === -1) return;
+    if (!confirm("Delete this message?")) return;
+    state.messages.splice(idx, 1);
+    persist();
+    const node = els.list.querySelector(`.msg[data-id="${id}"]`);
+    node?.remove();
+  }
+
+  function simulateBotReply(userText) {
+    const delay = Math.min(1200, 400 + userText.length * 15);
+    showTyping(true);
+
+    setTimeout(() => {
+      // Tiny rule-based responses
+      const lower = userText.toLowerCase();
+      let reply;
+      if (/^hello|^hi|^hey\b/.test(lower)) {
+        reply = "Hello! 👋 How can I help?";
+      } else if (/time|date/.test(lower)) {
+        reply = `It's ${new Date().toLocaleString()}.`;
+      } else if (/help|what can you do/.test(lower)) {
+        reply =
+          "I can echo your messages, keep chat history, and let you edit/delete your messages.";
+      } else {
+        reply = `You said: “${userText}”`;
+      }
+
+      addMessage({ text: reply, sender: "bot" }, { persist: true });
+      showTyping(false);
+    }, delay);
+  }
 };
