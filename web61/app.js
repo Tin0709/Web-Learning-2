@@ -44,4 +44,50 @@
     showTyping(true);
     debounceHideTyping();
   });
+
+  // Enter to send (Shift+Enter for newline)
+  els.input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      trySend();
+    }
+  });
+
+  els.form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    trySend();
+  });
+
+  els.themeToggle.addEventListener("change", (e) => {
+    const mode = e.target.checked ? "light" : "dark";
+    applyTheme(mode);
+    saveTheme(mode);
+  });
+
+  els.clearBtn.addEventListener("click", () => {
+    if (!state.messages.length) return;
+    if (confirm("Clear all messages?")) {
+      state.messages = [];
+      persist();
+      els.list.innerHTML = "";
+    }
+  });
+
+  els.exportBtn.addEventListener("click", () => {
+    const data = {
+      exportedAt: new Date().toISOString(),
+      messages: state.messages,
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `chat-${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
 };
