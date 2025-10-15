@@ -90,4 +90,42 @@
     a.remove();
     URL.revokeObjectURL(url);
   });
+
+  // ----- Core functions -----
+  function trySend() {
+    const raw = els.input.value.trim();
+    if (!raw) return;
+
+    const text = sanitize(raw);
+    const you = addMessage({ text, sender: "you" }, { persist: true });
+
+    els.input.value = "";
+    autoResize();
+    showTyping(false);
+
+    // Simulate bot response
+    simulateBotReply(you.text);
+  }
+
+  function addMessage(msg, options = {}) {
+    const message = {
+      id: crypto.randomUUID(),
+      text: String(msg.text || ""),
+      sender: msg.sender === "you" ? "you" : "bot",
+      ts: msg.ts || Date.now(),
+      edited: !!msg.edited,
+    };
+    renderMessage(message);
+    scrollToBottom();
+
+    if (options.persist) {
+      state.messages.push(message);
+      persist();
+    }
+    if (options.withTyping) {
+      // tiny type effect: show after a short delay
+      setTimeout(() => scrollToBottom(), 40);
+    }
+    return message;
+  }
 };
