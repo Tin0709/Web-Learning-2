@@ -93,6 +93,7 @@ const QUESTIONS = [
     ],
   },
 ];
+
 // ====== DOM Elements ======
 const startScreen = document.getElementById("startScreen");
 const quizScreen = document.getElementById("quizScreen");
@@ -185,6 +186,7 @@ function renderQuestion() {
 
   updateStats();
 }
+
 // ====== Handle Answer Selection ======
 function handleAnswer(btn) {
   if (hasAnswered) return;
@@ -281,7 +283,9 @@ function endQuiz() {
   });
   // Hide review by default; show when user clicks
   reviewPanel.classList.add("hidden");
-} // ====== Event Listeners ======
+}
+
+// ====== Event Listeners ======
 startBtn.addEventListener("click", startQuiz);
 nextBtn.addEventListener("click", nextQuestion);
 quitBtn.addEventListener("click", quitQuiz);
@@ -316,4 +320,11 @@ document.addEventListener("keydown", (e) => {
   ) {
     nextBtn.click();
   }
+});
+
+// Initialize counters and best score on load
+window.addEventListener("DOMContentLoaded", () => {
+  bestScoreEl.textContent = String(getBest());
+  questionCounter.textContent = `0 / ${QUESTIONS.length}`;
+  progressBar.style.width = "0%";
 });
