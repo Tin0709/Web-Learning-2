@@ -48,3 +48,57 @@ body {
   flex-direction: column;
   gap: 12px;
 }
+.app__title {
+  margin: 0;
+  font-size: clamp(24px, 3.5vw, 36px);
+}
+
+.header__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress {
+  background: #0f1528;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+}
+.progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--primary-600));
+  transition: width 0.25s ease;
+}
+
+.counters {
+  font-size: 14px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.divider {
+  opacity: 0.5;
+}
+
+.card {
+  background: linear-gradient(180deg, var(--card), #0c1324);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.question h2 {
+  margin: 0 0 12px;
+  font-size: clamp(18px, 2.6vw, 24px);
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 12px 0 8px;
+}
