@@ -281,4 +281,39 @@ function endQuiz() {
   });
   // Hide review by default; show when user clicks
   reviewPanel.classList.add("hidden");
-}
+} // ====== Event Listeners ======
+startBtn.addEventListener("click", startQuiz);
+nextBtn.addEventListener("click", nextQuestion);
+quitBtn.addEventListener("click", quitQuiz);
+
+restartBtn.addEventListener("click", () => {
+  startQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+reviewBtn.addEventListener("click", () => {
+  reviewPanel.classList.toggle("hidden");
+  // Move focus to the details for accessibility
+  if (!reviewPanel.classList.contains("hidden")) {
+    reviewPanel.querySelector("summary").focus();
+  }
+});
+
+// Allow keyboard nav for Next (Enter) when enabled
+document.addEventListener("keydown", (e) => {
+  if (
+    e.key.toLowerCase() === "enter" &&
+    !nextBtn.disabled &&
+    !resultScreen.classList.contains("hidden")
+  ) {
+    // no-op on result screen
+    return;
+  }
+  if (
+    e.key.toLowerCase() === "enter" &&
+    !nextBtn.disabled &&
+    !quizScreen.classList.contains("hidden")
+  ) {
+    nextBtn.click();
+  }
+});
