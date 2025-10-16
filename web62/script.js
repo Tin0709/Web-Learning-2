@@ -147,3 +147,41 @@ function updateStats() {
   scoreEl.textContent = String(score);
   bestScoreEl.textContent = String(getBest());
 }
+
+// ====== Render Question ======
+function renderQuestion() {
+  hasAnswered = false;
+  nextBtn.disabled = true;
+  answersContainer.innerHTML = "";
+
+  const q = questions[currentIndex];
+  questionText.textContent = q.question;
+
+  // shuffle answers per question to avoid positional bias
+  const shuffledAnswers = shuffle(q.answers);
+
+  shuffledAnswers.forEach((ans, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "answer";
+    btn.setAttribute("role", "listitem");
+    btn.setAttribute("aria-pressed", "false");
+    btn.textContent = ans.text;
+    btn.dataset.correct = ans.correct ? "1" : "0";
+
+    // Keyboard support: Enter/Space to choose
+    btn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        btn.click();
+      }
+    });
+
+    btn.addEventListener("click", () => handleAnswer(btn));
+    answersContainer.appendChild(btn);
+
+    // First option receives initial focus (improves keyboard flow)
+    if (idx === 0) btn.focus();
+  });
+
+  updateStats();
+}
