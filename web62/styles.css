@@ -48,6 +48,7 @@ body {
   flex-direction: column;
   gap: 12px;
 }
+
 .app__title {
   margin: 0;
   font-size: clamp(24px, 3.5vw, 36px);
@@ -159,4 +160,52 @@ body {
 }
 .btn--ghost {
   background: transparent;
+}
+
+.hidden {
+  display: none;
+}
+
+.app__footer {
+  text-align: center;
+  color: var(--muted);
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.result p {
+  margin: 6px 0 10px;
+}
+.best-note {
+  color: var(--muted);
+}
+
+.review {
+  margin-top: 16px;
+  border-top: 1px dashed var(--border);
+  padding-top: 10px;
+}
+.review__list {
+  display: grid;
+  gap: 10px;
+  padding-left: 18px;
+}
+.review__list li {
+  background: #0f1629;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.review__list .correct {
+  color: var(--success);
+}
+.review__list .wrong {
+  color: var(--danger);
+}
+
+/* Mobile tweaks */
+@media (min-width: 640px) {
+  .answers {
+    grid-template-columns: 1fr 1fr;
+  }
 }
