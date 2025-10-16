@@ -102,3 +102,61 @@ body {
   gap: 12px;
   margin: 12px 0 8px;
 }
+
+.answer {
+  width: 100%;
+  text-align: left;
+  background: #0f1629;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.05s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.answer:hover {
+  transform: translateY(-1px);
+}
+.answer:focus {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.answer.correct {
+  border-color: rgba(16, 185, 129, 0.6);
+  background: rgba(16, 185, 129, 0.08);
+}
+.answer.wrong {
+  border-color: rgba(239, 68, 68, 0.6);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.btn {
+  border: 1px solid var(--border);
+  background: #0f1528;
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.05s ease, opacity 0.2s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn--primary {
+  background: linear-gradient(90deg, var(--primary), var(--primary-600));
+  border-color: transparent;
+}
+.btn--ghost {
+  background: transparent;
+}
