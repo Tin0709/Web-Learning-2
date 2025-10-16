@@ -185,3 +185,100 @@ function renderQuestion() {
 
   updateStats();
 }
+// ====== Handle Answer Selection ======
+function handleAnswer(btn) {
+  if (hasAnswered) return;
+  hasAnswered = true;
+
+  const isCorrect = btn.dataset.correct === "1";
+  btn.classList.add(isCorrect ? "correct" : "wrong");
+  btn.setAttribute("aria-pressed", "true");
+
+  // reveal all correctness
+  [...answersContainer.children].forEach((b) => {
+    b.disabled = true;
+    if (b.dataset.correct === "1") b.classList.add("correct");
+    else if (b !== btn) b.classList.add("wrong");
+  });
+
+  if (isCorrect) score++;
+
+  // Save for review
+  const q = questions[currentIndex];
+  reviewData.push({
+    q: q.question,
+    chosen: btn.textContent,
+    correct: q.answers.find((a) => a.correct)?.text || "",
+  });
+
+  nextBtn.disabled = false;
+  scoreEl.textContent = String(score);
+}
+
+// ====== Flow Controls ======
+function startQuiz() {
+  score = 0;
+  currentIndex = 0;
+  questions = shuffle(QUESTIONS);
+  reviewData = [];
+
+  hide(startScreen);
+  hide(resultScreen);
+  show(quizScreen);
+
+  updateStats();
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (!hasAnswered) return;
+
+  currentIndex++;
+  progressBar.style.width = `${(currentIndex / questions.length) * 100}%`;
+
+  if (currentIndex >= questions.length) {
+    endQuiz();
+  } else {
+    renderQuestion();
+  }
+}
+
+function quitQuiz() {
+  endQuiz();
+}
+
+function endQuiz() {
+  hide(quizScreen);
+  show(resultScreen);
+
+  finalScoreEl.textContent = String(score);
+  totalQuestionsEl.textContent = String(questions.length);
+
+  const best = getBest();
+  if (score > best) {
+    setBest(score);
+    bestNoteEl.textContent = "🎉 New high score!";
+  } else if (score === best && best !== 0) {
+    bestNoteEl.textContent = "💪 You matched your best score!";
+  } else {
+    bestNoteEl.textContent = "";
+  }
+  bestScoreEl.textContent = String(getBest());
+
+  // Prepare review list
+  reviewList.innerHTML = "";
+  reviewData.forEach((item, i) => {
+    const li = document.createElement("li");
+    const isRight = item.chosen === item.correct;
+    li.innerHTML = `
+        <div><strong>Q${i + 1}:</strong> ${item.q}</div>
+        <div>Your answer: <span class="${isRight ? "correct" : "wrong"}">${
+      item.chosen
+    }</span></div>
+        <div>Correct answer: <span class="correct">${item.correct}</span></div>
+      `;
+    reviewList.appendChild(li);
+  });
+  // Hide review by default; show when user clicks
+  reviewPanel.classList.add("hidden");
+}
