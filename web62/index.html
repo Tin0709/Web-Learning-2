@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quiz App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app" aria-live="polite">
+      <!-- Header -->
+      <header class="app__header">
+        <h1 class="app__title">Quiz App</h1>
+        <div class="header__stats">
+          <div class="progress">
+            <div class="progress__bar" id="progressBar" style="width: 0%"></div>
+          </div>
+          <div class="counters">
+            <span id="questionCounter" aria-live="polite">0 / 0</span>
+            <span class="divider">•</span>
+            <span>Score: <strong id="score">0</strong></span>
+            <span class="divider">•</span>
+            <span>Best: <strong id="bestScore">0</strong></span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Start Screen -->
+      <section class="card start" id="startScreen">
+        <h2>Ready to test your knowledge?</h2>
+        <p>
+          10 multiple-choice questions. Instant feedback. See how high you can
+          score!
+        </p>
+        <button class="btn btn--primary" id="startBtn">Start Quiz</button>
+      </section>
+
+      <!-- Quiz Screen -->
+      <section
+        class="card quiz hidden"
+        id="quizScreen"
+        role="region"
+        aria-labelledby="questionText"
+      >
+        <div class="question">
+          <h2 id="questionText">Question text</h2>
+        </div>
+
+        <div id="answers" class="answers" role="list"></div>
+
+        <div class="controls">
+          <button class="btn" id="nextBtn" disabled>Next</button>
+          <button class="btn btn--ghost" id="quitBtn">Quit</button>
+        </div>
+      </section>
+
+      <!-- Result Screen -->
+      <section class="card result hidden" id="resultScreen">
+        <h2>Your Results</h2>
+        <p>
+          You scored <strong id="finalScore">0</strong>/<span
+            id="totalQuestions"
+            >0</span
+          >.
+        </p>
+        <p id="bestNote" class="best-note"></p>
+        <div class="controls">
+          <button class="btn btn--primary" id="restartBtn">Play Again</button>
+          <button class="btn btn--ghost" id="reviewBtn">Review Answers</button>
+        </div>
+
+        <details class="review hidden" id="reviewPanel">
+          <summary>Show detailed review</summary>
+          <ol id="reviewList" class="review__list"></ol>
+        </details>
+      </section>
+
+      <footer class="app__footer">
+        <small>Built with HTML • CSS • JS</small>
+      </footer>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
