@@ -93,3 +93,57 @@ const QUESTIONS = [
     ],
   },
 ];
+// ====== DOM Elements ======
+const startScreen = document.getElementById("startScreen");
+const quizScreen = document.getElementById("quizScreen");
+const resultScreen = document.getElementById("resultScreen");
+
+const startBtn = document.getElementById("startBtn");
+const nextBtn = document.getElementById("nextBtn");
+const quitBtn = document.getElementById("quitBtn");
+const restartBtn = document.getElementById("restartBtn");
+const reviewBtn = document.getElementById("reviewBtn");
+
+const questionText = document.getElementById("questionText");
+const answersContainer = document.getElementById("answers");
+
+const questionCounter = document.getElementById("questionCounter");
+const progressBar = document.getElementById("progressBar");
+const scoreEl = document.getElementById("score");
+const bestScoreEl = document.getElementById("bestScore");
+
+const finalScoreEl = document.getElementById("finalScore");
+const totalQuestionsEl = document.getElementById("totalQuestions");
+const bestNoteEl = document.getElementById("bestNote");
+
+const reviewPanel = document.getElementById("reviewPanel");
+const reviewList = document.getElementById("reviewList");
+
+// ====== State ======
+let questions = [];
+let currentIndex = 0;
+let score = 0;
+let hasAnswered = false;
+let reviewData = []; // {q, chosen, correct}
+
+// ====== Utilities ======
+const shuffle = (arr) => arr.slice().sort(() => Math.random() - 0.5);
+const getBest = () => Number(localStorage.getItem("quiz_best") || 0);
+const setBest = (val) => localStorage.setItem("quiz_best", String(val));
+
+function show(el) {
+  el.classList.remove("hidden");
+}
+function hide(el) {
+  el.classList.add("hidden");
+}
+
+function updateStats() {
+  questionCounter.textContent = `${Math.min(
+    currentIndex + 1,
+    questions.length
+  )} / ${questions.length}`;
+  progressBar.style.width = `${(currentIndex / questions.length) * 100}%`;
+  scoreEl.textContent = String(score);
+  bestScoreEl.textContent = String(getBest());
+}
