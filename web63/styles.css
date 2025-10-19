@@ -65,3 +65,62 @@ h2 {
   margin: 0 0 12px 0;
   font-size: 18px;
 }
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  border-radius: 12px;
+}
+.card h2 {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.card p {
+  font-size: 26px;
+  margin: 0;
+  font-weight: 700;
+}
+
+.card.income p {
+  color: var(--income);
+}
+.card.expense p {
+  color: var(--expense);
+}
+.card.balance p {
+  color: var(--primary);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.grid .span-2 {
+  grid-column: span 2;
+}
