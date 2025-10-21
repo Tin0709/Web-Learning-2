@@ -1,0 +1,62 @@
+:root {
+  --bg: #0b0e14;
+  --panel: #121826;
+  --muted: #8a94a6;
+  --text: #e8eefc;
+  --accent: #5da0ff;
+  --chip: #1b2436;
+  --card: #0f1523;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  background: radial-gradient(
+      1200px 800px at 10% -10%,
+      #14203b 0%,
+      transparent 55%
+    ),
+    var(--bg);
+  color: var(--text);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 14, 20, 0.9),
+    rgba(11, 14, 20, 0.7)
+  );
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.brand .logo {
+  font-size: 1.6rem;
+}
+.brand h1 {
+  font-size: 1.1rem;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
