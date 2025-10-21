@@ -185,3 +185,74 @@ body {
   padding: 2rem 1rem;
   color: var(--muted);
 }
+/* Chips */
+.chips {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin: 0.6rem 0;
+}
+.chips .chip {
+  background: var(--chip);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+/* Modal */
+.modal {
+  width: min(900px, 96vw);
+  border: none;
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  padding: 0;
+}
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+.modal-body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+.modal-poster {
+  width: 100%;
+  aspect-ratio: 2/3;
+  background: #0b0e14;
+  border-radius: 10px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+.modal-content {
+  display: flex;
+  flex-direction: column;
+}
+.modal-content h2 {
+  margin: 0.2rem 0 0.2rem;
+}
+.modal-content .muted {
+  color: var(--muted);
+}
+.modal-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+.modal-close {
+  position: absolute;
+  right: 0.6rem;
+  top: 0.6rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.3rem 0.55rem;
+  cursor: pointer;
+}
