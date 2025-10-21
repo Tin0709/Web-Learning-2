@@ -219,3 +219,28 @@ async function openDetails(id) {
     setStatus("Failed to load details.");
   }
 }
+function updateFavButton(btn, active) {
+  btn.textContent = active ? "Remove from Favorites" : "Add to Favorites";
+  btn.classList.toggle("ghost", active);
+}
+
+// reduce movie object to essentials for favorites storage
+function slimMovie(m) {
+  return {
+    id: m.id,
+    title: m.title,
+    name: m.name,
+    poster_path: m.poster_path,
+    release_date: m.release_date,
+    vote_average: m.vote_average,
+  };
+}
+
+/* ========= TAB / DATA FLOW ========= */
+async function loadInitial() {
+  // default: trending
+  state.tab = "discover";
+  state.query = "";
+  state.page = 1;
+  await runDiscover();
+}
