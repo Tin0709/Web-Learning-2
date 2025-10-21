@@ -127,3 +127,95 @@ function renderMovies(list, { append = false } = {}) {
 
   grid.appendChild(frag);
 }
+function updateLoadMore() {
+  const btn = $("#loadMoreBtn");
+  const hasMore = state.page < state.totalPages;
+  btn.hidden = !hasMore || state.tab === "favorites";
+}
+
+function setLoading(flag) {
+  state.loading = flag;
+  $("#loadMoreBtn").disabled = flag;
+}
+
+/* ========= MODAL ========= */
+async function openDetails(id) {
+  try {
+    const modal = $("#detailsModal");
+    const closeBtn = $("#closeModal");
+    setStatus("Loading details…");
+    const data = await fetchDetails(id);
+    setStatus("");
+
+    // Poster
+    const poster = $("#modalPoster");
+    poster.style.backgroundImage = data.poster_path
+      ? `url(${posterUrl(data.poster_path, BIG_POSTER_SIZE)})`
+      : "none";
+
+    // Content
+    $("#modalTitle").textContent = data.title;
+    const year = (data.release_date || "").slice(0, 4) || "—";
+    const runtime = data.runtime ? `${data.runtime} min` : "—";
+    const rating = data.vote_average ? data.vote_average.toFixed(1) : "—";
+    $("#modalMeta").textContent = `${year} · ${runtime} · ⭐ ${rating}`;
+    $("#modalOverview").textContent = data.overview || "No overview.";
+    const genres = $("#modalGenres");
+    genres.innerHTML = "";
+    (data.genres || []).forEach((g) => {
+      const chip = create("span", "chip");
+      chip.textContent = g.name;
+      genres.appendChild(chip);
+    });
+
+    // External links
+    const imdbLink = $("#modalIMDB");
+    if (data.external_ids && data.external_ids.imdb_id) {
+      imdbLink.href = `https://www.imdb.com/title/${data.external_ids.imdb_id}/`;
+      imdbLink.hidden = false;
+    } else imdbLink.hidden = true;
+
+    // Trailer (YouTube)
+    const trailer = (data.videos?.results || []).find(
+      (v) => v.site === "YouTube" && v.type.includes("Trailer")
+    );
+    const trailerBtn = $("#modalTrailer");
+    if (trailer) {
+      trailerBtn.href = `https://www.youtube.com/watch?v=${trailer.key}`;
+      trailerBtn.hidden = false;
+    } else trailerBtn.hidden = true;
+
+    // Favorite button
+    const favBtn = $("#modalFavorite");
+    updateFavButton(favBtn, isFav(data.id));
+    favBtn.onclick = () => {
+      toggleFav(slimMovie(data));
+      updateFavButton(favBtn, isFav(data.id));
+      // re-render current grid to reflect badge
+      refreshTab();
+    };
+
+    // Open modal
+    if (typeof modal.showModal === "function") modal.showModal();
+    else modal.setAttribute("open", "");
+
+    // close handlers
+    closeBtn.onclick = () => modal.close();
+    modal.addEventListener(
+      "click",
+      (e) => {
+        const rect = modal.querySelector(".modal-body").getBoundingClientRect();
+        const clickedOutside =
+          e.clientX < rect.left ||
+          e.clientX > rect.right ||
+          e.clientY < rect.top ||
+          e.clientY > rect.bottom;
+        if (clickedOutside) modal.close();
+      },
+      { once: true }
+    );
+  } catch (err) {
+    console.error(err);
+    setStatus("Failed to load details.");
+  }
+}
