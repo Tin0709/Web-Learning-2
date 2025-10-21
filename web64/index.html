@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie DB (Vanilla JS)</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://image.tmdb.org" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="brand">
+        <span class="logo">🎬</span>
+        <h1>Movie DB</h1>
+      </div>
+
+      <form id="searchForm" class="search">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search movies…"
+          aria-label="Search movies"
+          autocomplete="off"
+        />
+        <button type="submit" class="btn">Search</button>
+      </form>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="discover">Discover</button>
+        <button class="tab" data-tab="favorites">Favorites</button>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section
+        id="statusBar"
+        class="status"
+        role="status"
+        aria-live="polite"
+      ></section>
+
+      <section id="grid" class="grid" aria-label="Movies grid"></section>
+
+      <div class="actions">
+        <button id="loadMoreBtn" class="btn ghost" hidden>Load more</button>
+      </div>
+    </main>
+
+    <!-- Movie Details Modal -->
+    <dialog id="detailsModal" class="modal">
+      <button class="modal-close" aria-label="Close details" id="closeModal">
+        ✕
+      </button>
+      <div class="modal-body">
+        <div id="modalPoster" class="modal-poster"></div>
+        <div class="modal-content">
+          <h2 id="modalTitle"></h2>
+          <p id="modalMeta" class="muted"></p>
+          <p id="modalOverview"></p>
+          <div id="modalGenres" class="chips"></div>
+          <div class="modal-actions">
+            <a
+              id="modalIMDB"
+              href="#"
+              target="_blank"
+              rel="noopener"
+              class="btn ghost"
+              hidden
+              >IMDb</a
+            >
+            <a
+              id="modalTrailer"
+              href="#"
+              target="_blank"
+              rel="noopener"
+              class="btn ghost"
+              hidden
+              >Trailer</a
+            >
+            <button id="modalFavorite" class="btn">Add to Favorites</button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <footer class="footer">
+      <small
+        >Data from TMDB. This product uses the TMDB API but is not endorsed or
+        certified by TMDB.</small
+      >
+    </footer>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
