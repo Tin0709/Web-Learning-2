@@ -14,6 +14,7 @@ const state = {
   items: [], // current list in UI
   favorites: loadFavorites(), // { [movieId]: movieObject }
 };
+
 /* ========= HELPERS ========= */
 function $(sel, root = document) {
   return root.querySelector(sel);
@@ -54,6 +55,7 @@ function toggleFav(movie) {
   }
   saveFavorites(state.favorites);
 }
+
 /* ========= API CALLS ========= */
 async function tmdb(path, params = {}) {
   const url = new URL(API_ROOT + path);
@@ -127,6 +129,7 @@ function renderMovies(list, { append = false } = {}) {
 
   grid.appendChild(frag);
 }
+
 function updateLoadMore() {
   const btn = $("#loadMoreBtn");
   const hasMore = state.page < state.totalPages;
@@ -219,6 +222,7 @@ async function openDetails(id) {
     setStatus("Failed to load details.");
   }
 }
+
 function updateFavButton(btn, active) {
   btn.textContent = active ? "Remove from Favorites" : "Add to Favorites";
   btn.classList.toggle("ghost", active);
@@ -244,6 +248,7 @@ async function loadInitial() {
   state.page = 1;
   await runDiscover();
 }
+
 async function runDiscover({ append = false } = {}) {
   try {
     setLoading(true);
