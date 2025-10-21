@@ -244,3 +244,91 @@ async function loadInitial() {
   state.page = 1;
   await runDiscover();
 }
+async function runDiscover({ append = false } = {}) {
+  try {
+    setLoading(true);
+    setStatus(
+      state.query ? `Searching “${state.query}”…` : "Loading trending…"
+    );
+    const data = state.query
+      ? await fetchSearch(state.query, state.page)
+      : await fetchDiscover(state.page);
+
+    state.totalPages = Math.min(data.total_pages || 1, 500); // TMDB caps at 500
+    if (state.page === 1 && !append) state.items = data.results || [];
+    else state.items = state.items.concat(data.results || []);
+
+    renderMovies(state.items, { append });
+    updateLoadMore();
+    const total = data.total_results ?? state.items.length;
+    setStatus(
+      `${state.query ? "Results" : "Trending"} · Page ${state.page} of ${
+        state.totalPages
+      } · ${total} total`
+    );
+  } catch (err) {
+    console.error(err);
+    setStatus("Something went wrong. Check your API key or network.");
+  } finally {
+    setLoading(false);
+  }
+}
+
+function showFavorites() {
+  const favs = Object.values(state.favorites);
+  state.items = favs;
+  renderMovies(favs);
+  $("#loadMoreBtn").hidden = true;
+  setStatus(`Favorites · ${favs.length} item${favs.length === 1 ? "" : "s"}`);
+}
+
+function refreshTab() {
+  if (state.tab === "favorites") showFavorites();
+  else renderMovies(state.items);
+}
+
+/* ========= EVENTS ========= */
+document.addEventListener("DOMContentLoaded", () => {
+  // Tabs
+  document.querySelectorAll(".tab").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      document
+        .querySelectorAll(".tab")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      const tab = btn.dataset.tab;
+      state.tab = tab;
+
+      if (tab === "favorites") {
+        $("#searchInput").value = "";
+        state.query = "";
+        showFavorites();
+      } else {
+        // Back to discover
+        state.page = 1;
+        await runDiscover({ append: false });
+      }
+    });
+  });
+
+  // Search
+  $("#searchForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const q = $("#searchInput").value.trim();
+    state.query = q;
+    state.page = 1;
+    await runDiscover({ append: false });
+  });
+
+  // Load more
+  $("#loadMoreBtn").addEventListener("click", async () => {
+    if (state.loading) return;
+    state.page += 1;
+    await runDiscover({ append: true });
+  });
+
+  // Modal close button wired in openDetails
+
+  // Start
+  loadInitial();
+});
