@@ -134,3 +134,54 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 1rem;
 }
+.card {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.poster {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  background: #0b0e14;
+}
+.card-body {
+  padding: 0.7rem 0.8rem;
+}
+.title {
+  margin: 0 0 0.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+.meta {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.fav-badge {
+  margin-top: 0.5rem;
+  display: inline-block;
+  font-size: 0.75rem;
+  color: #ffd369;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--muted);
+}
