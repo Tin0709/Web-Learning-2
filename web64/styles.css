@@ -60,6 +60,7 @@ body {
   margin: 0;
   letter-spacing: 0.5px;
 }
+
 .search {
   display: flex;
   gap: 0.6rem;
@@ -185,6 +186,7 @@ body {
   padding: 2rem 1rem;
   color: var(--muted);
 }
+
 /* Chips */
 .chips {
   display: flex;
@@ -255,4 +257,21 @@ body {
   border-radius: 999px;
   padding: 0.3rem 0.55rem;
   cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .header {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .search input {
+    width: 100%;
+  }
+  .modal-body {
+    grid-template-columns: 1fr;
+  }
+  .modal-poster {
+    height: 380px;
+  }
 }
