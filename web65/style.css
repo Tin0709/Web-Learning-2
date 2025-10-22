@@ -160,3 +160,46 @@ h1 {
   gap: 12px;
   margin-top: 12px;
 }
+.fact {
+  background: #111436;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.fact span {
+  color: var(--ink-muted);
+  font-size: 14px;
+}
+.fact strong {
+  font-size: 16px;
+}
+
+.asof {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 2px;
+  color: var(--ink-muted);
+}
+.spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid #3a4181;
+  border-top-color: #a9baff;
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
