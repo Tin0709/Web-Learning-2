@@ -29,6 +29,7 @@ const state = {
   lastQuery: localStorage.getItem("lastQuery") || "",
   lastData: null,
 };
+
 // Initialize UI
 updateUnitUI();
 if (state.lastQuery) {
@@ -120,6 +121,7 @@ async function searchCity(query) {
     toggleLoading(false);
   }
 }
+
 function render(data) {
   // Location
   cityNameEl.textContent = data.name;
@@ -199,4 +201,50 @@ function fmtDate(d) {
   } catch {
     return d.toLocaleString();
   }
+}
+
+// Weather code mapping (Open-Meteo WMO)
+function codeToIconDesc(code, isDay = true) {
+  const sun = "☀️",
+    moon = "🌙",
+    cloud = "☁️",
+    sunBehind = "⛅",
+    rain = "🌧️",
+    drizzle = "🌦️",
+    thunder = "⛈️",
+    snow = "🌨️",
+    fog = "🌫️",
+    hail = "🧊";
+
+  const table = {
+    0: { icon: isDay ? sun : moon, label: "Clear sky" },
+    1: { icon: isDay ? sunBehind : "☁️", label: "Mainly clear" },
+    2: { icon: sunBehind, label: "Partly cloudy" },
+    3: { icon: cloud, label: "Overcast" },
+    45: { icon: fog, label: "Fog" },
+    48: { icon: fog, label: "Depositing rime fog" },
+    51: { icon: drizzle, label: "Light drizzle" },
+    53: { icon: drizzle, label: "Moderate drizzle" },
+    55: { icon: drizzle, label: "Dense drizzle" },
+    56: { icon: drizzle, label: "Freezing drizzle" },
+    57: { icon: drizzle, label: "Dense freezing drizzle" },
+    61: { icon: rain, label: "Slight rain" },
+    63: { icon: rain, label: "Moderate rain" },
+    65: { icon: rain, label: "Heavy rain" },
+    66: { icon: rain, label: "Freezing rain" },
+    67: { icon: rain, label: "Heavy freezing rain" },
+    71: { icon: snow, label: "Slight snow" },
+    73: { icon: snow, label: "Moderate snow" },
+    75: { icon: snow, label: "Heavy snow" },
+    77: { icon: hail, label: "Snow grains" },
+    80: { icon: drizzle, label: "Rain showers" },
+    81: { icon: drizzle, label: "Moderate rain showers" },
+    82: { icon: rain, label: "Violent rain showers" },
+    85: { icon: snow, label: "Slight snow showers" },
+    86: { icon: snow, label: "Heavy snow showers" },
+    95: { icon: thunder, label: "Thunderstorm" },
+    96: { icon: thunder, label: "Thunderstorm with hail" },
+    99: { icon: thunder, label: "Violent thunderstorm" },
+  };
+  return table[code] || { icon: cloud, label: "Unknown" };
 }
