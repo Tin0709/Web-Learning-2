@@ -108,3 +108,55 @@ h1 {
   padding: 18px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
+.hidden {
+  display: none;
+}
+
+.card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.card__location h2 {
+  margin: 0 0 4px;
+  font-size: clamp(18px, 3vw, 26px);
+}
+.card__location p {
+  margin: 0;
+}
+.card__icon {
+  font-size: 48px;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.3));
+}
+
+.card__temps {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+.temp {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.temp__value {
+  font-size: clamp(38px, 8vw, 64px);
+  line-height: 1;
+  font-weight: 800;
+}
+.temp__unit {
+  font-size: 20px;
+  margin-top: 6px;
+  color: var(--ink-muted);
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+.card__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
