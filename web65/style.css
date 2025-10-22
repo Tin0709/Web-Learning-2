@@ -53,3 +53,58 @@ h1 {
   cursor: pointer;
   transition: transform 0.06s ease, background 0.2s ease, border-color 0.2s ease;
 }
+#unitToggle:hover {
+  transform: translateY(-1px);
+  background: #1b1f3e;
+  border-color: #30355d;
+}
+
+.search {
+  margin-bottom: 16px;
+}
+.search__input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #121432;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.search__input::placeholder {
+  color: #8187a8;
+}
+.search__input:focus {
+  border-color: #3a4181;
+  box-shadow: 0 0 0 3px rgba(122, 162, 255, 0.15);
+}
+.search__btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #6e8bff, #7aa2ff 60%, #9cc3ff);
+  color: #0a1024;
+  font-weight: 700;
+  cursor: pointer;
+}
+.helper {
+  margin: 8px 2px 0;
+  color: var(--ink-muted);
+  font-size: 14px;
+}
+
+.card {
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.03),
+      rgba(255, 255, 255, 0)
+    ),
+    var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
