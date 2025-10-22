@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple Weather App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app__header">
+        <h1>Weather</h1>
+        <button
+          id="unitToggle"
+          aria-label="Toggle temperature units"
+          title="Toggle °C/°F"
+        >
+          °C
+        </button>
+      </header>
+
+      <section class="search">
+        <form id="searchForm" autocomplete="off">
+          <input
+            id="cityInput"
+            class="search__input"
+            type="text"
+            placeholder="Search city (e.g., London)"
+            aria-label="City name"
+            required
+          />
+          <button class="search__btn" type="submit">Search</button>
+        </form>
+        <p id="helperText" class="helper">
+          Tip: try “Tokyo”, “New York”, or “Hanoi”.
+        </p>
+      </section>
+
+      <section id="card" class="card hidden" aria-live="polite">
+        <div class="card__row">
+          <div class="card__location">
+            <h2 id="cityName">—</h2>
+            <p id="countryName" class="muted">—</p>
+          </div>
+          <div class="card__icon" id="weatherIcon" aria-hidden="true">⛅</div>
+        </div>
+
+        <div class="card__row card__temps">
+          <div class="temp">
+            <span id="tempValue" class="temp__value">—</span>
+            <span class="temp__unit" id="tempUnit">°C</span>
+          </div>
+          <p id="desc" class="muted">—</p>
+        </div>
+
+        <div class="card__grid">
+          <div class="fact">
+            <span>Feels like</span><strong id="feelsLike">—</strong>
+          </div>
+          <div class="fact">
+            <span>Humidity</span><strong id="humidity">—</strong>
+          </div>
+          <div class="fact"><span>Wind</span><strong id="wind">—</strong></div>
+          <div class="fact">
+            <span>Precip</span><strong id="precip">—</strong>
+          </div>
+        </div>
+
+        <p id="asOf" class="asof muted">—</p>
+      </section>
+
+      <div id="loader" class="loader hidden" role="status" aria-live="polite">
+        <span class="spinner"></span>
+        <span>Loading…</span>
+      </div>
+
+      <footer class="footer">
+        <small>
+          Data by
+          <a
+            href="https://open-meteo.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Open-Meteo</a
+          >. No API key needed.
+        </small>
+      </footer>
+    </main>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
