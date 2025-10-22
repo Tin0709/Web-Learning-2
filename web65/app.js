@@ -120,3 +120,83 @@ async function searchCity(query) {
     toggleLoading(false);
   }
 }
+function render(data) {
+  // Location
+  cityNameEl.textContent = data.name;
+  countryNameEl.textContent = [data.admin1, data.country]
+    .filter(Boolean)
+    .join(", ");
+
+  // Weather icon + description
+  const { icon, label } = codeToIconDesc(data.weatherCode, data.isDay);
+  iconEl.textContent = icon;
+  descEl.textContent = label;
+
+  // Units
+  const t =
+    state.units === "metric" ? data.temperatureC : cToF(data.temperatureC);
+  const feels =
+    state.units === "metric" ? data.feelsLikeC : cToF(data.feelsLikeC);
+  const wind =
+    state.units === "metric"
+      ? `${Math.round(kphToMps(data.windSpeedKph))} m/s`
+      : `${Math.round(kphToMph(data.windSpeedKph))} mph`;
+
+  tempValEl.textContent = Math.round(t);
+  tempUnitEl.textContent = state.units === "metric" ? "°C" : "°F";
+
+  feelsLikeEl.textContent = `${Math.round(feels)} ${
+    state.units === "metric" ? "°C" : "°F"
+  }`;
+  humidityEl.textContent = `${data.humidity ?? "—"}%`;
+  windEl.textContent = wind;
+  precipEl.textContent = `${(data.precipMm ?? 0).toFixed(1)} mm`;
+
+  // As-of
+  const dt = data.time ? new Date(data.time) : new Date();
+  asOfEl.textContent = `Updated: ${fmtDate(dt)} (${data.tz})`;
+
+  // Show the card
+  card.classList.remove("hidden");
+}
+
+function showError(msg) {
+  card.classList.remove("hidden");
+  cityNameEl.textContent = "Oops";
+  countryNameEl.textContent = "";
+  iconEl.textContent = "⚠️";
+  tempValEl.textContent = "—";
+  descEl.textContent = msg;
+  feelsLikeEl.textContent =
+    humidityEl.textContent =
+    windEl.textContent =
+    precipEl.textContent =
+      "—";
+  asOfEl.textContent = "";
+}
+
+function toggleLoading(isLoading) {
+  loader.classList.toggle("hidden", !isLoading);
+}
+
+// Helpers
+function cToF(c) {
+  return (c * 9) / 5 + 32;
+}
+function kphToMph(kph) {
+  return kph * 0.621371;
+}
+function kphToMps(kph) {
+  return kph / 3.6;
+}
+
+function fmtDate(d) {
+  try {
+    return new Intl.DateTimeFormat(undefined, {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(d);
+  } catch {
+    return d.toLocaleString();
+  }
+}
