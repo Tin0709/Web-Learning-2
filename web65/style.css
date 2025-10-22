@@ -203,3 +203,12 @@ h1 {
     transform: rotate(360deg);
   }
 }
+
+.footer {
+  margin-top: 20px;
+  color: #8d93b2;
+}
+.footer a {
+  color: #b8c6ff;
+  text-decoration: underline dotted;
+}
