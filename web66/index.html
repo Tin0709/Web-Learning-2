@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Markdown Previewer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Markdown Previewer</h1>
+
+      <div class="controls">
+        <div class="toolbar" aria-label="Insert formatting">
+          <button data-insert="**bold**" title="Bold (wrap selection with **)">
+            B
+          </button>
+          <button data-insert="*italic*" title="Italic (wrap selection with *)">
+            I
+          </button>
+          <button data-prefix="# " title="Heading (# )">H1</button>
+          <button data-prefix="## " title="Heading 2 (## )">H2</button>
+          <button data-prefix="- " title="List item (- )">•</button>
+          <button data-prefix="> " title="Quote (> )">❝</button>
+          <button
+            data-insert="[link text](https://example.com)"
+            title="Link"
+          >
+            🔗
+          </button>
+          <button
+            data-insert="`code`"
+            title="Inline code"
+          >
+            {'</>'}
+          </button>
+          <button
+            data-insert="\n```\nconsole.log('hi')\n```\n"
+            title="Code block"
+          >
+            ⌘
+          </button>
+        </div>
+
+        <div class="actions">
+          <button id="copyHtmlBtn" title="Copy rendered HTML">Copy HTML</button>
+          <button id="downloadBtn" title="Download .md">Download</button>
+          <button id="clearBtn" title="Clear editor">Clear</button>
+
+          <label class="toggle" title="Toggle dark mode">
+            <input id="themeToggle" type="checkbox" />
+            <span>🌙</span>
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <main class="panes">
+      <section class="pane editor-pane">
+        <div class="pane-header">Editor</div>
+        <textarea id="editor" autocomplete="off" spellcheck="false"></textarea>
+      </section>
+
+      <section class="pane preview-pane">
+        <div class="pane-header">Preview</div>
+        <div id="preview" class="markdown-body" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <small>
+        Uses
+        <a href="https://marked.js.org/" target="_blank" rel="noreferrer">marked</a>
+        for parsing and
+        <a href="https://github.com/cure53/DOMPurify" target="_blank" rel="noreferrer">DOMPurify</a>
+        for sanitizing HTML.
+      </small>
+    </footer>
+
+    <!-- Markdown parser & sanitizer (CDNs) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
