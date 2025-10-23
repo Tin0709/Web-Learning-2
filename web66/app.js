@@ -85,6 +85,7 @@ function initEditor() {
     }
   });
 }
+
 // === Theme handling ===
 function applyTheme(theme) {
   const root = document.documentElement;
@@ -156,3 +157,54 @@ function initToolbar() {
     });
   });
 }
+
+// === Copy / Download / Clear ===
+async function copyHtml() {
+  try {
+    await navigator.clipboard.writeText(preview.innerHTML);
+    flash(copyHtmlBtn, "Copied!");
+  } catch (e) {
+    alert("Clipboard copy failed.");
+  }
+}
+function triggerDownload() {
+  const blob = new Blob([editor.value], {
+    type: "text/markdown;charset=utf-8",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "document.md";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function clearEditor() {
+  if (confirm("Clear the editor? This will remove your current text.")) {
+    editor.value = "";
+    editor.dispatchEvent(new Event("input"));
+  }
+}
+function flash(el, text) {
+  const original = el.textContent;
+  el.textContent = text;
+  el.disabled = true;
+  setTimeout(() => {
+    el.textContent = original;
+    el.disabled = false;
+  }, 900);
+}
+
+// === Wire buttons ===
+function initButtons() {
+  copyHtmlBtn.addEventListener("click", copyHtml);
+  downloadBtn.addEventListener("click", triggerDownload);
+  clearBtn.addEventListener("click", clearEditor);
+}
+
+// === Kickoff ===
+initTheme();
+initEditor();
+initToolbar();
+initButtons();
