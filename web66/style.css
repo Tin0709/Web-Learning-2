@@ -100,6 +100,7 @@ a {
   gap: 0;
   min-height: calc(100vh - 130px);
 }
+
 .pane {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -136,6 +137,7 @@ a {
   padding: 16px 20px;
   overflow: auto;
 }
+
 /* Basic GitHub-like markdown styling */
 .markdown-body h1,
 .markdown-body h2,
@@ -187,4 +189,28 @@ a {
   border: 1px solid var(--border);
   padding: 8px 10px;
   text-align: left;
+}
+.markdown-body tr:nth-child(even) {
+  background: var(--bg-elev);
+}
+
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 10px 16px 20px;
+  color: var(--muted);
+  background: var(--bg);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .panes {
+    grid-template-columns: 1fr;
+  }
+  .pane {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .pane:last-child {
+    border-bottom: none;
+  }
 }
