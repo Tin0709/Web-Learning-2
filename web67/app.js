@@ -398,3 +398,17 @@ function importData(file) {
   };
   reader.readAsText(file);
 }
+function hardReset() {
+  if (!confirm("This will delete ALL transactions. Continue?")) return;
+  transactions = [];
+  save();
+  render();
+}
+
+/* ---------- Sorting ---------- */
+
+function toggleSort() {
+  sortDesc = !sortDesc;
+  els.sortBtn.textContent = sortDesc ? "Sort by Date ▼" : "Sort by Date ▲";
+  renderTransactions();
+}
