@@ -186,3 +186,69 @@ function renderCategoryBreakdown() {
   // simple bar chart (no libs)
   drawBarChart(els.barChart, byCat);
 }
+/* ---------- Chart ---------- */
+
+function drawBarChart(canvas, dict) {
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width,
+    H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const entries = Object.entries(dict);
+  if (entries.length === 0) {
+    ctx.fillStyle = "#a7b0d6";
+    ctx.font = "16px system-ui";
+    ctx.fillText("No data to display.", 20, 40);
+    return;
+  }
+
+  const values = entries.map(([, v]) => v);
+  const maxAbs = Math.max(...values.map((v) => Math.abs(v))) || 1;
+
+  const padding = 50;
+  const chartW = W - padding * 2;
+  const chartH = H - padding * 2;
+
+  // axis
+  ctx.strokeStyle = "#2b3053";
+  ctx.beginPath();
+  ctx.moveTo(padding, padding);
+  ctx.lineTo(padding, H - padding);
+  ctx.lineTo(W - padding, H - padding);
+  ctx.stroke();
+
+  const zeroY =
+    padding + chartH * (values.some((v) => v < 0) ? maxAbs / (maxAbs * 2) : 1); // if negatives, center
+  const barW = (chartW / entries.length) * 0.6;
+  const gap = (chartW / entries.length) * 0.4;
+
+  // bars & labels
+  entries.forEach(([label, value], i) => {
+    const x = padding + i * (barW + gap) + gap / 2;
+    const h = Math.round(
+      (Math.abs(value) / maxAbs) *
+        (values.some((v) => v < 0) ? chartH / 2 : chartH)
+    );
+    const y = value >= 0 ? H - padding - h : H - padding - chartH / 2 + h;
+
+    ctx.fillStyle = value >= 0 ? "#3ddc97" : "#ff6b6b";
+    ctx.fillRect(x, y, barW, h);
+
+    ctx.fillStyle = "#a7b0d6";
+    ctx.font = "11px system-ui";
+    const textX = x + barW / 2 - ctx.measureText(label).width / 2;
+    ctx.fillText(
+      label,
+      Math.max(
+        padding,
+        Math.min(textX, W - padding - ctx.measureText(label).width)
+      ),
+      H - padding + 14
+    );
+
+    // value label
+    const val = fmt(value);
+    ctx.font = "10px system-ui";
+    ctx.fillText(val, x, value >= 0 ? y - 6 : y + h + 12);
+  });
+}
