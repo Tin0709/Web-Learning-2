@@ -342,3 +342,17 @@ function resetForm() {
   els.note.value = "";
   els.cancelEditBtn.classList.add("hidden");
 }
+/* ---------- Helpers ---------- */
+
+function sum(arr) {
+  return arr.reduce((a, b) => a + Number(b || 0), 0);
+}
+
+function escapeHTML(s) {
+  return String(s)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
