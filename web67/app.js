@@ -304,3 +304,31 @@ function handleSubmit(e) {
   resetForm();
   render();
 }
+function startEdit(id) {
+  const t = transactions.find((x) => x.id === id);
+  if (!t) return;
+
+  els.formTitle.textContent = "Edit Transaction";
+  els.txId.value = t.id;
+  els.type.value = t.type;
+  els.amount.value = t.amount;
+  els.category.value = t.category;
+  els.date.value = t.date;
+  els.note.value = t.note || "";
+  els.cancelEditBtn.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function deleteTx(id) {
+  const t = transactions.find((x) => x.id === id);
+  if (!t) return;
+  if (
+    !confirm(
+      `Delete "${t.category}" ${t.type} of ${fmt(t.amount)} on ${t.date}?`
+    )
+  )
+    return;
+  transactions = transactions.filter((x) => x.id !== id);
+  save();
+  render();
+}
