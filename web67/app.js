@@ -275,3 +275,32 @@ function getFiltered() {
     return true;
   });
 }
+
+/* ---------- CRUD ---------- */
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const data = {
+    id: els.txId.value || uid(),
+    type: els.type.value,
+    amount: Number(els.amount.value || 0),
+    category: (els.category.value || "").trim(),
+    date: els.date.value,
+    note: (els.note.value || "").trim(),
+  };
+
+  if (!data.category) return alert("Please enter a category.");
+  if (!data.date) return alert("Please select a date.");
+  if (!(data.amount > 0)) return alert("Amount must be greater than 0.");
+
+  const existing = transactions.find((t) => t.id === data.id);
+  if (existing) {
+    Object.assign(existing, data);
+  } else {
+    transactions.push(data);
+  }
+
+  save();
+  resetForm();
+  render();
+}
