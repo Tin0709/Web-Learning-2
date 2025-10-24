@@ -332,3 +332,13 @@ function deleteTx(id) {
   save();
   render();
 }
+function resetForm() {
+  els.formTitle.textContent = "Add Transaction";
+  els.txId.value = "";
+  els.type.value = "income";
+  els.amount.value = "";
+  els.category.value = "";
+  els.date.value = todayStr();
+  els.note.value = "";
+  els.cancelEditBtn.classList.add("hidden");
+}
