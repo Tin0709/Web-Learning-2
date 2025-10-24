@@ -69,3 +69,13 @@ function guessCurrency() {
     return "USD";
   }
 }
+function todayStr() {
+  const d = new Date();
+  const m = (d.getMonth() + 1).toString().padStart(2, "0");
+  const day = d.getDate().toString().padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+function toDate(s) {
+  // treat as UTC-less local date
+  return new Date(s + "T00:00:00");
+}
