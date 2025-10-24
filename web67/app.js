@@ -36,6 +36,7 @@ const els = {
   importFile: document.getElementById("importFile"),
   resetBtn: document.getElementById("resetBtn"),
 };
+
 let transactions = load();
 let sortDesc = true; // default: newest first
 
@@ -79,6 +80,7 @@ function toDate(s) {
   // treat as UTC-less local date
   return new Date(s + "T00:00:00");
 }
+
 /* ---------- Rendering ---------- */
 
 function render() {
@@ -123,20 +125,20 @@ function renderTransactions() {
     for (const t of filtered) {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-          <td>${t.date}</td>
-          <td>${t.type === "income" ? "Income" : "Expense"}</td>
-          <td>${escapeHTML(t.category)}</td>
-          <td>${escapeHTML(t.note || "")}</td>
-          <td class="right" data-raw="${t.amount}">${fmt(t.amount)}</td>
-          <td class="actions">
-            <button class="action edit" data-id="${
-              t.id
-            }" aria-label="Edit">Edit</button>
-            <button class="action delete" data-id="${
-              t.id
-            }" aria-label="Delete">Delete</button>
-          </td>
-        `;
+        <td>${t.date}</td>
+        <td>${t.type === "income" ? "Income" : "Expense"}</td>
+        <td>${escapeHTML(t.category)}</td>
+        <td>${escapeHTML(t.note || "")}</td>
+        <td class="right" data-raw="${t.amount}">${fmt(t.amount)}</td>
+        <td class="actions">
+          <button class="action edit" data-id="${
+            t.id
+          }" aria-label="Edit">Edit</button>
+          <button class="action delete" data-id="${
+            t.id
+          }" aria-label="Delete">Delete</button>
+        </td>
+      `;
       els.txBody.appendChild(tr);
     }
   }
@@ -186,6 +188,7 @@ function renderCategoryBreakdown() {
   // simple bar chart (no libs)
   drawBarChart(els.barChart, byCat);
 }
+
 /* ---------- Chart ---------- */
 
 function drawBarChart(canvas, dict) {
@@ -252,6 +255,7 @@ function drawBarChart(canvas, dict) {
     ctx.fillText(val, x, value >= 0 ? y - 6 : y + h + 12);
   });
 }
+
 /* ---------- Filters ---------- */
 
 function getFiltered() {
@@ -304,6 +308,7 @@ function handleSubmit(e) {
   resetForm();
   render();
 }
+
 function startEdit(id) {
   const t = transactions.find((x) => x.id === id);
   if (!t) return;
@@ -332,6 +337,7 @@ function deleteTx(id) {
   save();
   render();
 }
+
 function resetForm() {
   els.formTitle.textContent = "Add Transaction";
   els.txId.value = "";
@@ -342,6 +348,7 @@ function resetForm() {
   els.note.value = "";
   els.cancelEditBtn.classList.add("hidden");
 }
+
 /* ---------- Helpers ---------- */
 
 function sum(arr) {
@@ -356,6 +363,7 @@ function escapeHTML(s) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
 /* ---------- Export / Import / Reset ---------- */
 
 function exportData() {
@@ -398,6 +406,7 @@ function importData(file) {
   };
   reader.readAsText(file);
 }
+
 function hardReset() {
   if (!confirm("This will delete ALL transactions. Continue?")) return;
   transactions = [];
@@ -412,6 +421,7 @@ function toggleSort() {
   els.sortBtn.textContent = sortDesc ? "Sort by Date ▼" : "Sort by Date ▲";
   renderTransactions();
 }
+
 /* ---------- Events ---------- */
 
 els.txForm.addEventListener("submit", handleSubmit);
@@ -448,3 +458,40 @@ els.sortBtn.addEventListener("click", toggleSort);
 els.exportBtn.addEventListener("click", exportData);
 els.importFile.addEventListener("change", (e) => importData(e.target.files[0]));
 els.resetBtn.addEventListener("click", hardReset);
+
+/* ---------- Init ---------- */
+
+(function init() {
+  if (!transactions.length) {
+    // Optional: starter examples (you can delete these)
+    transactions = [
+      {
+        id: uid(),
+        type: "income",
+        amount: 1500,
+        category: "Salary",
+        date: todayStr(),
+        note: "Monthly pay",
+      },
+      {
+        id: uid(),
+        type: "expense",
+        amount: 60.25,
+        category: "Groceries",
+        date: todayStr(),
+        note: "Veggies & fruit",
+      },
+      {
+        id: uid(),
+        type: "expense",
+        amount: 25.5,
+        category: "Transport",
+        date: todayStr(),
+        note: "Bus card",
+      },
+    ];
+    save();
+  }
+  els.date.value = todayStr();
+  render();
+})();
