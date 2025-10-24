@@ -36,3 +36,36 @@ const els = {
   importFile: document.getElementById("importFile"),
   resetBtn: document.getElementById("resetBtn"),
 };
+let transactions = load();
+let sortDesc = true; // default: newest first
+
+/* ---------- Utils ---------- */
+
+function uid() {
+  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
+}
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+}
+function load() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+function fmt(amount) {
+  const n = Number(amount || 0);
+  return n.toLocaleString(undefined, {
+    style: "currency",
+    currency: guessCurrency(),
+  });
+}
+function guessCurrency() {
+  try {
+    // crude guess from locale; fallback to USD
+    return Intl.NumberFormat().resolvedOptions().currency || "USD";
+  } catch {
+    return "USD";
+  }
+}
