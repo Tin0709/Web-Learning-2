@@ -79,3 +79,70 @@ function toDate(s) {
   // treat as UTC-less local date
   return new Date(s + "T00:00:00");
 }
+/* ---------- Rendering ---------- */
+
+function render() {
+  // sort
+  transactions.sort((a, b) =>
+    sortDesc ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date)
+  );
+
+  renderCategoryOptions();
+  renderTransactions();
+  renderSummary();
+  renderCategoryBreakdown();
+}
+
+function renderSummary() {
+  const income = sum(
+    transactions.filter((t) => t.type === "income").map((t) => t.amount)
+  );
+  const expense = sum(
+    transactions.filter((t) => t.type === "expense").map((t) => t.amount)
+  );
+  const balance = income - expense;
+
+  els.totalIncome.textContent = fmt(income);
+  els.totalExpense.textContent = fmt(expense);
+  els.balance.textContent = fmt(balance);
+}
+
+function renderTransactions() {
+  const filtered = getFiltered();
+  els.txBody.innerHTML = "";
+
+  if (filtered.length === 0) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 6;
+    td.style.textAlign = "center";
+    td.textContent = "No transactions match your filters.";
+    tr.appendChild(td);
+    els.txBody.appendChild(tr);
+  } else {
+    for (const t of filtered) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+          <td>${t.date}</td>
+          <td>${t.type === "income" ? "Income" : "Expense"}</td>
+          <td>${escapeHTML(t.category)}</td>
+          <td>${escapeHTML(t.note || "")}</td>
+          <td class="right" data-raw="${t.amount}">${fmt(t.amount)}</td>
+          <td class="actions">
+            <button class="action edit" data-id="${
+              t.id
+            }" aria-label="Edit">Edit</button>
+            <button class="action delete" data-id="${
+              t.id
+            }" aria-label="Delete">Delete</button>
+          </td>
+        `;
+      els.txBody.appendChild(tr);
+    }
+  }
+
+  const filteredTotal = sum(
+    filtered.map((t) => (t.type === "income" ? t.amount : -t.amount))
+  );
+  els.filteredTotal.textContent = fmt(filteredTotal);
+}
