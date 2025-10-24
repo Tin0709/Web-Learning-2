@@ -252,3 +252,26 @@ function drawBarChart(canvas, dict) {
     ctx.fillText(val, x, value >= 0 ? y - 6 : y + h + 12);
   });
 }
+/* ---------- Filters ---------- */
+
+function getFiltered() {
+  const type = els.filterType.value;
+  const cat = els.filterCategory.value;
+  const q = (els.filterText.value || "").trim().toLowerCase();
+  const from = els.fromDate.value ? toDate(els.fromDate.value) : null;
+  const to = els.toDate.value ? toDate(els.toDate.value) : null;
+
+  return transactions.filter((t) => {
+    if (type !== "all" && t.type !== type) return false;
+    if (cat !== "all" && t.category !== cat) return false;
+    if (
+      q &&
+      !(t.note || "").toLowerCase().includes(q) &&
+      !t.category.toLowerCase().includes(q)
+    )
+      return false;
+    if (from && toDate(t.date) < from) return false;
+    if (to && toDate(t.date) > to) return false;
+    return true;
+  });
+}
