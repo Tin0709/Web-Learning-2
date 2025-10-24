@@ -412,3 +412,39 @@ function toggleSort() {
   els.sortBtn.textContent = sortDesc ? "Sort by Date ▼" : "Sort by Date ▲";
   renderTransactions();
 }
+/* ---------- Events ---------- */
+
+els.txForm.addEventListener("submit", handleSubmit);
+els.cancelEditBtn.addEventListener("click", resetForm);
+els.txBody.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  const id = btn.getAttribute("data-id");
+  if (btn.classList.contains("edit")) startEdit(id);
+  if (btn.classList.contains("delete")) deleteTx(id);
+});
+
+["filterType", "filterCategory", "filterText", "fromDate", "toDate"].forEach(
+  (id) => {
+    document.getElementById(id).addEventListener("input", () => {
+      renderTransactions();
+      renderCategoryBreakdown();
+    });
+  }
+);
+
+els.clearFiltersBtn.addEventListener("click", () => {
+  els.filterType.value = "all";
+  els.filterCategory.value = "all";
+  els.filterText.value = "";
+  els.fromDate.value = "";
+  els.toDate.value = "";
+  renderTransactions();
+  renderCategoryBreakdown();
+});
+
+els.sortBtn.addEventListener("click", toggleSort);
+
+els.exportBtn.addEventListener("click", exportData);
+els.importFile.addEventListener("change", (e) => importData(e.target.files[0]));
+els.resetBtn.addEventListener("click", hardReset);
