@@ -356,3 +356,45 @@ function escapeHTML(s) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+/* ---------- Export / Import / Reset ---------- */
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(transactions, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "budget-data.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importData(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!Array.isArray(data)) throw new Error("Invalid file");
+      // basic validation
+      data.forEach((t) => {
+        if (!t.id) t.id = uid();
+        t.type = t.type === "expense" ? "expense" : "income";
+        t.amount = Number(t.amount || 0);
+        t.category = String(t.category || "").trim() || "Uncategorized";
+        t.date = t.date || todayStr();
+        t.note = t.note || "";
+      });
+      transactions = data;
+      save();
+      render();
+      alert("Import successful!");
+    } catch (err) {
+      alert("Failed to import: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
