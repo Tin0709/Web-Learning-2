@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Budget Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>💸 Budget Manager</h1>
+      <div class="header-actions">
+        <button id="exportBtn" title="Export data to JSON">Export</button>
+        <label
+          for="importFile"
+          class="import-label"
+          title="Import data from JSON"
+          >Import</label
+        >
+        <input type="file" id="importFile" accept=".json" />
+        <button id="resetBtn" class="danger" title="Clear all data">
+          Reset
+        </button>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Summary Cards -->
+      <section class="summary">
+        <div class="card">
+          <div class="card-title">Total Income</div>
+          <div class="card-value" id="totalIncome">0</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Total Expense</div>
+          <div class="card-value" id="totalExpense">0</div>
+        </div>
+        <div class="card balance">
+          <div class="card-title">Balance</div>
+          <div class="card-value" id="balance">0</div>
+        </div>
+      </section>
+
+      <!-- Add / Edit Transaction -->
+      <section class="panel">
+        <h2 id="formTitle">Add Transaction</h2>
+        <form id="txForm" autocomplete="off">
+          <input type="hidden" id="txId" />
+          <div class="grid">
+            <div class="field">
+              <label for="type">Type</label>
+              <select id="type" required>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="amount">Amount</label>
+              <input
+                id="amount"
+                type="number"
+                step="0.01"
+                min="0"
+                placeholder="0.00"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="category">Category</label>
+              <input
+                id="category"
+                type="text"
+                list="categoryList"
+                placeholder="e.g., Groceries, Rent, Salary"
+                required
+              />
+              <datalist id="categoryList"></datalist>
+            </div>
+
+            <div class="field">
+              <label for="date">Date</label>
+              <input id="date" type="date" required />
+            </div>
+
+            <div class="field span-2">
+              <label for="note">Note (optional)</label>
+              <input id="note" type="text" placeholder="Add a short note…" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="saveBtn">Save</button>
+            <button type="button" id="cancelEditBtn" class="soft hidden">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Filters -->
+      <section class="panel">
+        <h2>Filters</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="filterType">Type</label>
+            <select id="filterType">
+              <option value="all">All</option>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="filterCategory">Category</label>
+            <select id="filterCategory">
+              <option value="all">All</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="filterText">Search note/category</label>
+            <input id="filterText" type="text" placeholder="Search…" />
+          </div>
+          <div class="field">
+            <label for="fromDate">From</label>
+            <input id="fromDate" type="date" />
+          </div>
+          <div class="field">
+            <label for="toDate">To</label>
+            <input id="toDate" type="date" />
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="clearFiltersBtn" class="soft">Clear filters</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Transaction List -->
+      <section class="panel">
+        <div class="list-header">
+          <h2>Transactions</h2>
+          <div class="list-actions">
+            <button id="sortBtn" class="soft">Sort by Date ▼</button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="txTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Category</th>
+                <th>Note</th>
+                <th class="right">Amount</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="txBody">
+              <!-- rows injected by JS -->
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" class="right">Filtered Total:</td>
+                <td class="right" id="filteredTotal">0</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <!-- Category Breakdown -->
+      <section class="panel">
+        <h2>Category Breakdown (Filtered)</h2>
+        <div id="categoryChips" class="chips"></div>
+        <canvas
+          id="barChart"
+          width="900"
+          height="360"
+          aria-label="Category bar chart"
+          role="img"
+        ></canvas>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <small
+        >Data stored locally in your browser • No servers, no tracking.</small
+      >
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
