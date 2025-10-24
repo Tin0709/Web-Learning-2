@@ -146,3 +146,43 @@ function renderTransactions() {
   );
   els.filteredTotal.textContent = fmt(filteredTotal);
 }
+
+function renderCategoryOptions() {
+  const cats = Array.from(new Set(transactions.map((t) => t.category))).sort(
+    (a, b) => a.localeCompare(b)
+  );
+  // datalist for input
+  els.categoryList.innerHTML = cats
+    .map((c) => `<option value="${escapeHTML(c)}"></option>`)
+    .join("");
+  // filter dropdown
+  const current = els.filterCategory.value || "all";
+  els.filterCategory.innerHTML =
+    `<option value="all">All</option>` +
+    cats
+      .map((c) => `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`)
+      .join("");
+  els.filterCategory.value =
+    current === "all" || cats.includes(current) ? current : "all";
+}
+
+function renderCategoryBreakdown() {
+  const filtered = getFiltered();
+  const byCat = {};
+  for (const t of filtered) {
+    const sign = t.type === "expense" ? -1 : 1;
+    byCat[t.category] = (byCat[t.category] || 0) + sign * t.amount;
+  }
+
+  // chips
+  els.categoryChips.innerHTML = Object.entries(byCat)
+    .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+    .map(
+      ([c, v]) =>
+        `<span class="chip">${escapeHTML(c)}: <strong>${fmt(v)}</strong></span>`
+    )
+    .join("");
+
+  // simple bar chart (no libs)
+  drawBarChart(els.barChart, byCat);
+}
