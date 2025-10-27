@@ -56,6 +56,16 @@ body {
   color: var(--text);
   border: 1px solid var(--border);
 }
+.modal-content button {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #0b0e1a;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 /* Header */
 .app-header {
   display: flex;
@@ -174,4 +184,36 @@ body {
   border: 1px solid var(--border);
   background: #0c0f1a;
   color: var(--text);
+}
+.composer button {
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #0b0e1a;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.system {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0.4rem 0;
+}
+
+@media (max-width: 880px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    height: auto;
+    order: 2;
+  }
+  .chat {
+    height: auto;
+  }
+  .messages {
+    height: 55vh;
+  }
 }
