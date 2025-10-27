@@ -54,3 +54,31 @@ function addMessage({ username, message, ts }, mine = false) {
   messages.appendChild(wrap);
   messages.scrollTop = messages.scrollHeight;
 }
+function updateTypingBar() {
+  const arr = Array.from(currentlyTyping).filter((n) => n !== myName);
+  if (arr.length === 0) {
+    typingBar.textContent = "";
+  } else if (arr.length === 1) {
+    typingBar.textContent = `${arr[0]} is typing…`;
+  } else if (arr.length === 2) {
+    typingBar.textContent = `${arr[0]} and ${arr[1]} are typing…`;
+  } else {
+    typingBar.textContent = `Several people are typing…`;
+  }
+}
+
+// Handle joining
+nameForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = usernameInput.value.trim().slice(0, 32);
+  if (!name) return;
+
+  myName = name;
+  meName.textContent = myName;
+  socket.emit("join", myName);
+
+  modal.style.display = "none";
+  messageInput.disabled = false;
+  sendBtn.disabled = false;
+  messageInput.focus();
+});
