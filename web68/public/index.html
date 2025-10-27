@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple Real-Time Chat</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Username modal -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2>Choose a username</h2>
+        <form id="nameForm">
+          <input
+            id="username"
+            type="text"
+            placeholder="e.g. Alex"
+            maxlength="32"
+            required
+          />
+          <button type="submit">Join Chat</button>
+        </form>
+      </div>
+    </div>
+
+    <header class="app-header">
+      <h1>💬 Simple Real-Time Chat</h1>
+      <div class="me">You: <span id="meName">—</span></div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <h3>Online</h3>
+        <ul id="users"></ul>
+      </aside>
+
+      <section class="chat">
+        <div id="messages" class="messages"></div>
+        <div id="typingBar" class="typingbar" aria-live="polite"></div>
+        <form id="chatForm" class="composer" autocomplete="off">
+          <input
+            id="messageInput"
+            type="text"
+            placeholder="Type a message…"
+            maxlength="2000"
+            disabled
+          />
+          <button id="sendBtn" type="submit" disabled>Send</button>
+        </form>
+      </section>
+    </main>
+
+    <!-- Socket.IO client served by our server -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
