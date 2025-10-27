@@ -24,6 +24,7 @@ function fmtTime(ts) {
   const d = new Date(ts);
   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
+
 function addSystem(text) {
   const el = document.createElement("div");
   el.className = "system";
@@ -54,6 +55,7 @@ function addMessage({ username, message, ts }, mine = false) {
   messages.appendChild(wrap);
   messages.scrollTop = messages.scrollHeight;
 }
+
 function updateTypingBar() {
   const arr = Array.from(currentlyTyping).filter((n) => n !== myName);
   if (arr.length === 0) {
@@ -82,6 +84,7 @@ nameForm.addEventListener("submit", (e) => {
   sendBtn.disabled = false;
   messageInput.focus();
 });
+
 // Send message
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -118,3 +121,15 @@ socket.on("typing", ({ username, isTyping }) => {
   else currentlyTyping.delete(username);
   updateTypingBar();
 });
+
+socket.on("users", (names) => {
+  usersList.innerHTML = "";
+  names.forEach((n) => {
+    const li = document.createElement("li");
+    li.textContent = n;
+    usersList.appendChild(li);
+  });
+});
+
+// Accessibility: allow Enter to submit, Shift+Enter for newline (if desired for future textarea)
+// Here we keep a single-line input; no special handling needed.
