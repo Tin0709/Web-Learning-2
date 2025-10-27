@@ -24,3 +24,33 @@ function fmtTime(ts) {
   const d = new Date(ts);
   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
+function addSystem(text) {
+  const el = document.createElement("div");
+  el.className = "system";
+  el.textContent = text;
+  messages.appendChild(el);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function addMessage({ username, message, ts }, mine = false) {
+  const wrap = document.createElement("div");
+  wrap.className = "msg" + (mine ? " me" : "");
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  const nameSpan = document.createElement("span");
+  nameSpan.textContent = username;
+  const timeSpan = document.createElement("span");
+  timeSpan.textContent = fmtTime(ts || Date.now());
+  meta.appendChild(nameSpan);
+  meta.appendChild(timeSpan);
+
+  const text = document.createElement("div");
+  text.className = "text";
+  text.textContent = message;
+
+  wrap.appendChild(meta);
+  wrap.appendChild(text);
+  messages.appendChild(wrap);
+  messages.scrollTop = messages.scrollHeight;
+}
