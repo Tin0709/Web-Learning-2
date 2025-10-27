@@ -82,3 +82,39 @@ nameForm.addEventListener("submit", (e) => {
   sendBtn.disabled = false;
   messageInput.focus();
 });
+// Send message
+chatForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = messageInput.value.trim();
+  if (!text) return;
+
+  socket.emit("chat", text);
+  addMessage({ username: myName, message: text, ts: Date.now() }, true);
+
+  messageInput.value = "";
+  socket.emit("typing", false);
+});
+
+// Typing indicator
+messageInput.addEventListener("input", () => {
+  socket.emit("typing", true);
+  if (typingTimeout) clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => socket.emit("typing", false), 1200);
+});
+
+// Incoming events
+socket.on("system", (text) => addSystem(text));
+
+socket.on("chat", (payload) => {
+  // Don't duplicate my own messages (already added locally)
+  if (payload.username === myName && payload.message === messageInput.value)
+    return;
+  addMessage(payload, payload.username === myName);
+});
+
+socket.on("typing", ({ username, isTyping }) => {
+  if (!username || username === myName) return;
+  if (isTyping) currentlyTyping.add(username);
+  else currentlyTyping.delete(username);
+  updateTypingBar();
+});
