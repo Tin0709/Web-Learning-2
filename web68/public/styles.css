@@ -1,0 +1,58 @@
+:root {
+  --bg: #0f1220;
+  --card: #171a2b;
+  --muted: #a6b0cf;
+  --text: #e7eaf6;
+  --accent: #7aa2ff;
+  --accent-2: #79ffe1;
+  --danger: #ff6b6b;
+  --border: #242842;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter,
+    "Helvetica Neue", Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji";
+  background: linear-gradient(180deg, #0b0e1a 0%, #0f1220 100%);
+  color: var(--text);
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+.modal-content {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  width: min(90vw, 380px);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+.modal-content h2 {
+  margin: 0 0 0.75rem;
+}
+.modal-content form {
+  display: flex;
+  gap: 0.5rem;
+}
+.modal-content input {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: #0c0f1a;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
