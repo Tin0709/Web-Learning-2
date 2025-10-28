@@ -157,3 +157,77 @@ body {
 .task:last-child {
   border-bottom: none;
 }
+.task__checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #0f131a;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.task__checkbox input {
+  display: none;
+}
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 2px solid #33405d;
+  display: inline-block;
+}
+.task.completed .checkmark {
+  border-color: var(--ok);
+  background: linear-gradient(
+    180deg,
+    rgba(125, 241, 148, 0.25),
+    rgba(125, 241, 148, 0.05)
+  );
+  position: relative;
+}
+.task.completed .checkmark::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 1px;
+  width: 8px;
+  height: 14px;
+  border: solid var(--ok);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.task__main {
+  min-width: 0;
+}
+.task__row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.task__text {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+.task.completed .task__text {
+  color: #7a859f;
+  text-decoration: line-through;
+}
+
+.task__priority {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.2px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: #0f131a;
+  flex: 0 0 auto;
+}
