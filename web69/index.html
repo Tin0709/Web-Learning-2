@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app__header" aria-label="To-Do List Header">
+        <h1>To-Do List</h1>
+
+        <div class="addbar" role="form" aria-label="Add a new task">
+          <input
+            id="task-input"
+            class="addbar__text"
+            type="text"
+            placeholder="What needs to be done?"
+            aria-label="Task description"
+            maxlength="200"
+            autofocus
+          />
+          <input
+            id="task-due"
+            class="addbar__date"
+            type="date"
+            aria-label="Due date (optional)"
+          />
+          <select
+            id="task-priority"
+            class="addbar__priority"
+            aria-label="Priority"
+          >
+            <option value="normal" selected>Priority: Normal</option>
+            <option value="high">Priority: High</option>
+            <option value="low">Priority: Low</option>
+          </select>
+          <button id="add-btn" class="btn primary" aria-label="Add task">
+            Add
+          </button>
+        </div>
+
+        <div class="toolbar" aria-label="Filters and search">
+          <div class="filters" role="tablist" aria-label="Task filters">
+            <button
+              class="chip active"
+              data-filter="all"
+              role="tab"
+              aria-selected="true"
+            >
+              All
+            </button>
+            <button
+              class="chip"
+              data-filter="active"
+              role="tab"
+              aria-selected="false"
+            >
+              Active
+            </button>
+            <button
+              class="chip"
+              data-filter="completed"
+              role="tab"
+              aria-selected="false"
+            >
+              Completed
+            </button>
+          </div>
+
+          <div class="search">
+            <input
+              id="search-input"
+              type="search"
+              placeholder="Search tasks…"
+              aria-label="Search tasks"
+            />
+          </div>
+        </div>
+      </header>
+
+      <section class="list" aria-label="Task list">
+        <ul id="task-list" class="tasklist" aria-live="polite"></ul>
+      </section>
+
+      <footer class="app__footer">
+        <div id="counter" class="counter">0 items</div>
+        <div class="footer__actions">
+          <button id="clear-completed" class="btn subtle">
+            Clear completed
+          </button>
+          <button id="export-json" class="btn subtle">Export</button>
+          <label class="file-btn">
+            Import
+            <input
+              id="import-json"
+              type="file"
+              accept="application/json"
+              hidden
+            />
+          </label>
+        </div>
+      </footer>
+    </main>
+
+    <template id="task-item-template">
+      <li class="task" draggable="false">
+        <label class="task__checkbox">
+          <input
+            type="checkbox"
+            class="task__toggle"
+            aria-label="Mark complete"
+          />
+          <span class="checkmark" aria-hidden="true"></span>
+        </label>
+
+        <div class="task__main">
+          <div class="task__row">
+            <span class="task__priority" title="Priority"></span>
+            <span class="task__text" tabindex="0"></span>
+          </div>
+          <div class="task__meta">
+            <time class="task__due"></time>
+            <span class="dot">•</span>
+            <time class="task__created"></time>
+          </div>
+        </div>
+
+        <div class="task__actions">
+          <button
+            class="icon-btn edit"
+            title="Edit"
+            aria-label="Edit task"
+            data-action="edit"
+          >
+            ✏️
+          </button>
+          <button
+            class="icon-btn delete"
+            title="Delete"
+            aria-label="Delete task"
+            data-action="delete"
+          >
+            🗑️
+          </button>
+        </div>
+      </li>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
