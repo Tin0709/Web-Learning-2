@@ -1,0 +1,51 @@
+:root {
+  --bg: #0b0d10;
+  --panel: #12151a;
+  --muted: #a8b3cf;
+  --text: #e8eefb;
+  --accent: #7aa2f7;
+  --accent-2: #a4f9c8;
+  --border: #1f2530;
+  --danger: #ff6363;
+  --ok: #7df194;
+  --chip: #1a2030;
+  --chip-active: #25314a;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  background: radial-gradient(
+      1200px 600px at 10% -10%,
+      rgba(122, 162, 247, 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      1200px 600px at 110% 10%,
+      rgba(164, 249, 200, 0.08),
+      transparent 60%
+    ),
+    var(--bg);
+  color: var(--text);
+}
+
+.app {
+  max-width: 900px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.app__header h1 {
+  margin: 0 0 14px;
+  letter-spacing: 0.3px;
+  font-weight: 800;
+}
