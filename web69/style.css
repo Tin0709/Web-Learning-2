@@ -49,3 +49,59 @@ body {
   letter-spacing: 0.3px;
   font-weight: 800;
 }
+.addbar {
+  display: grid;
+  grid-template-columns: 1fr 150px 170px auto;
+  gap: 10px;
+  background: var(--panel);
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+.addbar input,
+.addbar select {
+  width: 100%;
+  background: #0f131a;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 10px;
+  outline: none;
+}
+.addbar input:focus,
+.addbar select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(122, 162, 247, 0.2);
+}
+.addbar__text {
+  min-width: 0;
+}
+
+.btn {
+  border: 1px solid var(--border);
+  background: #17202c;
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.btn.primary {
+  background: linear-gradient(
+    180deg,
+    rgba(122, 162, 247, 0.16),
+    rgba(122, 162, 247, 0.05)
+  );
+  border-color: #33405d;
+}
+.btn.subtle {
+  background: #121826;
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 14px 2px 0;
+}
